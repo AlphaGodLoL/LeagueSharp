@@ -1,0 +1,15 @@
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\LeagueSharp.Common.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\LeagueSharp.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.Toolkit.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.Toolkit.Graphics.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\LeagueSharp.xml
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.Toolkit.xml
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\SharpDX.Toolkit.Graphics.xml
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\obj\x86\Release\Shared Experience.csprojResolveAssemblyReference.cache
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\Shared Experience.exe.config
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\Shared Experience.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\Shared Experience.pdb
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\obj\x86\Release\Shared Experience.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\obj\x86\Release\Shared Experience.pdb

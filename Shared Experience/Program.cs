@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-namespace SharedExprience
+namespace SharedExperience
 {
     class Program
     {
@@ -18,7 +18,8 @@ namespace SharedExprience
         public static void OnGameLoad(EventArgs args)
         {
             LoadMenu();
-            
+
+            Game.OnGameUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Game.PrintChat("Shared Experience Loaded!");
         }
@@ -28,13 +29,13 @@ namespace SharedExprience
         public static int[] VisibleCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] InvisibleCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] Time = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        public static Color[] Cor = { Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White };
 
-        public static void Drawing_OnDraw(EventArgs args)
+        public static void OnGameUpdate(EventArgs args)
         {
-            
             int i = -1;
             int expReceived = 0;
-            Color[] Cor = { Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White, Color.White};
+
 
             foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
             {
@@ -48,15 +49,6 @@ namespace SharedExprience
                 if (hero.IsAlly && !menu.Item("showAllies").GetValue<bool>()) continue;
 
                 if (hero.IsEnemy && !menu.Item("showEnemies").GetValue<bool>()) continue;
-
-                int textXOffset = menu.Item("positionX").GetValue<Slider>().Value;
-                int textYOffset = menu.Item("positionY").GetValue<Slider>().Value;
-
-                if (hero.IsAlly)
-                {
-                    textYOffset -= 2;
-                }
-
 
                 if (Exp[i] != hero.Experience)
                 {
@@ -163,13 +155,47 @@ namespace SharedExprience
                 {
                     VisibleCount[i] = 6;
                 }
-                    
+
+                if (SharingCount[i] > 1 && VisibleCount[i] < SharingCount[i])
+                {
+                    InvisibleCount[i] = (SharingCount[i] - VisibleCount[i]);
+                    Cor[i] = menu.Item("invColor").GetValue<Color>();
+
+                    Console.WriteLine((i) + " " + (hero.ChampionName) + " Invis Color:" + (Cor[i]));
+                }
+            }
+        }
+
+        public static void Drawing_OnDraw(EventArgs args)
+        {
+            
+            int i = -1;
+
+            foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                i += 1;
+
+                if (!hero.IsVisible || hero.IsDead || hero.IsMe || (hero.Level == 18))
+                {
+                    continue;
+                }
+
+                if (hero.IsAlly && !menu.Item("showAllies").GetValue<bool>()) continue;
+
+                if (hero.IsEnemy && !menu.Item("showEnemies").GetValue<bool>()) continue;
+
+                int textXOffset = menu.Item("positionX").GetValue<Slider>().Value;
+                int textYOffset = menu.Item("positionY").GetValue<Slider>().Value;
+
+                if (hero.IsAlly)
+                {
+                    textYOffset -= 2;
+                }
 
                 if (SharingCount[i] > 1)
                 {
                     if (VisibleCount[i] < SharingCount[i])
                     {
-                        InvisibleCount[i] = (SharingCount[i] - VisibleCount[i]);
                         Drawing.DrawText(hero.HPBarPosition.X + textXOffset, hero.HPBarPosition.Y + textYOffset, Cor[i], "+" + (SharingCount[i] - 1) + " (" + InvisibleCount[i] + " Inv)");
                     }
                     else
@@ -186,6 +212,7 @@ namespace SharedExprience
             menu = new Menu("Shared Experience", "Shared Experience", true);
             menu.AddItem(new MenuItem("showAllies", "Show Allies Exp Share Count").SetValue(false));
             menu.AddItem(new MenuItem("showEnemies", "Show Enemies Exp Share Count").SetValue(true));
+            menu.AddItem(new MenuItem("invColor", "Text Color When Not Visible Enemies").SetValue(Color.FromArgb(255, Color.White)));
             menu.AddItem(new MenuItem("positionX", "Text Position X").SetValue(new Slider(142, -100, 200)));
             menu.AddItem(new MenuItem("positionY", "Text Position Y").SetValue(new Slider(21, -100, 100)));
             menu.AddToMainMenu();
