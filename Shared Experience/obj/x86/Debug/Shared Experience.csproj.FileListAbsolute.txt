@@ -1,0 +1,14 @@
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.exe.config
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.exe
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.pdb
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.Common.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Direct3D9.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Toolkit.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Toolkit.Graphics.dll
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.xml
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Toolkit.xml
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Toolkit.Graphics.xml
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\obj\x86\Debug\Shared Experience.exe
+D:\Desktop\Desktop\LeagueSharp\LocalAssemblies\Shared Experience\obj\x86\Debug\Shared Experience.pdb
