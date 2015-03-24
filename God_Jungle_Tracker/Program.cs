@@ -84,7 +84,16 @@ namespace GodJungleTracker
         new Vector3(12703f , 6444f  , 52f),
         };
 
-        private static SoundPlayer Danger = new SoundPlayer(Properties.Resources.danger);
+        private static readonly SoundPlayer danger = new SoundPlayer(Properties.Resources.danger);
+        private static readonly SoundPlayer danger10 = new SoundPlayer(Properties.Resources.danger10);
+        private static readonly SoundPlayer danger25 = new SoundPlayer(Properties.Resources.danger25);
+        private static readonly SoundPlayer danger50 = new SoundPlayer(Properties.Resources.danger50);
+        private static readonly SoundPlayer danger75 = new SoundPlayer(Properties.Resources.danger75);
+        private static SoundPlayer sound = danger;
+
+        public static int[] SoundFow = { 0, 0 };
+
+        public static int[] SoundScreen = { 0, 0 };
 
         public static int[] NetworkID = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -141,7 +150,6 @@ namespace GodJungleTracker
             CampState[0] = State[0];
             LastChangeOnCampState[0] = LastChangeOnState[0];
                 
-
             CampState[1] = State[1];
             LastChangeOnCampState[1] = LastChangeOnState[1];
                 
@@ -207,57 +215,93 @@ namespace GodJungleTracker
             CampState[11] = State[15];
             LastChangeOnCampState[11] = LastChangeOnState[15];
 
-            if ((CampState[0] == 2 && menu.Item("dragonsound").GetValue<bool>()) && (Environment.TickCount - LastChangeOnCampState[0] <= 5000))
-            {
-                for (int i = 1; i <= menu.Item("dragonsoundtimes").GetValue<Slider>().Value; i++)
-                {
-                    if (Environment.TickCount - LastChangeOnCampState[0] < 50)
-                    {
-                        LastChangeOnCampState[0] += 50;
-                        LastPlayedDragonSound = Environment.TickCount;
-                        PlaySound(Danger);
 
-                    }
-                    else if (i > 1 && Environment.TickCount - LastChangeOnCampState[0] > 550 * (i - 1) && Environment.TickCount - LastChangeOnCampState[0] < 600 * (i - 1) && Environment.TickCount - LastPlayedDragonSound > 500)
+            
+
+            if ((menu.Item("soundfow").GetValue<bool>() && SoundFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>())
+            {
+                if ((menu.Item("soundscreen").GetValue<bool>() && SoundScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                {
+                    if ((CampState[0] == 2 && menu.Item("dragonsound").GetValue<bool>()) && (Environment.TickCount - LastChangeOnCampState[0] <= 5000))
                     {
-                        LastChangeOnCampState[0] += (50 * (i - 1));
-                        LastPlayedDragonSound = Environment.TickCount;
-                        PlaySound(Danger);
+                        for (int i = 1; i <= menu.Item("dragonsoundtimes").GetValue<Slider>().Value; i++)
+                        {
+                            if (i == 1 && Environment.TickCount - LastChangeOnCampState[0] < 50)
+                            {
+                                LastChangeOnCampState[0] += 50;
+                                LastPlayedDragonSound = Environment.TickCount;
+                                PlaySound(sound);
+
+                            }
+                            else if (i > 1 && Environment.TickCount - LastChangeOnCampState[0] > 550 * (i - 1) && Environment.TickCount - LastChangeOnCampState[0] < 600 * (i - 1) && Environment.TickCount - LastPlayedDragonSound > 500)
+                            {
+                                LastChangeOnCampState[0] += (50 * (i - 1));
+                                LastPlayedDragonSound = Environment.TickCount;
+                                PlaySound(sound);
+                            }
+                        }
                     }
                 }
             }
 
-            else if ((CampState[1] == 2 && menu.Item("baronsound").GetValue<bool>()) && (Environment.TickCount - BaronSoundDelay >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)))
+            if ((menu.Item("soundfow").GetValue<bool>() && SoundFow[1] == 0) || !menu.Item("soundfow").GetValue<bool>())
             {
-                for (int i = 1; i <= menu.Item("baronsoundtimes").GetValue<Slider>().Value; i++)
+                if ((menu.Item("soundscreen").GetValue<bool>() && SoundScreen[1] == 0) || !menu.Item("soundscreen").GetValue<bool>())
                 {
-
-                    if (i == 1 && (LastPlayedBaronSound == 0 || Environment.TickCount - LastPlayedBaronSound >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)) && Environment.TickCount - LastChangeOnCampState[1] < 500)
+                    if ((CampState[1] == 2 && menu.Item("baronsound").GetValue<bool>()) && (Environment.TickCount - BaronSoundDelay >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)))
                     {
-                        LastPlayedBaronSound = Environment.TickCount;
-                        LastPlayedBaronSound2 = Environment.TickCount;
-                        PlaySound(Danger);
-                    }
-
-                    else if (i > 1 && Environment.TickCount - LastPlayedBaronSound > 550 * (i - 1) && Environment.TickCount - LastPlayedBaronSound < 600 * (i - 1) && Environment.TickCount - LastPlayedBaronSound2 > 500)
-                    {
-                        LastPlayedBaronSound += (50 * (i - 1));
-
-                        LastPlayedBaronSound2 = Environment.TickCount;
-
-
-                        if (i == menu.Item("baronsoundtimes").GetValue<Slider>().Value)
+                        for (int i = 1; i <= menu.Item("baronsoundtimes").GetValue<Slider>().Value; i++)
                         {
-                            BaronSoundDelay = Environment.TickCount;
+
+                            if (i == 1 && (LastPlayedBaronSound == 0 || Environment.TickCount - LastPlayedBaronSound >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)) && Environment.TickCount - LastChangeOnCampState[1] < 500)
+                            {
+                                LastPlayedBaronSound = Environment.TickCount;
+                                LastPlayedBaronSound2 = Environment.TickCount;
+                                PlaySound(sound);
+                            }
+
+                            else if (i > 1 && Environment.TickCount - LastPlayedBaronSound > 550 * (i - 1) && Environment.TickCount - LastPlayedBaronSound < 600 * (i - 1) && Environment.TickCount - LastPlayedBaronSound2 > 500)
+                            {
+                                LastPlayedBaronSound += (50 * (i - 1));
+
+                                LastPlayedBaronSound2 = Environment.TickCount;
+
+
+                                if (i == menu.Item("baronsoundtimes").GetValue<Slider>().Value)
+                                {
+                                    BaronSoundDelay = Environment.TickCount;
+                                }
+
+                                PlaySound(sound);
+
+                            }
                         }
-
-                        PlaySound(Danger);
-
                     }
                 }
             }
 
             if (Environment.TickCount - UpdateTimer < 300) return;
+
+            if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
+            {
+                sound = danger10;
+            }
+            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(1))
+            {
+                sound = danger25;
+            }
+            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(2))
+            {
+                sound = danger50;
+            }
+            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(3))
+            {
+                sound = danger75;
+            }
+            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(4))
+            {
+                sound = danger;
+            }
 
             foreach (Obj_AI_Minion Minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.CampNumber > 0))
             {
@@ -272,49 +316,65 @@ namespace GodJungleTracker
                     if (!menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
                     if (!menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
 
-                    
-                    if (Minion.Name.Contains(NameToCompare[i]) && Minion.IsVisible)
+                    if (Minion.Name.Contains(NameToCompare[i]))
                     {
-                        if (!Minion.IsDead && NetworkID[i] != Minion.NetworkId)
+                        if (Minion.IsVisible)
                         {
-
-                            NetworkID[i] = Minion.NetworkId;
-                            State[i] = 1;
-                            LastChangeOnState[i] = Environment.TickCount;
-                            //Console.WriteLine("NetworkId["+i+"]: " + Minion.NetworkId + " Name: " + Minion.Name);
-
-                            /*  //Useless It only starts receiving attack packets after vision maybe works with buff recognition will test later
-                            if (GuessNetworkID == 0) // Game.Time < 125f)
+                            if (!Minion.IsDead && NetworkID[i] != Minion.NetworkId)
                             {
-                                //Console.WriteLine("The ID guess for: " + NetworkID[i] + " and Name: " + NameToCompare[i]);
-                                for (int c = 0; c <= 35; c++)
-                                {
-                                    if (c == i || CreateOrder[c] == 0) continue;
 
-                                    if (NetworkID[c] == 0)
+                                NetworkID[i] = Minion.NetworkId;
+                                State[i] = 1;
+                                LastChangeOnState[i] = Environment.TickCount;
+                                //Console.WriteLine("NetworkId["+i+"]: " + Minion.NetworkId + " Name: " + Minion.Name);
+
+                                /*  //Useless It only starts receiving attack packets after vision maybe works with buff recognition will test later
+                                if (GuessNetworkID == 0) // Game.Time < 125f)
+                                {
+                                    //Console.WriteLine("The ID guess for: " + NetworkID[i] + " and Name: " + NameToCompare[i]);
+                                    for (int c = 0; c <= 35; c++)
                                     {
-                                        if (CreateOrder[c] < CreateOrder[i])
+                                        if (c == i || CreateOrder[c] == 0) continue;
+
+                                        if (NetworkID[c] == 0)
                                         {
-                                            NetworkID[c] = NetworkID[i] - ((CreateOrder[i] - CreateOrder[c]) * 2);
-                                            State[c] = 1;
-                                            LastChangeOnState[c] = Environment.TickCount;
+                                            if (CreateOrder[c] < CreateOrder[i])
+                                            {
+                                                NetworkID[c] = NetworkID[i] - ((CreateOrder[i] - CreateOrder[c]) * 2);
+                                                State[c] = 1;
+                                                LastChangeOnState[c] = Environment.TickCount;
+                                            }
+                                            else if (CreateOrder[c] > CreateOrder[i])
+                                            {
+                                                NetworkID[c] = NetworkID[i] + ((CreateOrder[c] - CreateOrder[i]) * 2);
+                                                State[c] = 1;
+                                                LastChangeOnState[c] = Environment.TickCount;
+                                            }
+                                            //Console.WriteLine("NetworkID["+c+"]:" + NetworkID[c] + " and Name: " + NameToCompare[c]);
                                         }
-                                        else if (CreateOrder[c] > CreateOrder[i])
-                                        {
-                                            NetworkID[c] = NetworkID[i] + ((CreateOrder[c] - CreateOrder[i]) * 2);
-                                            State[c] = 1;
-                                            LastChangeOnState[c] = Environment.TickCount;
-                                        }
-                                        //Console.WriteLine("NetworkID["+c+"]:" + NetworkID[c] + " and Name: " + NameToCompare[c]);
                                     }
-                                }
-                                GuessNetworkID = 1;
-                            }*/
+                                    GuessNetworkID = 1;
+                                }*/
+                            }
+                            else if (Minion.IsDead)
+                            {
+                                State[i] = 4;
+                                LastChangeOnState[i] = Environment.TickCount;
+                            }
+
+                            if (i < 2)
+                            {
+                                SoundFow[i] = 1;
+
+                                if (Game.CursorPos.Distance(CampPosition[i]) < 1800) SoundScreen[i] = 1;
+
+                                else SoundScreen[i] = 0;
+                            }
                         }
-                        else if (Minion.IsDead)
+                        else if (!Minion.IsVisible && i < 2)
                         {
-                            State[i] = 4;
-                            LastChangeOnState[i] = Environment.TickCount;
+                            SoundFow[i] = 0;
+                            SoundScreen[i] = 0;
                         }
                     }
 
@@ -705,11 +765,15 @@ namespace GodJungleTracker
 
             //Play Danger Sound
             menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On First Dragon Attack").SetValue(true));
+            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On Dragon First Attack").SetValue(true));
             menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
             menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsound", "On Baron Attack").SetValue(true));
             menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("sounddelay", "Baron Sound Delay (s)").SetValue(new Slider(10, 1, 60)));
+            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("sounddelay", "Baron Sound Delay (s)").SetValue(new Slider(20, 1, 60)));
+            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundfow", "Only On Fog of War").SetValue(false));
+            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundscreen", "Only If Camp Not On Screen").SetValue(true));
+            String [] volume = {"10%","25%","50%","75%","100%"};
+            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundvolume", "Sound Volume").SetValue(new StringList(volume, 2)));
 
             //Track on Minimap
             menu.AddItem(new MenuItem("TrackonMinimap", "Track on Minimap").SetValue(true));

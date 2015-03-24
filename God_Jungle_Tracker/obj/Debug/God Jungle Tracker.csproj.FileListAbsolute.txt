@@ -7,7 +7,11 @@ D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\bin\Release\SharpDX.Direct3D9.
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\bin\Release\SharpDX.dll
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\bin\Release\clipper_library.dll
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\bin\Release\LeagueSharp.xml
+D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\God Jungle Tracker.csprojResolveAssemblyReference.cache
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\GodJungleTracker.Properties.Resources.resources
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\God Jungle Tracker.csproj.GenerateResource.Cache
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\GodJungleTracker.exe
 D:\LeagueSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\GodJungleTracker.pdb
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\bin\Release\GodJungleTracker.exe.config
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\obj\Debug\GodJungleTracker.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\obj\Debug\GodJungleTracker.pdb

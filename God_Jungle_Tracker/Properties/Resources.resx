@@ -121,4 +121,16 @@
   <data name="danger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\danger.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="danger10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\danger10.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="danger25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\danger25.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="danger50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\danger50.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="danger75" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\danger75.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

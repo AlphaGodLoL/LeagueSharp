@@ -68,5 +68,41 @@ namespace GodJungleTracker.Properties {
                 return ResourceManager.GetStream("danger", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream danger10 {
+            get {
+                return ResourceManager.GetStream("danger10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream danger25 {
+            get {
+                return ResourceManager.GetStream("danger25", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream danger50 {
+            get {
+                return ResourceManager.GetStream("danger50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream danger75 {
+            get {
+                return ResourceManager.GetStream("danger75", resourceCulture);
+            }
+        }
     }
 }
