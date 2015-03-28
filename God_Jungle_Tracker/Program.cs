@@ -32,7 +32,7 @@ namespace GodJungleTracker
             Game.OnProcessPacket += OnProcessPacket;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Game.PrintChat("<font color=\"#00BFFF\">God Jungle Tracker</font> <font color=\"#FFFFFF\"> - Loaded!</font>");
+            Game.PrintChat("<font color=\"#00BFFF\">God Jungle Tracker</font> <font color=\"#FFFFFF\"> - Loaded</font>");
 
         }
 
@@ -467,12 +467,12 @@ namespace GodJungleTracker
                 if (BitConverter.ToInt32(args.PacketData, 2) == NetworkID[i])
                 {
                     /*
-                    if (NameToCompare[i].Contains("Dragon") && header != 52)   //Packet test
+                    if (NameToCompare[i].Contains("Dragon")) //&& header != 52)   //Packet test
                     {
                        Game.PrintChat("Packet Header is: " + header + " For: " + NameToCompare[i] + " NetworkID == " + NetworkID[i]);
                     }*/
-                
-                    if (header == 48)
+
+                    if (header == 148)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Attacking");   //"using skill" or crab dead
 
@@ -489,7 +489,7 @@ namespace GodJungleTracker
                         LastChangeOnState[i] = Environment.TickCount;
                     }
 
-                    else if (header == 213)
+                    else if (header == 200)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Attacking");
 
@@ -498,7 +498,7 @@ namespace GodJungleTracker
                         LastChangeOnState[i] = Environment.TickCount;
                     }
 
-                    else if (header == 153)
+                    else if (header == 88)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Disengaged");
                         if (NameToCompare[i].Contains("Crab"))
@@ -564,22 +564,22 @@ namespace GodJungleTracker
                         //Console.WriteLine(HeroName[i] + " got a new Buff");
                     }
 
-                    if (header == 48//5.5
+                    if (header == 148//5.6
                     {
                         //Console.WriteLine(HeroName[i] + " is using skill");
                     }
 
-                    if (header == 213)//5.5
+                    if (header == 200)//5.6
                     {
                         //Console.WriteLine(HeroName[i] + " is Attacking");
                     }
 
-                    if (header == 107)//5.5
+                    if (header == 108)//5.6
                     {
                         //Console.WriteLine(HeroName[i] + " Lost Vision");
                     }
 
-                    if (header == 153)//5.5
+                    if (header == 88)//5.6
                     {
                         //Console.WriteLine(HeroName[i] + " is Disengaged");
                     }
