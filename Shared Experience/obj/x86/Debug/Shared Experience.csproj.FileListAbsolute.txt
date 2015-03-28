@@ -1,0 +1,15 @@
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.exe.config
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.exe
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\Shared Experience.pdb
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.Common.dll
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.dll
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.dll
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\SharpDX.Direct3D9.dll
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\clipper_library.dll
+D:\LeagueSharp\LocalAssemblies\Shared Experience\bin\Release\LeagueSharp.xml
+D:\LeagueSharp\LocalAssemblies\Shared Experience\obj\x86\Debug\Shared Experience.csprojResolveAssemblyReference.cache
+D:\LeagueSharp\LocalAssemblies\Shared Experience\obj\x86\Debug\Shared Experience.exe
+D:\LeagueSharp\LocalAssemblies\Shared Experience\obj\x86\Debug\Shared Experience.pdb
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\bin\Release\Shared Experience.exe.config
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\obj\x86\Debug\Shared Experience.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Shared Experience\obj\x86\Debug\Shared Experience.pdb

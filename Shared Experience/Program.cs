@@ -26,9 +26,9 @@ namespace SharedExperience
         public static void OnGameLoad(EventArgs args)
         {
             LoadMenu();
-            Game.OnGameUpdate += OnGameUpdate;
+            Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Game.PrintChat("<font color=\"#00BFFF\">Shared Experience</font> <font color=\"#FFFFFF\"> - Loaded! v5.4.0.0</font>");
+            Game.PrintChat("<font color=\"#00BFFF\">Shared Experience</font> <font color=\"#FFFFFF\"> - Loaded</font>");
         }
 
         public static float[] Exp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -379,7 +379,7 @@ namespace SharedExperience
                 c += 1;
 
                 int x = menu.Item("posX").GetValue<Slider>().Value;
-                int y = menu.Item("posY").GetValue<Slider>().Value + c * 20;
+                int y = menu.Item("posY").GetValue<Slider>().Value + c * 30;
 
                 if ((Environment.TickCount - TimeChangedExp[i]) < 5000 && InvisibleCount[i] > 0)
                 {
@@ -399,28 +399,34 @@ namespace SharedExperience
 
                 if (IsNearMe[i] == 1 && !hero.IsDead)
                 {
-                    Drawing.DrawLine(
-                        new Vector2(x - 4.5f, y - 2),
-                        new Vector2(x + 100, y - 2), 1, VisibleColor[i]);
+                    if (menu.Item("drawchampionlist").GetValue<bool>())
+                    {
+                        Drawing.DrawLine(
+                            new Vector2(x - 4.5f, y - 5),
+                            new Vector2(x + 85, y - 5), 3, VisibleColor[i]);
 
-                    Drawing.DrawLine(
-                        new Vector2(x + 100, y - 1.5f),
-                        new Vector2(x + 100, y + 18), 1, VisibleColor[i]);
+                        Drawing.DrawLine(
+                            new Vector2(x + 85, y - 4.5f),
+                            new Vector2(x + 85, y + 21), 3, VisibleColor[i]);
 
-                    Drawing.DrawLine(
-                        new Vector2(x + 100, y + 18),
-                        new Vector2(x - 3, y + 18), 1, VisibleColor[i]);
+                        Drawing.DrawLine(
+                            new Vector2(x + 85, y + 21),
+                            new Vector2(x - 3, y + 21), 3, VisibleColor[i]);
 
-                    Drawing.DrawLine(
-                        new Vector2(x - 5, y + 18),
-                        new Vector2(x - 5, y - 1.5f), 1, VisibleColor[i]);
+                        Drawing.DrawLine(
+                            new Vector2(x - 5, y + 21),
+                            new Vector2(x - 5, y - 4.5f), 3, VisibleColor[i]);
 
 
-                    Drawing.DrawText(x, y, MissingColor[i], hero.ChampionName);
+                        Drawing.DrawText(x+5, y, MissingColor[i], hero.ChampionName);
+                    }
                 }
                 else
                 {
-                    Drawing.DrawText(x, y, MissingColor[i], hero.ChampionName);
+                    if (menu.Item("drawchampionlist").GetValue<bool>())
+                    {
+                        Drawing.DrawText(x+5, y, MissingColor[i], hero.ChampionName);
+                    }
                 }
 
                 if (!menu.Item("showEnemies").GetValue<bool>()) continue;
@@ -453,8 +459,14 @@ namespace SharedExperience
             menu.AddItem(new MenuItem("invColor", "Text Color When Not Visible Enemies").SetValue(Color.FromArgb(255, 245,25,25)));
             menu.AddItem(new MenuItem("positionX", "OnEnemy Text Position X").SetValue(new Slider(142, -100, 200)));
             menu.AddItem(new MenuItem("positionY", "OnEnemy Text Position Y").SetValue(new Slider(21, -100, 100)));
-            menu.AddItem(new MenuItem("posX", "Champions List Pos X").SetValue(new Slider(1800, 0, 1920)));
-            menu.AddItem(new MenuItem("posY", "Champions List Pos Y").SetValue(new Slider(670, 0, 1080)));
+
+
+            //Champion List Menu
+            menu.AddSubMenu(new Menu("Champion List", "Champion List"));
+            menu.SubMenu("Champion List").AddItem(new MenuItem("drawchampionlist", "Draw Champion List").SetValue(false));
+            menu.SubMenu("Champion List").AddItem(new MenuItem("posX", "Champions List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
+            menu.SubMenu("Champion List").AddItem(new MenuItem("posY", "Champions List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
+
             menu.AddToMainMenu();
         }
     }
