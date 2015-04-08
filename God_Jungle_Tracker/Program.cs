@@ -43,8 +43,8 @@ namespace GodJungleTracker
 
             TrackingList = new List<Obj_AI_Minion>();
 
-            GameObject.OnCreate += GameObjectOnOnCreate;
-            GameObject.OnDelete += GameObjectOnOnDelete;
+            GameObject.OnCreate += GameObjectOnCreate;
+            GameObject.OnDelete += GameObjectOnDelete;
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -216,7 +216,7 @@ namespace GodJungleTracker
 
 
 
-        private static void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        private static void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
             if (!(sender is Obj_AI_Minion))
             {
@@ -252,7 +252,7 @@ namespace GodJungleTracker
             }
         }
 
-        private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
+        private static void GameObjectOnDelete(GameObject sender, EventArgs args)
         {
             if (!(sender is Obj_AI_Minion))
             {

@@ -27,6 +27,3 @@ D:\LSharp\LocalAssemblies\God_Jungle_Tracker\bin\Release\LeagueSharp.xml
 D:\LSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\God Jungle Tracker.csprojResolveAssemblyReference.cache
 D:\LSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\GodJungleTracker.Properties.Resources.resources
 D:\LSharp\LocalAssemblies\God_Jungle_Tracker\obj\Debug\God Jungle Tracker.csproj.GenerateResource.Cache
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\bin\Release\GodJungleTracker.exe.config
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\obj\Debug\GodJungleTracker.exe
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God_Jungle_Tracker\obj\Debug\GodJungleTracker.pdb
