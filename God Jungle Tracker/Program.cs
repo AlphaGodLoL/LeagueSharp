@@ -68,6 +68,8 @@ namespace GodJungleTracker
 
         public static int Seed2 = 2;
 
+        public static float ClockTimeAdjust = 0;
+
         public static int l = 0;
 
         public static int BufferDragonSound = 0;
@@ -211,6 +213,7 @@ namespace GodJungleTracker
             Drawing.OnPostReset += DrawingOnPostReset;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
+           
 
             LoadMenu();
             Game.PrintChat("<font color=\"#00BFFF\">God Jungle Tracker</font> <font color=\"#FFFFFF\"> - Loaded</font>");
@@ -268,6 +271,14 @@ namespace GodJungleTracker
                 GuessNetworkID2 = 0;
             }
 
+            int c = 0;
+            foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                HeroNetworkID[c] = hero.NetworkId;
+                HeroName[c] = hero.BaseSkinName;
+                //Console.WriteLine(HeroName[i] + " ; " + HeroNetworkID[i]);
+                c++;
+            }
         }
 
         private static void PlaySound(SoundPlayer sound = null)
@@ -382,6 +393,24 @@ namespace GodJungleTracker
                     JustDied[UnitToCamp[l]] = 0;
                 }
             }
+
+            if (Game.ClockTime < (1200 + ClockTimeAdjust))
+            {
+                if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000 && ((ClockTimeAdjust > 0 && Game.ClockTime > 145f + ClockTimeAdjust) || Game.ClockTime > 200f))
+                {
+                    State[0] = 6;
+                    CampState[0] = 6;
+                }
+            }
+            else if (Game.ClockTime >= (1200 + ClockTimeAdjust))
+            {
+                if (CampState[0] == 6)
+                {
+                    CampState[0] = 0;
+                    State[0] = 0;
+                }
+            }
+
 
             if ((l >= 2 && l <= 5)) //Red and Blue
             {
@@ -873,7 +902,11 @@ namespace GodJungleTracker
 
             int t = 3000;
 
-            if (l == 0) t = 30000;
+            if (l == 0)
+            {
+                if (Game.ClockTime - ClockTimeAdjust < 420f) t = 60000;
+                else  t = 30000;
+            } 
 
             if (State[l] == 2 && (Environment.TickCount - LastChangeOnState[l]) >= t && !(NameToCompare[l].Contains("Crab")))    //presumed dead
             {
@@ -906,19 +939,6 @@ namespace GodJungleTracker
 
             #endregion
 
-
-            /*foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
-            {
-                int i = -1;
-                i++;
-                if (hero.IsVisible)
-                {
-                    HeroNetworkID[i] = hero.NetworkId;
-                    HeroName[i] = hero.BaseSkinName;
-                    Console.WriteLine(HeroName[i] + " ; " + HeroNetworkID[i]);
-                }
-            }*/
-
             l++;
             if (l > 35) l = 0;
         }
@@ -927,12 +947,13 @@ namespace GodJungleTracker
         {
             short header = BitConverter.ToInt16(args.PacketData, 0);
 
-
             /*if (menu.Item("debug").GetValue<bool>() &&
-                //(BitConverter.ToInt32(args.PacketData, 2) > 0) &&
-                //BitConverter.ToString(args.PacketData, 0).Length > 71 && //test header
-                 header == 133
-                
+                (BitConverter.ToInt32(args.PacketData, 2) > 0) &&
+                BitConverter.ToString(args.PacketData, 0).Length == 47 && //test header
+                 header == 225
+                && (BitConverter.ToInt32(args.PacketData, 2) > HeroNetworkID[0]+50)
+
+
                  && header != 225 && header != 229 && header != 61 && header != 193 && header != 165
                  && header != 231 && header != 282 && header != 227 && header != 48 && header != 227
                  && header != 136 && header != 198 && header != 276 && header != 180 && header != 273
@@ -965,6 +986,18 @@ namespace GodJungleTracker
                         catch (Exception ex)
                         {
                             //Console.WriteLine(ex);
+                            try
+                            {
+                                if (BitConverter.ToString(args.PacketData, d).Length > 0)
+                                {
+                                    Console.WriteLine("Packet Index: 0" + d + " ---- " + (BitConverter.ToString(args.PacketData, d)).Substring(0, BitConverter.ToString(args.PacketData, d).Length));
+                                }
+                            }
+                            catch (Exception ex2)
+                            {
+
+                            }
+                            break;
                         }
                     }
                     else
@@ -980,6 +1013,18 @@ namespace GodJungleTracker
                         catch (Exception ex)
                         {
                             //Console.WriteLine(ex);
+                            try
+                            {
+                                if (BitConverter.ToString(args.PacketData, d).Length > 0)
+                                {
+                                    Console.WriteLine("Packet Index: " + d + " ---- " + (BitConverter.ToString(args.PacketData, d)).Substring(0, BitConverter.ToString(args.PacketData, d).Length));
+                                }
+                            }
+                            catch (Exception ex2)
+                            {
+
+                            }
+                            break;
                         }
                     }
                 }
@@ -993,9 +1038,9 @@ namespace GodJungleTracker
                 if (BitConverter.ToInt32(args.PacketData, 2) == NetworkID[i])
                 {
 
-                    /*if (NameToCompare[i].Contains("SRU_Red4.1.1")) //&& header != 169)   //Packet test
+                    /*if (NameToCompare[i].Contains("Drag")) //&& header != 169)   //Packet test
                     {
-                       Console.WriteLine("Packet Header is: " + header + " For: " + NameToCompare[i] + " NetworkID == " + NetworkID[i]);
+                        Console.WriteLine("Packet Header is: " + header + " For: " + NameToCompare[i] + " NetworkID == " + NetworkID[i] + " Lenght: " + BitConverter.ToString(args.PacketData, 0).Length);
                     }*/
 
                     if (header == 225)
@@ -1064,6 +1109,30 @@ namespace GodJungleTracker
                 }
             }
 
+            if ((State[0] == 0 || State[0] == 7 || State[0] == 6) && header == 225 && Game.ClockTime < (1200 + ClockTimeAdjust)&&
+                BitConverter.ToInt32(args.PacketData, 2) > HeroNetworkID[0]+70 &&
+                BitConverter.ToString(args.PacketData, 0).Length == 47
+                )
+            {
+                //Console.WriteLine(NameToCompare[i] + " is Attacking");   //"using skill"
+
+                if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && SoundFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
+                {
+                    if ((menu.Item("soundscreen").GetValue<bool>() && SoundScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                    {
+                        if ((menu.Item("dragonsound").GetValue<bool>()))
+                        {
+                            BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
+                            PlayingDragonSound = 1;
+                            CampState[0] = 2;
+                        }
+                    }
+                }
+                State[0] = 2;
+                LastChangeOnState[0] = Environment.TickCount;
+                NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
+            }
+
             if (header == 193)  //Gromp Created
             {
                 if (BitConverter.ToString(args.PacketData, 0).Length == 284)
@@ -1071,6 +1140,14 @@ namespace GodJungleTracker
                     NetworkID[14] = BitConverter.ToInt32(args.PacketData, 2);
                     State[14] = 6;
                     LastChangeOnState[14] = Environment.TickCount;
+
+                    if (Game.ClockTime - 111f < 90)
+                    {
+                        ClockTimeAdjust = Game.ClockTime - 111f;
+                        State[0] = 0;
+                        CampRespawnTime[0] = Environment.TickCount + 39000;
+                        CampState[0] = 0;
+                    }
                 }
                 else if (BitConverter.ToString(args.PacketData, 0).Length == 293)
                 {
