@@ -70,6 +70,8 @@ namespace GodJungleTracker
 
         public static float ClockTimeAdjust = 0;
 
+        public static int BiggestNetworkID = 0;
+
         public static int l = 0;
 
         public static int BufferDragonSound = 0;
@@ -240,6 +242,7 @@ namespace GodJungleTracker
                             LastChangeOnState[i] = Environment.TickCount;
                             //Console.WriteLine(minion.NetworkId + " Name: " + minion.Name);
                             TrackingList.Add(minion);
+                            
                         }
                     }
                 }
@@ -278,6 +281,10 @@ namespace GodJungleTracker
                 HeroName[c] = hero.BaseSkinName;
                 //Console.WriteLine(HeroName[i] + " ; " + HeroNetworkID[i]);
                 c++;
+                if (hero.NetworkId > BiggestNetworkID)
+                {
+                    BiggestNetworkID = hero.NetworkId;
+                }
             }
         }
 
@@ -1109,8 +1116,8 @@ namespace GodJungleTracker
                 }
             }
 
-            if ((State[0] == 0 || State[0] == 7 || State[0] == 6) && header == 225 && Game.ClockTime < (1200 + ClockTimeAdjust)&&
-                BitConverter.ToInt32(args.PacketData, 2) > HeroNetworkID[0]+70 &&
+            if ((State[0] == 7 || State[0] == 6) && header == 225 && Game.ClockTime < (1200 + ClockTimeAdjust)&&
+                BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
                 BitConverter.ToString(args.PacketData, 0).Length == 47
                 )
             {
@@ -1147,6 +1154,7 @@ namespace GodJungleTracker
                         State[0] = 0;
                         CampRespawnTime[0] = Environment.TickCount + 39000;
                         CampState[0] = 0;
+                        BiggestNetworkID = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
                 else if (BitConverter.ToString(args.PacketData, 0).Length == 293)
