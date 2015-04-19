@@ -197,7 +197,6 @@ namespace GodJungleTracker
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
         }
-
         public static void OnGameLoad(EventArgs args)
         {
 
@@ -397,20 +396,23 @@ namespace GodJungleTracker
                 }
             }
 
-            if (Game.ClockTime < (1200 + ClockTimeAdjust))
+            if (menu.Item("dragonbeta").GetValue<bool>())
             {
-                if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000 && ((ClockTimeAdjust > 0 && Game.ClockTime > 145f + ClockTimeAdjust) || Game.ClockTime > 200f))
+                if (Game.ClockTime < (1200 + ClockTimeAdjust))
                 {
-                    State[0] = 6;
-                    CampState[0] = 6;
+                    if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000 && ((ClockTimeAdjust > 0 && Game.ClockTime > 145f + ClockTimeAdjust) || Game.ClockTime > 200f))
+                    {
+                        State[0] = 6;
+                        CampState[0] = 6;
+                    }
                 }
-            }
-            else if (Game.ClockTime >= (1200 + ClockTimeAdjust))
-            {
-                if (CampState[0] == 6)
+                else if (Game.ClockTime >= (1200 + ClockTimeAdjust))
                 {
-                    CampState[0] = 0;
-                    State[0] = 0;
+                    if (CampState[0] == 6)
+                    {
+                        CampState[0] = 0;
+                        State[0] = 0;
+                    }
                 }
             }
 
@@ -1116,7 +1118,8 @@ namespace GodJungleTracker
 
             if ((State[0] == 7 || State[0] == 6) && header == 225 && Game.ClockTime < (1200 + ClockTimeAdjust)&&
                 BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
-                BitConverter.ToString(args.PacketData, 0).Length == 47
+                BitConverter.ToString(args.PacketData, 0).Length == 47 && 
+                menu.Item("dragonbeta").GetValue<bool>() 
                 )
             {
                 bool AI_Base = false;
@@ -1537,6 +1540,7 @@ namespace GodJungleTracker
             menu.AddItem(new MenuItem("TrackonMinimap", "Track on Minimap").SetValue(true));
 
             //Debug
+            menu.AddItem(new MenuItem("dragonbeta", "Guess Dragon NetworkID (Beta)").SetValue(true));
             //menu.AddItem(new MenuItem("debug", "Debug").SetValue(true));
 
             menu.AddToMainMenu();
