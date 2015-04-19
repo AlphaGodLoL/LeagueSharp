@@ -78,9 +78,6 @@ namespace GodJungleTracker
 
         public static int PlayingDragonSound = 0;
 
-
-        public static int speedtest = 0;
-
         public static Vector3[] CampPosition = 
         { 
         new Vector3(9866f  , 4414f  , -71f),
@@ -199,7 +196,6 @@ namespace GodJungleTracker
         static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -279,7 +275,7 @@ namespace GodJungleTracker
             {
                 HeroNetworkID[c] = hero.NetworkId;
                 HeroName[c] = hero.BaseSkinName;
-                //Console.WriteLine(HeroName[i] + " ; " + HeroNetworkID[i]);
+                //Console.WriteLine(HeroName[c] + " ; " + HeroNetworkID[c]);
                 c++;
                 if (hero.NetworkId > BiggestNetworkID)
                 {
@@ -958,10 +954,10 @@ namespace GodJungleTracker
                 (BitConverter.ToInt32(args.PacketData, 2) > 0) &&
                 BitConverter.ToString(args.PacketData, 0).Length == 47 && //test header
                  header == 225
-                && (BitConverter.ToInt32(args.PacketData, 2) > HeroNetworkID[0]+50)
+                && (BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID)
 
-
-                 && header != 225 && header != 229 && header != 61 && header != 193 && header != 165
+                
+                 && header != 229 && header != 61 && header != 193 && header != 165
                  && header != 231 && header != 282 && header != 227 && header != 48 && header != 227
                  && header != 136 && header != 198 && header != 276 && header != 180 && header != 273
                  && header != 207 && header != 26 && header != 119 && header != 244 && header != 189
@@ -977,6 +973,8 @@ namespace GodJungleTracker
                  
                 )
             {
+                //TestNetworkID = BitConverter.ToInt32(args.PacketData, 2);
+
                 Console.WriteLine("Header: " + header + " NetworkID: " + BitConverter.ToInt32(args.PacketData, 2) + " Length: " + (BitConverter.ToString(args.PacketData, 0).Length));
                 for (int d = 0; d <= 96; d += 4)
                 {
@@ -1121,23 +1119,32 @@ namespace GodJungleTracker
                 BitConverter.ToString(args.PacketData, 0).Length == 47
                 )
             {
-                //Console.WriteLine(NameToCompare[i] + " is Attacking");   //"using skill"
-
-                if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && SoundFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
+                bool AI_Base = false;
+                foreach (Obj_AI_Base AI_Base_Test in ObjectManager.Get<Obj_AI_Base>().Where(x => x.NetworkId == BitConverter.ToInt32(args.PacketData, 2)))
                 {
-                    if ((menu.Item("soundscreen").GetValue<bool>() && SoundScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                    AI_Base = true;
+                }
+
+                if (!AI_Base)
+                {
+                    //Console.WriteLine("Draggy is Attacking - NetworkID: " + BitConverter.ToInt32(args.PacketData, 2));   //"using skill"
+
+                    if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && SoundFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
                     {
-                        if ((menu.Item("dragonsound").GetValue<bool>()))
+                        if ((menu.Item("soundscreen").GetValue<bool>() && SoundScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
                         {
-                            BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
-                            PlayingDragonSound = 1;
-                            CampState[0] = 2;
+                            if ((menu.Item("dragonsound").GetValue<bool>()))
+                            {
+                                BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
+                                PlayingDragonSound = 1;
+                                CampState[0] = 2;
+                            }
                         }
                     }
+                    State[0] = 2;
+                    LastChangeOnState[0] = Environment.TickCount;
+                    NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
                 }
-                State[0] = 2;
-                LastChangeOnState[0] = Environment.TickCount;
-                NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
             }
 
             if (header == 193)  //Gromp Created
