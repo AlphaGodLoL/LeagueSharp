@@ -1227,9 +1227,9 @@ namespace GodJungleTracker
                 {
                     if (!obj.IsAlly)
                     {
-                        if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon"))
+                        if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
                         {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon NetWorkID disabled</font>");
+                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon/Baron NetWorkID disabled</font>");
                             WarningOnce = 1;
                             GuessDragonID = 0;
                         }
@@ -1273,7 +1273,7 @@ namespace GodJungleTracker
                     {
                         if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
                         {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon/Baron NetWorkID will not work properly this game</font>");
+                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon/Baron NetWorkID disabled</font>");
                             WarningOnce = 1;
                             GuessDragonID = 0;
                         }
@@ -1305,7 +1305,6 @@ namespace GodJungleTracker
 
                     if ((State[0] == 1 || (State[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000)) && BitConverter.ToInt32(args.PacketData, 2) != NetworkID[0])
                     {
-                        if (State[1] == 1)
                         State[1] = 2;
                         LastChangeOnState[1] = Environment.TickCount;
                         NetworkID[1] = BitConverter.ToInt32(args.PacketData, 2);
