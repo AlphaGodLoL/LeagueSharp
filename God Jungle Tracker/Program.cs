@@ -1229,7 +1229,7 @@ namespace GodJungleTracker
                     {
                         if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
                         {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon/Baron NetWorkID disabled</font>");
+                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             WarningOnce = 1;
                             GuessDragonID = 0;
                         }
@@ -1273,7 +1273,7 @@ namespace GodJungleTracker
                     {
                         if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
                         {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - Guess Dragon/Baron NetWorkID disabled</font>");
+                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             WarningOnce = 1;
                             GuessDragonID = 0;
                         }

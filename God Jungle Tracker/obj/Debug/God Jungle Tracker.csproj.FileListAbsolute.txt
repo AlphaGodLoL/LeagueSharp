@@ -24,6 +24,5 @@ C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\bin\Release\Sh
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\bin\Release\clipper_library.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\bin\Release\LeagueSharp.Sandbox.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\bin\Release\LeagueSharp.xml
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\obj\Debug\God Jungle Tracker.csprojResolveAssemblyReference.cache
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\obj\Debug\GodJungleTracker.Properties.Resources.resources
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker\obj\Debug\God Jungle Tracker.csproj.GenerateResource.Cache
