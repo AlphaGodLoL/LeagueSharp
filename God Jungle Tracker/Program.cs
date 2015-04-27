@@ -8,19 +8,17 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Media;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
-using System.Linq;
-using System.Media;
-using System.Collections.Generic;
 using Font = SharpDX.Direct3D9.Font;
 using FontDrawFlags = SharpDX.Direct3D9.FontDrawFlags;
 using Vector2 = SharpDX.Vector2;
-using SharpDX.Direct3D9;
-
-
 
 namespace GodJungleTracker
 {
@@ -58,7 +56,7 @@ namespace GodJungleTracker
 
         public static short HeaderCreateGromp = 193;
 
-        public static int WarningOnce = 0;
+        public static float BaronSpawn = 1199;
 
         public static int EnemyTeamStacks = 0;
 
@@ -147,15 +145,15 @@ namespace GodJungleTracker
 
         public static int[] HeroNetworkID = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        public static string[] Heros = { "Caitlyn", "Fizz", "Jinx", "Nidalee", "Wukong", "Zed", "Zyra", "Kalista" };
+        public static string[] Heros = { "Caitlyn", "Fizz", "Jinx", "Nidalee", "Wukong", "Zed", "Zyra", "Kalista", "Yasuo" };
 
         public static string[] HeroName = { "", "", "", "", "", "", "", "", "", "" };
 
-        public static int[] State = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] State = { 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int[] UnitToCamp = { 0, 1, 4, 7, 10, 13, 24, 25, 19, 23, 14, 15, 27, 29, 32, 35 };
 
-        public static int[] CampState = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] CampState = { 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int[] SeedOrder = { 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0 };
 
@@ -230,6 +228,10 @@ namespace GodJungleTracker
         public static void OnGameStart(EventArgs args)
         {
             ClockTimeAdjust = Game.ClockTime;
+
+            CampRespawnTime[0] = (int)((145f + Game.ClockTime) * 1000) + Environment.TickCount;
+
+            CampRespawnTime[1] = (int)((1195f + Game.ClockTime) * 1000) + Environment.TickCount;
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -316,7 +318,7 @@ namespace GodJungleTracker
 
                 if (!hero.IsAlly)
                 {
-                    for (int i = 0; i <= 7; i++)
+                    for (int i = 0; i <= 8; i++)
                     {
                         if (hero.ChampionName.Contains(Heros[i]))
                         {
@@ -371,6 +373,12 @@ namespace GodJungleTracker
                     JustDied[i] = 0;
                     //Console.WriteLine("Added " + minion.Name + " to the Tracking List " + minion.NetworkId);
                     TrackingList.Add(minion);
+
+                    if (i == 0 && Game.ClockTime < (BaronSpawn + ClockTimeAdjust))
+                    {
+                        ClockTimeAdjust = 0;
+                        BaronSpawn = Game.ClockTime-1;
+                    }
                     return;
                 }
             }
@@ -442,44 +450,34 @@ namespace GodJungleTracker
 
             if (menu.Item("dragonbeta2").GetValue<bool>() && GuessDragonID == 1)
             {
-                if (Game.ClockTime < (1199 + ClockTimeAdjust))
+
+                if (CampState[0] == 6 && ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000))
                 {
-                    if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000 && ((ClockTimeAdjust > 0 && Game.ClockTime > 145f + ClockTimeAdjust) || Game.ClockTime > 200f))
+                    CampState[0] = 0;
+                    State[0] = 0;
+                }
+
+                if (CampState[1] == 6 && ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000))
+                {
+                    CampState[1] = 0;
+                    State[1] = 0;
+                }
+
+                if (CampState[0] == 1 || (CampState[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000))
+                {
+                    if ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000)
+                    {
+                        State[1] = 6;
+                        CampState[1] = 6;
+                    }
+                }
+
+                if (CampState[1] == 1 || (CampState[1] == 7 && CampRespawnTime[1] > Environment.TickCount + 1000) || CampState[1] == 8)
+                {
+                    if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000)
                     {
                         State[0] = 6;
                         CampState[0] = 6;
-                    }
-                }
-                else if (Game.ClockTime >= (1199 + ClockTimeAdjust))
-                {
-                    if (CampState[0] == 6 && ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000))
-                    {
-                        CampState[0] = 0;
-                        State[0] = 0;
-                    }
-
-                    if (CampState[1] == 6 && ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000))
-                    {
-                        CampState[1] = 0;
-                        State[1] = 0;
-                    }
-
-                    if (CampState[0] == 1 || (CampState[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000))
-                    {
-                        if ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000)
-                        {
-                            State[1] = 6;
-                            CampState[1] = 6;
-                        }
-                    }
-
-                    if (CampState[1] == 1 || (CampState[1] == 7 && CampRespawnTime[1] > Environment.TickCount + 1000))
-                    {
-                        if ((CampState[0] == 7 || CampState[0] == 0) && CampRespawnTime[0] <= Environment.TickCount + 1000)
-                        {
-                            State[0] = 6;
-                            CampState[0] = 6;
-                        }
                     }
                 }
             }
@@ -1073,7 +1071,12 @@ namespace GodJungleTracker
                 if (Game.ClockTime - ClockTimeAdjust < 420f) t = 60000;
                 else if (Game.ClockTime - ClockTimeAdjust < 820f) t = 40000;
                 else  t = 15000;
-            } 
+            }
+
+            if (l == 1 && State[l] == 8 && CampRespawnTime[l] <= Environment.TickCount)
+            {
+                State[l] = 0;
+            }
 
             if (State[l] == 2 && (Environment.TickCount - LastChangeOnState[l]) >= t && !(NameToCompare[l].Contains("Crab")))    //presumed dead
             {
@@ -1215,50 +1218,7 @@ namespace GodJungleTracker
 
             #region Guess Dragon/Baron NetworkID
 
-            if (header == HeaderSkill && Game.ClockTime < (1199 + ClockTimeAdjust) &&
-                BitConverter.ToInt32(args.PacketData, 2) != NetworkID[0] &&
-                BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
-                BitConverter.ToString(args.PacketData, 0).Length == 47 &&
-                menu.Item("dragonbeta2").GetValue<bool>() && GuessDragonID == 1
-                )
-            {
-                bool AI_Base = false;
-                foreach (Obj_AI_Base obj in ObjectManager.Get<Obj_AI_Base>().Where(x => x.NetworkId == BitConverter.ToInt32(args.PacketData, 2)))
-                {
-                    if (!obj.IsAlly)
-                    {
-                        if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
-                        {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
-                            WarningOnce = 1;
-                            GuessDragonID = 0;
-                        }
-                    }
-                    AI_Base = true;
-                }
-
-                if (!AI_Base)
-                {
-                    //Console.WriteLine("Draggy is Attacking - NetworkID: " + BitConverter.ToInt32(args.PacketData, 2));   //"using skill"
-
-                    if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
-                    {
-                        if ((menu.Item("soundscreen").GetValue<bool>() && OnScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
-                        {
-                            if ((menu.Item("dragonsound").GetValue<bool>()))
-                            {
-                                BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
-                                PlayingDragonSound = 1;
-                                CampState[0] = 2;
-                            }
-                        }
-                    }
-                    State[0] = 2;
-                    LastChangeOnState[0] = Environment.TickCount;
-                    NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
-                }
-            }
-            else if (header == HeaderSkill && Game.ClockTime >= (1199 + ClockTimeAdjust) &&
+            if (header == HeaderSkill &&
                 BitConverter.ToInt32(args.PacketData, 2) != NetworkID[0] &&
                 BitConverter.ToInt32(args.PacketData, 2) != NetworkID[1] &&
                 BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
@@ -1271,10 +1231,9 @@ namespace GodJungleTracker
                 {
                     if (!obj.IsAlly)
                     {
-                        if (WarningOnce == 0 && !obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
+                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron") )//&& !obj.Name.Contains("TestCube"))
                         {
                             Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
-                            WarningOnce = 1;
                             GuessDragonID = 0;
                         }
                     }
@@ -1283,7 +1242,7 @@ namespace GodJungleTracker
 
                 if (!AI_Base)
                 {
-                    if ((State[1] == 1 || (State[1] == 7 && CampRespawnTime[1] > Environment.TickCount + 1000)) && BitConverter.ToInt32(args.PacketData, 2) != NetworkID[1])
+                    if (State[1] == 1 || (State[1] == 7 && CampRespawnTime[1] > Environment.TickCount + 1000) || State[1] == 8)
                     {
                         if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
                         {
@@ -1302,8 +1261,7 @@ namespace GodJungleTracker
                         LastChangeOnState[0] = Environment.TickCount;
                         NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
                     }
-
-                    if ((State[0] == 1 || (State[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000)) && BitConverter.ToInt32(args.PacketData, 2) != NetworkID[0])
+                    else if (State[0] == 1 || (State[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000))
                     {
                         State[1] = 2;
                         LastChangeOnState[1] = Environment.TickCount;
