@@ -46,15 +46,15 @@ namespace GodJungleTracker
                         Quality = FontQuality.Default
                     });
 
-        public static short HeaderRangedAttack = 229;
+        public static short HeaderRangedAttack = 220;
 
-        public static short HeaderMeleeAttack = 227;
+        public static short HeaderMeleeAttack = 48;
 
-        public static short HeaderDisengaged = 61;
+        public static short HeaderDisengaged = 75;
 
-        public static short HeaderSkill = 225;
+        public static short HeaderSkill = 151;
 
-        public static short HeaderCreateGromp = 193;
+        public static short HeaderCreateGromp = 301;
 
         public static float BaronSpawn = 1199;
 
@@ -448,7 +448,7 @@ namespace GodJungleTracker
                 }
             }
 
-            if (menu.Item("dragonbeta2").GetValue<bool>() && GuessDragonID == 1)
+            if  (GuessDragonID == 1)
             {
 
                 if (CampState[0] == 6 && ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000))
@@ -1223,7 +1223,7 @@ namespace GodJungleTracker
                 BitConverter.ToInt32(args.PacketData, 2) != NetworkID[1] &&
                 BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
                 BitConverter.ToString(args.PacketData, 0).Length == 47 &&
-                menu.Item("dragonbeta2").GetValue<bool>() && GuessDragonID == 1
+                GuessDragonID == 1
                 )
             {
                 bool AI_Base = false;
@@ -1576,9 +1576,6 @@ namespace GodJungleTracker
             
             //Track on Minimap
             menu.AddItem(new MenuItem("TrackonMinimap", "Track on Minimap").SetValue(true));
-
-            //Debug
-            menu.AddItem(new MenuItem("dragonbeta2", "Guess Dragon/Baron NetworkID (Beta)").SetValue(true));
 
             menu.AddToMainMenu();
         }
