@@ -1279,7 +1279,7 @@ namespace GodJungleTracker
                 if (BitConverter.ToString(args.PacketData, 0).Length == 284)
                 {
                     NetworkID[14] = BitConverter.ToInt32(args.PacketData, 2);
-                    State[14] = 6;
+                    State[14] = 1;
                     LastChangeOnState[14] = Environment.TickCount;
 
                     if (Game.ClockTime - 111f < 90 && ClockTimeAdjust == 0)
@@ -1294,7 +1294,7 @@ namespace GodJungleTracker
                 else if (BitConverter.ToString(args.PacketData, 0).Length == 293)
                 {
                     NetworkID[15] = BitConverter.ToInt32(args.PacketData, 2);
-                    State[15] = 6;
+                    State[15] = 1;
                     LastChangeOnState[15] = Environment.TickCount;
                 }
             }
@@ -1360,23 +1360,23 @@ namespace GodJungleTracker
                     }
                     if (CampState[i] == 1)
                     {
-                        cor = Color.FromArgb(255, 0, 255, 0);
+                        cor = menu.Item("colortracked").GetValue<Color>();
                     }
                     else if (CampState[i] == 2)
                     {
-                        cor = Color.FromArgb(255, 255, 0, 0);
+                        cor = menu.Item("colorattacking").GetValue<Color>();
                     }
                     else if (CampState[i] == 3)
                     {
-                        cor = Color.FromArgb(255, 255, 210, 0);
+                        cor = menu.Item("colordisengaged").GetValue<Color>();
                     }
                     else if (CampState[i] == 4)
                     {
-                        cor = Color.FromArgb(255, 200, 200, 200);
+                        cor = menu.Item("colordead").GetValue<Color>();
                     }
                     else if (CampState[i] == 5 || CampState[i] == 6)
                     {
-                        cor = Color.Cyan;
+                        cor = menu.Item("colorguessed").GetValue<Color>();
                     }
 
 
@@ -1436,6 +1436,7 @@ namespace GodJungleTracker
 
             for (int i = 0; i <= 15; i++)
             {
+                #region Timers
 
                 if (CampRespawnTime[i] > Environment.TickCount && CampState[i] == 7)
                 {
@@ -1486,34 +1487,36 @@ namespace GodJungleTracker
                     }
                 }
 
+                #endregion
+
                 if (i > 11) continue;
 
 
-                if (!menu.Item("TrackonMinimap").GetValue<bool>()) break;
+                if (!menu.Item("TrackonMinimap").GetValue<bool>()) continue;
 
                 if ((i == 0 || i == 6 || i == 7) && CampState[i] == 2 && (Environment.TickCount - LastChangeOnCampState[i]) < 60000)
                 {
-                    Utility.DrawCircle(CampPosition[i], 500, Color.Red, 2, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorattacking").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
                 }
                 else if (i != 0 && CampState[i] == 2 && (Environment.TickCount - LastChangeOnCampState[i]) < 10000)
                 {
-                    Utility.DrawCircle(CampPosition[i], 500, Color.Red, 2, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorattacking").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
                 }
                 else if (CampState[i] == 1)
                 {
-                    Utility.DrawCircle(CampPosition[i], 400, Color.Lime, 1, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colortracked").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
                 }
                 else if (CampState[i] == 3)
                 {
-                    Utility.DrawCircle(CampPosition[i], 450, Color.FromArgb(255, 255, 210, 0), 2, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colordisengaged").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
                 }
                 else if (CampState[i] == 4)
                 {
-                    Utility.DrawCircle(CampPosition[i], 400, Color.FromArgb(255, 200, 200, 200), 1, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colordead").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
                 }
                 else if (CampState[i] == 5 || CampState[i] == 6)
                 {
-                    Utility.DrawCircle(CampPosition[i], 400, Color.Cyan, 1, 15, true);
+                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorguessed").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
                 }
             }
         }
@@ -1574,8 +1577,17 @@ namespace GodJungleTracker
             Timers.SubMenu("On Minimap").AddItem(new MenuItem("timerfontminimap", "Font Height").SetValue(new Slider(13, 3, 30)));
             Timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimap", "Enabled").SetValue(true));
             
-            //Track on Minimap
-            menu.AddItem(new MenuItem("TrackonMinimap", "Track on Minimap").SetValue(true));
+            //Drawing
+            menu.AddSubMenu(new Menu("Drawing", "Drawing"));
+            var Draw = menu.SubMenu("Drawing");
+            Draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
+            Draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
+            Draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
+            Draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
+            Draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
+            menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
+            menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
+            menu.SubMenu("Drawing").AddItem(new MenuItem("TrackonMinimap", "Draw on Minimap").SetValue(true));
 
             menu.AddToMainMenu();
         }
