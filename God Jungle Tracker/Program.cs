@@ -46,15 +46,15 @@ namespace GodJungleTracker
                         Quality = FontQuality.Default
                     });
 
-        public static short HeaderRangedAttack = 220;
+        public static short HeaderRangedAttack = 1000;
 
-        public static short HeaderMeleeAttack = 48;
+        public static short HeaderMeleeAttack = 1000;
 
-        public static short HeaderDisengaged = 75;
+        public static short HeaderDisengaged = 1000;
 
-        public static short HeaderSkill = 151;
+        public static short HeaderSkill = 1000;
 
-        public static short HeaderCreateGromp = 301;
+        public static short HeaderCreateGromp = 1000;
 
         public static float BaronSpawn = 1199;
 
@@ -246,10 +246,11 @@ namespace GodJungleTracker
             Drawing.OnPostReset += DrawingOnPostReset;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
-           
 
+            SetPacketId();
             LoadMenu();
-            Game.PrintChat("<font color=\"#00BFFF\">God Jungle Tracker</font> <font color=\"#FFFFFF\"> - Loaded</font>");
+            //Game.PrintChat("<font color=\"#00BFFF\">God Jungle Tracker</font> <font color=\"#FFFFFF\"> - Loaded</font>");
+            //Notifications.AddNotification(new Notification("God Jungle Tracker - Loaded", 3000).SetTextColor(Color.FromArgb(136, 207, 240)));
 
             foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Contains("SRU_") || x.Name.Contains("Sru_")))
             {
@@ -326,6 +327,40 @@ namespace GodJungleTracker
                         }
                     }
                 }
+            }
+        }
+
+        private static void SetPacketId()
+        {
+            if (Game.Version.StartsWith("5.9"))
+            {
+                HeaderRangedAttack = 223;
+
+                HeaderMeleeAttack = 83;
+
+                HeaderDisengaged = 98;
+
+                HeaderSkill = 106;
+
+                HeaderCreateGromp = 312;
+            }
+            else if (Game.Version.StartsWith("5.8"))
+            {
+                HeaderRangedAttack = 220;
+
+                HeaderMeleeAttack = 48;
+
+                HeaderDisengaged = 75;
+
+                HeaderSkill = 151;
+
+                HeaderCreateGromp = 301;
+            }
+            else
+            {
+                Notifications.AddNotification(new Notification("God Jungle Tracker", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                Notifications.AddNotification(new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                Notifications.AddNotification(new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
             }
         }
 
@@ -493,11 +528,9 @@ namespace GodJungleTracker
                     visible = 1;
                 }
 
-                if (visible == 0)
-                {
-                    CampState[l] = Math.Min(State[UnitToCamp[l] - 1], State[UnitToCamp[l] - 2]);
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
-                }
+
+                CampState[l] = Math.Min(State[UnitToCamp[l] - 1], State[UnitToCamp[l] - 2]);
+                LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
 
                 if ((State[UnitToCamp[l]] == 2 || State[UnitToCamp[l] - 1] == 2 || State[UnitToCamp[l] - 2] == 2))
                 {
@@ -507,7 +540,12 @@ namespace GodJungleTracker
 
                 if (visible == 1)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]] , Math.Min(State[UnitToCamp[l] - 1] ,State[UnitToCamp[l] - 2]));
+                    if (State[UnitToCamp[l]] == 1 && (State[UnitToCamp[l] - 1] == 4 || State[UnitToCamp[l] - 1] == 7) && (State[UnitToCamp[l] - 2] == 4 || State[UnitToCamp[l] - 2] == 7))
+                    {
+                        CampState[l] = 0;
+                    }
+
+
                     LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
 
                     if (CampRespawnTime[l] > Environment.TickCount) CampRespawnTime[l] = (Environment.TickCount + CampRespawnTimer[l] * 1000);
