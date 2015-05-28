@@ -332,7 +332,19 @@ namespace GodJungleTracker
 
         private static void SetPacketId()
         {
-            if (Game.Version.StartsWith("5.9"))
+            if (Game.Version.StartsWith("5.10"))
+            {
+                HeaderRangedAttack = 179;
+
+                HeaderMeleeAttack = 305;
+
+                HeaderDisengaged = 204;
+
+                HeaderSkill = 30;
+
+                HeaderCreateGromp = 282;
+            }
+            else if (Game.Version.StartsWith("5.9"))
             {
                 HeaderRangedAttack = 223;
 
