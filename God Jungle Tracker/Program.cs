@@ -236,6 +236,12 @@ namespace GodJungleTracker
 
         public static void OnGameLoad(EventArgs args)
         {
+
+            if (Game.MapId.ToString() != "SummonersRift")
+            {
+                return;
+            }
+
             TrackingList = new List<Obj_AI_Minion>();
 
             GameObject.OnCreate += GameObjectOnCreate;
