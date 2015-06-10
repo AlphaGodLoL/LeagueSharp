@@ -48,6 +48,8 @@ namespace GodJungleTracker
 
         public static short HeaderRangedAttack = 1000;
 
+        public static Utility.Map.MapType MapType { get; set; }
+
         public static short HeaderMeleeAttack = 1000;
 
         public static short HeaderDisengaged = 1000;
@@ -199,23 +201,31 @@ namespace GodJungleTracker
                                             "Wolf W" };
 
 
-        public static string[] NameToCompare = { "SRU_Dragon6.1.1", 
-                                                 "SRU_Baron12.1.1",
-                                                 "SRU_BlueMini21.1.3", "SRU_BlueMini1.1.2", "SRU_Blue1.1.1", //4
-                                                 "SRU_BlueMini27.1.3", "SRU_BlueMini7.1.2", "SRU_Blue7.1.1", //7
-                                                 "SRU_RedMini4.1.3", "SRU_RedMini4.1.2", "SRU_Red4.1.1",//10
-                                                 "SRU_RedMini10.1.3", "SRU_RedMini10.1.2", "SRU_Red10.1.1", //13
-                                                 "SRU_Gromp13.1.1",
-                                                 "SRU_Gromp14.1.1", 
-                                                 "SRU_RazorbeakMini9.1.4", "SRU_RazorbeakMini9.1.3", "SRU_RazorbeakMini9.1.2", "SRU_Razorbeak9.1.1",//19
-                                                 "SRU_RazorbeakMini3.1.4", "SRU_RazorbeakMini3.1.3", "SRU_RazorbeakMini3.1.2", "SRU_Razorbeak3.1.1",//23 
-                                                 "Sru_Crab15.1.1",
-                                                 "Sru_Crab16.1.1",
-                                                 "SRU_Krug11.1.2", "SRU_KrugMini11.1.1", //27
-                                                 "SRU_Krug5.1.2", "SRU_KrugMini5.1.1",//29
-                                                 "SRU_MurkwolfMini8.1.3", "SRU_MurkwolfMini8.1.2", "SRU_Murkwolf8.1.1", //32
-                                                 "SRU_MurkwolfMini2.1.3", "SRU_MurkwolfMini2.1.2", "SRU_Murkwolf2.1.1", //35
-                                                 "SRU_BaronSpawn12.1.2" };
+        public static string[] NameToCompare = {"SRU_Dragon6.1.1", 
+                                                "SRU_Baron12.1.1",
+                                                "SRU_BlueMini21.1.3", "SRU_BlueMini1.1.2", "SRU_Blue1.1.1", //4
+                                                "SRU_BlueMini27.1.3", "SRU_BlueMini7.1.2", "SRU_Blue7.1.1", //7
+                                                "SRU_RedMini4.1.3", "SRU_RedMini4.1.2", "SRU_Red4.1.1",//10
+                                                "SRU_RedMini10.1.3", "SRU_RedMini10.1.2", "SRU_Red10.1.1", //13
+                                                "SRU_Gromp13.1.1",
+                                                "SRU_Gromp14.1.1", 
+                                                "SRU_RazorbeakMini9.1.4", "SRU_RazorbeakMini9.1.3", "SRU_RazorbeakMini9.1.2", "SRU_Razorbeak9.1.1",//19
+                                                "SRU_RazorbeakMini3.1.4", "SRU_RazorbeakMini3.1.3", "SRU_RazorbeakMini3.1.2", "SRU_Razorbeak3.1.1",//23 
+                                                "Sru_Crab15.1.1",
+                                                "Sru_Crab16.1.1",
+                                                "SRU_Krug11.1.2", "SRU_KrugMini11.1.1", //27
+                                                "SRU_Krug5.1.2", "SRU_KrugMini5.1.1",//29
+                                                "SRU_MurkwolfMini8.1.3", "SRU_MurkwolfMini8.1.2", "SRU_Murkwolf8.1.1", //32
+                                                "SRU_MurkwolfMini2.1.3", "SRU_MurkwolfMini2.1.2", "SRU_Murkwolf2.1.1", //35
+                                                "SRU_BaronSpawn12.1.2", //36
+                                                "TT_NGolem2.1.1", "TT_NGolem22.1.2",
+                                                "TT_NWraith21.1.3", "TT_NWraith21.1.2", "TT_NWraith1.1.1", 
+                                                "TT_NWolf23.1.3", "TT_NWolf23.1.2", "TT_NWolf3.1.1",
+                                                "TT_NWraith24.1.3", "TT_NWraith24.1.2", "TT_NWraith4.1.1",
+                                                "TT_NWolf26.1.3", "TT_NWolf26.1.2", "TT_NWolf6.1.1",
+                                                "TT_NGolem5.1.1", "TT_NGolem25.1.2",
+                                                "TT_Spiderboss8.1.1",
+                                                "TT_Relic7.1.1"};
 
         #endregion
 
@@ -236,11 +246,11 @@ namespace GodJungleTracker
 
         public static void OnGameLoad(EventArgs args)
         {
-
             if (Game.MapId.ToString() != "SummonersRift")
             {
                 return;
             }
+        
 
             TrackingList = new List<Obj_AI_Minion>();
 
@@ -248,8 +258,6 @@ namespace GodJungleTracker
             GameObject.OnDelete += GameObjectOnDelete;
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
-            Drawing.OnPreReset += DrawingOnPreReset;
-            Drawing.OnPostReset += DrawingOnPostReset;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
 
@@ -277,7 +285,7 @@ namespace GodJungleTracker
                             NetworkID[i] = minion.NetworkId;
                             State[i] = 1;
                             LastChangeOnState[i] = Environment.TickCount;
-                            //Console.WriteLine(minion.NetworkId + " Name: " + minion.Name);
+                            Console.WriteLine(minion.NetworkId + " Name: " + minion.Name);
                             TrackingList.Add(minion);
                             
                         }
@@ -338,7 +346,19 @@ namespace GodJungleTracker
 
         private static void SetPacketId()
         {
-            if (Game.Version.StartsWith("5.10"))
+            if (Game.Version.StartsWith("5.11"))
+            {
+                HeaderRangedAttack = 42;
+
+                HeaderMeleeAttack = 230;
+
+                HeaderDisengaged = 226;
+
+                HeaderSkill = 132;
+
+                HeaderCreateGromp = 168;
+            }
+            else if (Game.Version.StartsWith("5.10"))
             {
                 HeaderRangedAttack = 179;
 
@@ -407,6 +427,7 @@ namespace GodJungleTracker
             var minion = (Obj_AI_Minion)sender;
             var n = minion.Name;
 
+            Console.WriteLine("Added " + minion.Name + " to the Tracking List " + minion.NetworkId);
 
             for (int i = 0; i <= 35; i++)
             {
@@ -1575,18 +1596,6 @@ namespace GodJungleTracker
                     Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorguessed").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
                 }
             }
-        }
-
-        private static void DrawingOnPostReset(EventArgs args)
-        {
-            MapText.OnResetDevice();
-            MinimapText.OnResetDevice();
-        }
-
-        private static void DrawingOnPreReset(EventArgs args)
-        {
-            MapText.OnLostDevice();
-            MinimapText.OnLostDevice();
         }
 
         static void LoadMenu()
