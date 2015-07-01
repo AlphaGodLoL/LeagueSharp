@@ -24,7 +24,7 @@ namespace GodJungleTracker
 {
     class Program
     {
-        static Menu menu;
+        static Menu _menu;
 
         #region Definitions
 
@@ -60,49 +60,62 @@ namespace GodJungleTracker
 
         public static float BaronSpawn = 1199;
 
-        public static int EnemyTeamStacks = 0;
+        public static int EnemyTeamStacks;
 
-        public static int AllyTeamStacks = 0;
+        public static int AllyTeamStacks;
 
-        public static bool EnemyTeamNashor = false;
+        public static bool EnemyTeamNashor;
 
-        public static bool AllyTeamNashor = false;
+        public static bool AllyTeamNashor;
 
         public static string TestMinionName = "";
 
         public static int TestMinionState = 0;
 
-        public static int GuessNetworkID1 = 1;
+        public static int GuessNetworkId1 = 1;
 
-        public static int GuessNetworkID2 = 1;
+        public static int GuessNetworkId2 = 1;
 
-        public static int GuessDragonID = 1;
+        public static int GuessDragonId = 1;
 
-        public static int EnemyFoWTime = 0;
+        public static int EnemyFoWTime;
 
-        public static int AllyFoWTime = 0;
+        public static int AllyFoWTime;
 
-        public static int LastPlayedDragonSound = 0;
+        public static int LastPlayedDragonSound;
 
-        public static int LastPlayedBaronSound = 0;
+        public static int LastPlayedBaronSound;
 
-        public static int LastPlayedBaronSound2 = 0;
+        public static int LastPlayedBaronSound2;
 
-        public static int BaronSoundDelay = 0;
+        public static int BaronSoundDelay;
 
         public static int Seed1 = 3;
 
         public static int Seed2 = 2;
 
-        public static float ClockTimeAdjust = 0;
+        public static float ClockTimeAdjust;
 
-        public static int BiggestNetworkID = 0;
+        public static int BiggestNetworkId;
 
-        public static int l = 0;
+        public static int L;
 
-        public static int BufferDragonSound = 0;
+        public static int BufferDragonSound;
 
-        public static int PlayingDragonSound = 0;
+        public static int PlayingDragonSound;
+
+        public static bool timeronmap;
+        public static bool timeronminimap;
+        public static int circleradius;
+        public static Color colorattacking;
+        public static Color colortracked;
+        public static Color colordisengaged;
+        public static Color colordead;
+        public static Color colorguessed;
+        public static int circlewidth;
+        public static bool trackonminimap;
+
+        public static ColorBGRA white = new ColorBGRA(255, 255, 255, 255);
 
         public static Vector3[] CampPosition = 
         { 
@@ -124,12 +137,12 @@ namespace GodJungleTracker
         new Vector3(3825f  , 6491f  , 52f),
         };
 
-        private static readonly SoundPlayer danger = new SoundPlayer(Properties.Resources.danger);
-        private static readonly SoundPlayer danger10 = new SoundPlayer(Properties.Resources.danger10);
-        private static readonly SoundPlayer danger25 = new SoundPlayer(Properties.Resources.danger25);
-        private static readonly SoundPlayer danger50 = new SoundPlayer(Properties.Resources.danger50);
-        private static readonly SoundPlayer danger75 = new SoundPlayer(Properties.Resources.danger75);
-        private static SoundPlayer sound = danger;
+        private static readonly SoundPlayer Danger = new SoundPlayer(Properties.Resources.danger);
+        private static readonly SoundPlayer Danger10 = new SoundPlayer(Properties.Resources.danger10);
+        private static readonly SoundPlayer Danger25 = new SoundPlayer(Properties.Resources.danger25);
+        private static readonly SoundPlayer Danger50 = new SoundPlayer(Properties.Resources.danger50);
+        private static readonly SoundPlayer Danger75 = new SoundPlayer(Properties.Resources.danger75);
+        private static SoundPlayer _sound = Danger;
 
         private static List<Obj_AI_Minion> TrackingList { get; set; }
 
@@ -137,7 +150,7 @@ namespace GodJungleTracker
 
         public static int[] OnScreen = { 0, 0 };
 
-        public static int[] NetworkID = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] NetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int[] JustDied = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -145,7 +158,19 @@ namespace GodJungleTracker
 
         public static int[] LastChangeOnCampState = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        public static int[] HeroNetworkID = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static string[] TimerTextOnMap = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+
+        public static string[] TimerTextOnMinimap = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+
+        public static int[] TimerPosXOnMap = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        public static int[] TimerPosYOnMap = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        public static int[] TimerPosXOnMinimap = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        public static int[] TimerPosYOnMinimap = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static string[] Heros = { "Caitlyn", "Fizz", "Jinx", "Nidalee", "Wukong", "Zed", "Zyra", "Kalista", "Yasuo" };
 
@@ -161,7 +186,7 @@ namespace GodJungleTracker
 
         public static int[] CreateOrder = { 14, 15, 10, 9, 8, 13, 12, 11, 4, 3, 2, 7, 6, 5, 23, 22, 21, 20, 29, 28, 27, 26, 19, 18, 17, 16, 35, 34, 33, 32, 31, 30 };
 
-        public static int[] IDOrder = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] IdOrder = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int[] CampRespawnTime = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -229,7 +254,7 @@ namespace GodJungleTracker
 
         #endregion
 
-        static void Main(string[] args)
+        static void Main()
         {
             Game.OnStart += OnGameStart;
             CustomEvents.Game.OnGameLoad += OnGameLoad;
@@ -250,12 +275,12 @@ namespace GodJungleTracker
             {
                 return;
             }
-        
 
             TrackingList = new List<Obj_AI_Minion>();
 
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnDelete += GameObjectOnDelete;
+            GameObject.OnFloatPropertyChange += OnFloatChange;
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -270,22 +295,22 @@ namespace GodJungleTracker
             {
                 for (int i = 0; i <= 35; i++)
                 {
-                    if (!menu.Item("dragon").GetValue<bool>() && i == 0) continue;
-                    if (!menu.Item("baron").GetValue<bool>() && i == 1) continue;
-                    if (!menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
-                    if (!menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
-                    if (!menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
-                    if (!menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
-                    if (!menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
+                    if (!_menu.Item("dragon").GetValue<bool>() && i == 0) continue;
+                    if (!_menu.Item("baron").GetValue<bool>() && i == 1) continue;
+                    if (!_menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
+                    if (!_menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
+                    if (!_menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
+                    if (!_menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
+                    if (!_menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
 
                     if (minion.Name.Contains(NameToCompare[i]))
                     {
-                        if (!minion.IsDead && NetworkID[i] != minion.NetworkId)
+                        if (!minion.IsDead && NetworkId[i] != minion.NetworkId)
                         {
-                            NetworkID[i] = minion.NetworkId;
+                            NetworkId[i] = minion.NetworkId;
                             State[i] = 1;
                             LastChangeOnState[i] = Environment.TickCount;
-                            Console.WriteLine(minion.NetworkId + " Name: " + minion.Name);
+                            //Console.WriteLine(minion.NetworkId + " Name: " + minion.Name);
                             TrackingList.Add(minion);
                             
                         }
@@ -297,7 +322,7 @@ namespace GodJungleTracker
                      new FontDescription
                      {
                          FaceName = "Calibri",
-                         Height = menu.Item("timerfontminimap").GetValue<Slider>().Value,
+                         Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
                          OutputPrecision = FontPrecision.Default,
                          Quality = FontQuality.Default
                      });
@@ -306,7 +331,7 @@ namespace GodJungleTracker
                     new FontDescription
                     {
                         FaceName = "Calibri",
-                        Height = menu.Item("timerfontmap").GetValue<Slider>().Value,
+                        Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
                         OutputPrecision = FontPrecision.Default,
                         Quality = FontQuality.Default
                     });
@@ -314,21 +339,21 @@ namespace GodJungleTracker
 
             if (Game.ClockTime > 400f)
             {
-                GuessNetworkID1 = 0;
+                GuessNetworkId1 = 0;
 
-                GuessNetworkID2 = 0;
+                GuessNetworkId2 = 0;
             }
 
             int c = 0;
             foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                HeroNetworkID[c] = hero.NetworkId;
+                HeroNetworkId[c] = hero.NetworkId;
                 HeroName[c] = hero.BaseSkinName;
                 //Console.WriteLine(HeroName[c] + " ; " + HeroNetworkID[c]);
                 c++;
-                if (hero.NetworkId > BiggestNetworkID)
+                if (hero.NetworkId > BiggestNetworkId)
                 {
-                    BiggestNetworkID = hero.NetworkId;
+                    BiggestNetworkId = hero.NetworkId;
                 }
 
                 if (!hero.IsAlly)
@@ -337,7 +362,7 @@ namespace GodJungleTracker
                     {
                         if (hero.ChampionName.Contains(Heros[i]))
                         {
-                            GuessDragonID = 0;
+                            GuessDragonId = 0;
                         }
                     }
                 }
@@ -345,72 +370,78 @@ namespace GodJungleTracker
         }
 
         private static void SetPacketId()
-        {   
-            if (Game.Version.StartsWith("5.12"))
+        {
+            if (!Game.Region.Substring(0, 2).Equals("HN"))
             {
-                HeaderRangedAttack = 186;
+                if (Game.Version.StartsWith("5.12"))
+                {
+                    HeaderRangedAttack = 186;
 
-                HeaderMeleeAttack = 118;
+                    HeaderMeleeAttack = 118;
 
-                HeaderDisengaged = 52;
+                    HeaderDisengaged = 52;
 
-                HeaderSkill = 159;
+                    HeaderSkill = 159;
 
-                HeaderCreateGromp = 61;
-            }
-            else if (Game.Version.StartsWith("5.11"))
-            {
-                HeaderRangedAttack = 42;
+                    HeaderCreateGromp = 61;
+                }
+                else if (Game.Version.StartsWith("5.11"))
+                {
+                    HeaderRangedAttack = 42;
 
-                HeaderMeleeAttack = 230;
+                    HeaderMeleeAttack = 230;
 
-                HeaderDisengaged = 226;
+                    HeaderDisengaged = 226;
 
-                HeaderSkill = 132;
+                    HeaderSkill = 132;
 
-                HeaderCreateGromp = 168;
-            }
-            else if (Game.Version.StartsWith("5.10"))
-            {
-                HeaderRangedAttack = 179;
+                    HeaderCreateGromp = 168;
+                }
+                else if (Game.Version.StartsWith("5.10"))
+                {
+                    HeaderRangedAttack = 179;
 
-                HeaderMeleeAttack = 305;
+                    HeaderMeleeAttack = 305;
 
-                HeaderDisengaged = 204;
+                    HeaderDisengaged = 204;
 
-                HeaderSkill = 30;
+                    HeaderSkill = 30;
 
-                HeaderCreateGromp = 282;
-            }
-            else if (Game.Version.StartsWith("5.9"))
-            {
-                HeaderRangedAttack = 223;
-
-                HeaderMeleeAttack = 83;
-
-                HeaderDisengaged = 98;
-
-                HeaderSkill = 106;
-
-                HeaderCreateGromp = 312;
-            }
-            else if (Game.Version.StartsWith("5.8"))
-            {
-                HeaderRangedAttack = 220;
-
-                HeaderMeleeAttack = 48;
-
-                HeaderDisengaged = 75;
-
-                HeaderSkill = 151;
-
-                HeaderCreateGromp = 301;
+                    HeaderCreateGromp = 282;
+                }
+                else
+                {
+                    Notifications.AddNotification(
+                        new Notification("God Jungle Tracker", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                }
             }
             else
             {
-                Notifications.AddNotification(new Notification("God Jungle Tracker", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
-                Notifications.AddNotification(new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
-                Notifications.AddNotification(new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                if (Game.Version.StartsWith("5.11"))
+                {
+                    HeaderRangedAttack = 182;
+
+                    HeaderMeleeAttack = 290;
+
+                    HeaderDisengaged = 165;
+
+                    HeaderSkill = 187;
+
+                    HeaderCreateGromp = 51;
+                }
+                else
+                {
+                    Notifications.AddNotification(
+                        new Notification("God Jungle Tracker", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                }
             }
         }
 
@@ -439,21 +470,21 @@ namespace GodJungleTracker
             var minion = (Obj_AI_Minion)sender;
             var n = minion.Name;
 
-            Console.WriteLine("Added " + minion.Name + " to the Tracking List " + minion.NetworkId);
+            //Console.WriteLine("Added " + minion.Name + " to the Tracking List " + minion.NetworkId);
 
             for (int i = 0; i <= 35; i++)
             {
-                if (!menu.Item("dragon").GetValue<bool>() && i == 0) continue;
-                if (!menu.Item("baron").GetValue<bool>() && i == 1) continue;
-                if (!menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
-                if (!menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
-                if (!menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
-                if (!menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
-                if (!menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
+                if (!_menu.Item("dragon").GetValue<bool>() && i == 0) continue;
+                if (!_menu.Item("baron").GetValue<bool>() && i == 1) continue;
+                if (!_menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
+                if (!_menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
+                if (!_menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
+                if (!_menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
+                if (!_menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
 
                 if (NameToCompare[i] == n)
                 {
-                    NetworkID[i] = minion.NetworkId;
+                    NetworkId[i] = minion.NetworkId;
                     State[i] = 1;
                     LastChangeOnState[i] = Environment.TickCount;
                     JustDied[i] = 0;
@@ -470,6 +501,41 @@ namespace GodJungleTracker
             }
         }
 
+        public static void OnFloatChange(GameObject sender, GameObjectFloatPropertyChangeEventArgs args)
+        {
+            if (sender.Team != GameObjectTeam.Neutral || !sender.IsDead || !(sender is Obj_AI_Minion) || args.Property != "mHP" || (int)args.NewValue != 0)
+            {
+                return;
+            }
+
+            var minion = (Obj_AI_Minion)sender;
+            var n = minion.Name;
+
+            for (int i = 0; i <= 35; i++)
+            {
+                if (!_menu.Item("dragon").GetValue<bool>() && i == 0) continue;
+                if (!_menu.Item("baron").GetValue<bool>() && i == 1) continue;
+                if (!_menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
+                if (!_menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
+                if (!_menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
+                if (!_menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
+                if (!_menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
+
+                if (NameToCompare[i] == n)
+                {
+                    State[i] = 7;
+                    LastChangeOnState[i] = Environment.TickCount;
+                    JustDied[i] = 1;
+                    //Console.WriteLine("Removed " + minion.Name + " of the Tracking List");
+                    TrackingList.RemoveAll(x => x.Name == minion.Name);
+
+                    return;
+                }
+            }
+
+            //Console.WriteLine("Object: " + sender.Name + " Property changed: " + args.Property + " Value: " + args.NewValue + " IsDead: " + sender.IsDead);
+        }
+
         private static void GameObjectOnDelete(GameObject sender, EventArgs args)
         {
             if (!(sender is Obj_AI_Minion) || sender.Team != GameObjectTeam.Neutral)
@@ -482,21 +548,24 @@ namespace GodJungleTracker
 
             for (int i = 0; i <= 35; i++)
             {
-                if (!menu.Item("dragon").GetValue<bool>() && i == 0) continue;
-                if (!menu.Item("baron").GetValue<bool>() && i == 1) continue;
-                if (!menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
-                if (!menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
-                if (!menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
-                if (!menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
-                if (!menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
+                if (!_menu.Item("dragon").GetValue<bool>() && i == 0) continue;
+                if (!_menu.Item("baron").GetValue<bool>() && i == 1) continue;
+                if (!_menu.Item("blue").GetValue<bool>() && i >= 2 && i <= 7) continue;
+                if (!_menu.Item("red").GetValue<bool>() && i >= 8 && i <= 13) continue;
+                if (!_menu.Item("gromp").GetValue<bool>() && i >= 14 && i <= 15) continue;
+                if (!_menu.Item("raptor").GetValue<bool>() && i >= 16 && i <= 23) continue;
+                if (!_menu.Item("crab").GetValue<bool>() && i >= 24 && i <= 25) continue;
 
                 if (NameToCompare[i] == n)
                 {
-                    State[i] = 7;
-                    LastChangeOnState[i] = Environment.TickCount - 3000;
-                    JustDied[i] = 1;
-                    //Console.WriteLine("Removed " + minion.Name + " of the Tracking List");
-                    TrackingList.RemoveAll(x => x.Name == minion.Name);
+                    if (LastChangeOnState[i] < Environment.TickCount + 10000)
+                    {
+                        State[i] = 7;
+                        LastChangeOnState[i] = Environment.TickCount - 3000;
+                        JustDied[i] = 1;
+                        //Console.WriteLine("Removed " + minion.Name + " of the Tracking List");
+                        TrackingList.RemoveAll(x => x.Name == minion.Name);
+                    }
                     
                     return;
                 }
@@ -507,34 +576,41 @@ namespace GodJungleTracker
         {
             #region Update CampState
 
-            if (l <= 11 && (l < 2 || l > 5) && l != 8 && l != 9)
+            if (L <= 11 && (L < 2 || L > 5) && L != 8 && L != 9)
             {
 
                 var visible = 0;
 
-                CampState[l] = State[UnitToCamp[l]];
-                LastChangeOnCampState[l] = LastChangeOnState[UnitToCamp[l]];
+                CampState[L] = State[UnitToCamp[L]];
+                LastChangeOnCampState[L] = LastChangeOnState[UnitToCamp[L]];
 
-                foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible && x.Name.Contains(NameToCompare[UnitToCamp[l]]) && !x.IsDead))
+                try
                 {
-                    visible = 1;
+                    foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible && x.Name.Contains(NameToCompare[UnitToCamp[L]]) && !x.IsDead))
+                    {
+                        visible = 1;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(@"Here ------" + ex);
                 }
 
-                if ((CampState[l] == 7 || CampState[l] == 4) && visible == 1)
+                if ((CampState[L] == 7 || CampState[L] == 4) && visible == 1)
                 {
-                    State[UnitToCamp[l]] = 1;
-                    CampState[l] = 1;
-                    JustDied[UnitToCamp[l]] = 0;
+                    State[UnitToCamp[L]] = 1;
+                    CampState[L] = 1;
+                    JustDied[UnitToCamp[L]] = 0;
                 }
 
-                if (JustDied[UnitToCamp[l]] == 1)
+                if (JustDied[UnitToCamp[L]] == 1)
                 {
-                    CampRespawnTime[l] = (LastChangeOnCampState[l] + CampRespawnTimer[l] * 1000);
-                    JustDied[UnitToCamp[l]] = 0;
+                    CampRespawnTime[L] = (LastChangeOnCampState[L] + CampRespawnTimer[L] * 1000);
+                    JustDied[UnitToCamp[L]] = 0;
                 }
             }
 
-            if  (GuessDragonID == 1)
+            if (GuessDragonId == 1)
             {
 
                 if (CampState[0] == 6 && ((CampState[1] == 7 || CampState[1] == 0) && CampRespawnTime[1] <= Environment.TickCount + 1000))
@@ -569,55 +645,55 @@ namespace GodJungleTracker
             }
 
 
-            if ((l >= 2 && l <= 5)) //Red and Blue
+            if ((L >= 2 && L <= 5)) //Red and Blue
             {
 
                 var visible = 0;
 
-                foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible && x.Name.Contains(NameToCompare[UnitToCamp[l]]) && !x.IsDead))
+                foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible && x.Name.Contains(NameToCompare[UnitToCamp[L]]) && !x.IsDead))
                 {
                     visible = 1;
                 }
 
 
-                CampState[l] = Math.Min(State[UnitToCamp[l] - 1], State[UnitToCamp[l] - 2]);
-                LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                CampState[L] = Math.Min(State[UnitToCamp[L] - 1], State[UnitToCamp[L] - 2]);
+                LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
 
-                if ((State[UnitToCamp[l]] == 2 || State[UnitToCamp[l] - 1] == 2 || State[UnitToCamp[l] - 2] == 2))
+                if ((State[UnitToCamp[L]] == 2 || State[UnitToCamp[L] - 1] == 2 || State[UnitToCamp[L] - 2] == 2))
                 {
-                    CampState[l] = 2;
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                    CampState[L] = 2;
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
                 }
 
                 if (visible == 1)
                 {
-                    if (State[UnitToCamp[l]] == 1 && (State[UnitToCamp[l] - 1] == 4 || State[UnitToCamp[l] - 1] == 7) && (State[UnitToCamp[l] - 2] == 4 || State[UnitToCamp[l] - 2] == 7))
+                    if (State[UnitToCamp[L]] == 1 && (State[UnitToCamp[L] - 1] == 4 || State[UnitToCamp[L] - 1] == 7) && (State[UnitToCamp[L] - 2] == 4 || State[UnitToCamp[L] - 2] == 7))
                     {
-                        CampState[l] = 0;
+                        CampState[L] = 0;
                     }
 
 
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
 
-                    if (CampRespawnTime[l] > Environment.TickCount) CampRespawnTime[l] = (Environment.TickCount + CampRespawnTimer[l] * 1000);
+                    if (CampRespawnTime[L] > Environment.TickCount) CampRespawnTime[L] = (Environment.TickCount + CampRespawnTimer[L] * 1000);
                 }
 
-                if (CampState[l] == 7 && JustDied[UnitToCamp[l] - 1] == 1 && JustDied[UnitToCamp[l] - 2] == 1)
+                if (CampState[L] == 7 && JustDied[UnitToCamp[L] - 1] == 1 && JustDied[UnitToCamp[L] - 2] == 1)
                 {
-                    CampRespawnTime[l] = (LastChangeOnCampState[l] + CampRespawnTimer[l] * 1000);
-                    JustDied[UnitToCamp[l]] = 0;
-                    JustDied[UnitToCamp[l] - 1] = 0;
-                    JustDied[UnitToCamp[l] - 2] = 0;
+                    CampRespawnTime[L] = (LastChangeOnCampState[L] + CampRespawnTimer[L] * 1000);
+                    JustDied[UnitToCamp[L]] = 0;
+                    JustDied[UnitToCamp[L] - 1] = 0;
+                    JustDied[UnitToCamp[L] - 2] = 0;
                 }
             }
 
-            if ((l >= 8 && l <= 9)) //Razor
+            if ((L >= 8 && L <= 9)) //Razor
             {
 
                 var visible = 0;
 
                 foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible &&
-                    (x.Name.Contains(NameToCompare[UnitToCamp[l] - 1]) || x.Name.Contains(NameToCompare[UnitToCamp[l] - 2]) || x.Name.Contains(NameToCompare[UnitToCamp[l] - 3]))
+                    (x.Name.Contains(NameToCompare[UnitToCamp[L] - 1]) || x.Name.Contains(NameToCompare[UnitToCamp[L] - 2]) || x.Name.Contains(NameToCompare[UnitToCamp[L] - 3]))
                     && !x.IsDead))
                 {
                     visible = 1;
@@ -625,40 +701,40 @@ namespace GodJungleTracker
 
                 if (visible == 0)
                 {
-                    CampState[l] = State[UnitToCamp[l]];
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], Math.Max(LastChangeOnState[UnitToCamp[l] - 2], LastChangeOnState[UnitToCamp[l] - 3])));
+                    CampState[L] = State[UnitToCamp[L]];
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], Math.Max(LastChangeOnState[UnitToCamp[L] - 2], LastChangeOnState[UnitToCamp[L] - 3])));
                 }
 
-                if ((State[UnitToCamp[l]] == 2 || State[UnitToCamp[l] - 1] == 2 || State[UnitToCamp[l] - 2] == 2 || State[UnitToCamp[l] - 3] == 2))
+                if ((State[UnitToCamp[L]] == 2 || State[UnitToCamp[L] - 1] == 2 || State[UnitToCamp[L] - 2] == 2 || State[UnitToCamp[L] - 3] == 2))
                 {
-                    CampState[l] = 2;
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], Math.Max(LastChangeOnState[UnitToCamp[l] - 2], LastChangeOnState[UnitToCamp[l] - 3])));
+                    CampState[L] = 2;
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], Math.Max(LastChangeOnState[UnitToCamp[L] - 2], LastChangeOnState[UnitToCamp[L] - 3])));
                 }
 
                 if (visible == 1)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]], Math.Min(State[UnitToCamp[l] - 1], Math.Min(State[UnitToCamp[l] - 2], State[UnitToCamp[l] - 3])));
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], Math.Max(LastChangeOnState[UnitToCamp[l] - 2], LastChangeOnState[UnitToCamp[l] - 3])));
+                    CampState[L] = Math.Min(State[UnitToCamp[L]], Math.Min(State[UnitToCamp[L] - 1], Math.Min(State[UnitToCamp[L] - 2], State[UnitToCamp[L] - 3])));
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], Math.Max(LastChangeOnState[UnitToCamp[L] - 2], LastChangeOnState[UnitToCamp[L] - 3])));
 
-                    if (CampRespawnTime[l] > Environment.TickCount) CampRespawnTime[l] = (Environment.TickCount + CampRespawnTimer[l] * 1000);
+                    if (CampRespawnTime[L] > Environment.TickCount) CampRespawnTime[L] = (Environment.TickCount + CampRespawnTimer[L] * 1000);
                 }
 
-                if (CampState[l] == 7 && JustDied[UnitToCamp[l]] == 1)
+                if (CampState[L] == 7 && JustDied[UnitToCamp[L]] == 1)
                 {
-                    CampRespawnTime[l] = (LastChangeOnCampState[l] + CampRespawnTimer[l] * 1000);
-                    JustDied[UnitToCamp[l]] = 0;
-                    JustDied[UnitToCamp[l] - 1] = 0;
-                    JustDied[UnitToCamp[l] - 2] = 0;
-                    JustDied[UnitToCamp[l] - 3] = 0;
+                    CampRespawnTime[L] = (LastChangeOnCampState[L] + CampRespawnTimer[L] * 1000);
+                    JustDied[UnitToCamp[L]] = 0;
+                    JustDied[UnitToCamp[L] - 1] = 0;
+                    JustDied[UnitToCamp[L] - 2] = 0;
+                    JustDied[UnitToCamp[L] - 3] = 0;
                 }
             }
 
-            if (l == 12 || l == 13) //Krug
+            if (L == 12 || L == 13) //Krug
             {
                 var visible = 0;
 
                 foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible &&
-                    (x.Name.Contains(NameToCompare[UnitToCamp[l]]) || x.Name.Contains(NameToCompare[UnitToCamp[l] - 1]))
+                    (x.Name.Contains(NameToCompare[UnitToCamp[L]]) || x.Name.Contains(NameToCompare[UnitToCamp[L] - 1]))
                     && !x.IsDead))
                 {
                     visible = 1;
@@ -666,38 +742,38 @@ namespace GodJungleTracker
 
                 if (visible == 0)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]], State[UnitToCamp[l] - 1]);
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], LastChangeOnState[UnitToCamp[l] - 1]);
+                    CampState[L] = Math.Min(State[UnitToCamp[L]], State[UnitToCamp[L] - 1]);
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], LastChangeOnState[UnitToCamp[L] - 1]);
                 }
 
-                if (State[UnitToCamp[l]] == 2 || State[UnitToCamp[l] - 1] == 2)
+                if (State[UnitToCamp[L]] == 2 || State[UnitToCamp[L] - 1] == 2)
                 {
-                    CampState[l] = 2;
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], LastChangeOnState[UnitToCamp[l] - 1]);
+                    CampState[L] = 2;
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], LastChangeOnState[UnitToCamp[L] - 1]);
                 }
 
                 if (visible == 1)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]], State[UnitToCamp[l] - 1]);
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], LastChangeOnState[UnitToCamp[l] - 1]);
+                    CampState[L] = Math.Min(State[UnitToCamp[L]], State[UnitToCamp[L] - 1]);
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], LastChangeOnState[UnitToCamp[L] - 1]);
 
-                    if (CampRespawnTime[l] > Environment.TickCount) CampRespawnTime[l] = (Environment.TickCount + CampRespawnTimer[l] * 1000);
+                    if (CampRespawnTime[L] > Environment.TickCount) CampRespawnTime[L] = (Environment.TickCount + CampRespawnTimer[L] * 1000);
                 }
 
-                if (CampState[l] == 7 && JustDied[UnitToCamp[l]] == 1 && JustDied[UnitToCamp[l] - 1] == 1)
+                if (CampState[L] == 7 && JustDied[UnitToCamp[L]] == 1 && JustDied[UnitToCamp[L] - 1] == 1)
                 {
-                    CampRespawnTime[l] = (LastChangeOnCampState[l] + CampRespawnTimer[l] * 1000);
-                    JustDied[UnitToCamp[l]] = 0;
-                    JustDied[UnitToCamp[l] - 1] = 0;
+                    CampRespawnTime[L] = (LastChangeOnCampState[L] + CampRespawnTimer[L] * 1000);
+                    JustDied[UnitToCamp[L]] = 0;
+                    JustDied[UnitToCamp[L] - 1] = 0;
                 }
             }
 
-            if (l == 14 || l == 15) //Wolf
+            if (L == 14 || L == 15) //Wolf
             {
                 var visible = 0;
 
-                foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible && 
-                    (x.Name.Contains(NameToCompare[UnitToCamp[l]]) || x.Name.Contains(NameToCompare[UnitToCamp[l] - 1]) || x.Name.Contains(NameToCompare[UnitToCamp[l] - 2])) 
+                foreach (Obj_AI_Minion minion in TrackingList.Where(x => x.IsVisible &&
+                    (x.Name.Contains(NameToCompare[UnitToCamp[L]]) || x.Name.Contains(NameToCompare[UnitToCamp[L] - 1]) || x.Name.Contains(NameToCompare[UnitToCamp[L] - 2]))
                     && !x.IsDead))
                 {
                     visible = 1;
@@ -705,35 +781,35 @@ namespace GodJungleTracker
 
                 if (visible == 0)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]], Math.Min(State[UnitToCamp[l] - 1], State[UnitToCamp[l] - 2]));
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                    CampState[L] = Math.Min(State[UnitToCamp[L]], Math.Min(State[UnitToCamp[L] - 1], State[UnitToCamp[L] - 2]));
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
                 }
 
-                if ((State[UnitToCamp[l]] == 2 || State[UnitToCamp[l] - 1] == 2 || State[UnitToCamp[l] - 2] == 2))
+                if ((State[UnitToCamp[L]] == 2 || State[UnitToCamp[L] - 1] == 2 || State[UnitToCamp[L] - 2] == 2))
                 {
-                    CampState[l] = 2;
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                    CampState[L] = 2;
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
                 }
 
                 if (visible == 1)
                 {
-                    CampState[l] = Math.Min(State[UnitToCamp[l]], Math.Min(State[UnitToCamp[l] - 1], State[UnitToCamp[l] - 2]));
-                    LastChangeOnCampState[l] = Math.Max(LastChangeOnState[UnitToCamp[l]], Math.Max(LastChangeOnState[UnitToCamp[l] - 1], LastChangeOnState[UnitToCamp[l] - 2]));
+                    CampState[L] = Math.Min(State[UnitToCamp[L]], Math.Min(State[UnitToCamp[L] - 1], State[UnitToCamp[L] - 2]));
+                    LastChangeOnCampState[L] = Math.Max(LastChangeOnState[UnitToCamp[L]], Math.Max(LastChangeOnState[UnitToCamp[L] - 1], LastChangeOnState[UnitToCamp[L] - 2]));
 
-                    if (CampRespawnTime[l] > Environment.TickCount) CampRespawnTime[l] = (Environment.TickCount + CampRespawnTimer[l] * 1000);
+                    if (CampRespawnTime[L] > Environment.TickCount) CampRespawnTime[L] = (Environment.TickCount + CampRespawnTimer[L] * 1000);
                 }
 
-                if (CampState[l] == 7 && JustDied[UnitToCamp[l]] == 1 && JustDied[UnitToCamp[l] - 1] == 1 && JustDied[UnitToCamp[l] - 2] == 1)
+                if (CampState[L] == 7 && JustDied[UnitToCamp[L]] == 1 && JustDied[UnitToCamp[L] - 1] == 1 && JustDied[UnitToCamp[L] - 2] == 1)
                 {
-                    CampRespawnTime[l] = (LastChangeOnCampState[l] + CampRespawnTimer[l] * 1000);
-                    JustDied[UnitToCamp[l]] = 0;
-                    JustDied[UnitToCamp[l] - 1] = 0;
-                    JustDied[UnitToCamp[l] - 2] = 0;
+                    CampRespawnTime[L] = (LastChangeOnCampState[L] + CampRespawnTimer[L] * 1000);
+                    JustDied[UnitToCamp[L]] = 0;
+                    JustDied[UnitToCamp[L] - 1] = 0;
+                    JustDied[UnitToCamp[L] - 2] = 0;
                 }
             }
 
-            
-            
+
+
             #endregion
 
             #region Play Dragon/Baron Sound
@@ -747,24 +823,24 @@ namespace GodJungleTracker
             if (BufferDragonSound > 0 && (Environment.TickCount - LastPlayedDragonSound > 500) && CampState[0] == 2)
             {
                 LastPlayedDragonSound = Environment.TickCount;
-                PlaySound(sound);
+                PlaySound(_sound);
                 BufferDragonSound -= 1;
                 if (BufferDragonSound == 0) PlayingDragonSound = 0;
             }
 
-            if ((menu.Item("soundfow").GetValue<bool>() && OnFow[1] == 0) || !menu.Item("soundfow").GetValue<bool>())
+            if ((_menu.Item("soundfow").GetValue<bool>() && OnFow[1] == 0) || !_menu.Item("soundfow").GetValue<bool>())
             {
-                if ((menu.Item("soundscreen").GetValue<bool>() && OnScreen[1] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                if ((_menu.Item("soundscreen").GetValue<bool>() && OnScreen[1] == 0) || !_menu.Item("soundscreen").GetValue<bool>())
                 {
-                    if ((CampState[1] == 2 && menu.Item("baronsound").GetValue<bool>()) && (Environment.TickCount - BaronSoundDelay >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)))
+                    if ((CampState[1] == 2 && _menu.Item("baronsound").GetValue<bool>()) && (Environment.TickCount - BaronSoundDelay >= (_menu.Item("sounddelay").GetValue<Slider>().Value * 1000)))
                     {
-                        for (int i = 1; i <= menu.Item("baronsoundtimes").GetValue<Slider>().Value; i++)
+                        for (int i = 1; i <= _menu.Item("baronsoundtimes").GetValue<Slider>().Value; i++)
                         {
-                            if (i == 1 && (LastPlayedBaronSound == 0 || Environment.TickCount - LastPlayedBaronSound >= (menu.Item("sounddelay").GetValue<Slider>().Value * 1000)) && Environment.TickCount - LastChangeOnCampState[1] < 500)
+                            if (i == 1 && (LastPlayedBaronSound == 0 || Environment.TickCount - LastPlayedBaronSound >= (_menu.Item("sounddelay").GetValue<Slider>().Value * 1000)) && Environment.TickCount - LastChangeOnCampState[1] < 500)
                             {
                                 LastPlayedBaronSound = Environment.TickCount;
                                 LastPlayedBaronSound2 = Environment.TickCount;
-                                PlaySound(sound);
+                                PlaySound(_sound);
                             }
                             else if (i > 1 && Environment.TickCount - LastPlayedBaronSound > 550 * (i - 1) && Environment.TickCount - LastPlayedBaronSound < 600 * (i - 1) && Environment.TickCount - LastPlayedBaronSound2 > 500)
                             {
@@ -773,11 +849,11 @@ namespace GodJungleTracker
                                 LastPlayedBaronSound2 = Environment.TickCount;
 
 
-                                if (i == menu.Item("baronsoundtimes").GetValue<Slider>().Value)
+                                if (i == _menu.Item("baronsoundtimes").GetValue<Slider>().Value)
                                 {
                                     BaronSoundDelay = Environment.TickCount;
                                 }
-                                PlaySound(sound);
+                                PlaySound(_sound);
                             }
                         }
                     }
@@ -786,37 +862,51 @@ namespace GodJungleTracker
 
             #endregion
 
-            #region Sound Volume Update
+            #region Static Menu Update
 
-            if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
+            if (L == 0)
             {
-                sound = danger10;
-            }
-            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(1))
-            {
-                sound = danger25;
-            }
-            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(2))
-            {
-                sound = danger50;
-            }
-            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(3))
-            {
-                sound = danger75;
-            }
-            else if (menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(4))
-            {
-                sound = danger;
+                if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
+                {
+                    _sound = Danger10;
+                }
+                else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(1))
+                {
+                    _sound = Danger25;
+                }
+                else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(2))
+                {
+                    _sound = Danger50;
+                }
+                else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(3))
+                {
+                    _sound = Danger75;
+                }
+                else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(4))
+                {
+                    _sound = Danger;
+                }
+
+                timeronmap = _menu.Item("timeronmap").GetValue<bool>();
+                timeronminimap = _menu.Item("timeronminimap").GetValue<bool>();
+                circleradius = _menu.Item("circleradius").GetValue<Slider>().Value;
+                colorattacking = _menu.Item("colorattacking").GetValue<Color>();
+                colortracked = _menu.Item("colortracked").GetValue<Color>();
+                colordisengaged = _menu.Item("colordisengaged").GetValue<Color>();
+                colordead = _menu.Item("colordead").GetValue<Color>();
+                colorguessed = _menu.Item("colorguessed").GetValue<Color>();
+                circlewidth = _menu.Item("circlewidth").GetValue<Slider>().Value;
+                trackonminimap = _menu.Item("TrackonMinimap").GetValue<bool>();
             }
 
             #endregion
 
             #region Guess Blue/Red NetworkID
 
-            if (GuessNetworkID1 == 1 && NetworkID[4] != 0 &&NetworkID[3] != 0 && NetworkID[2] != 0)
+            if (GuessNetworkId1 == 1 && NetworkId[4] != 0 && NetworkId[3] != 0 && NetworkId[2] != 0)
             {
-                Seed1 = (NetworkID[3] - NetworkID[4]);
-                Seed2 = (NetworkID[2] - NetworkID[3]);
+                Seed1 = (NetworkId[3] - NetworkId[4]);
+                Seed2 = (NetworkId[2] - NetworkId[3]);
 
                 //Console.WriteLine("Seed1:" + Seed1 + "  Seed2:" + Seed2);
 
@@ -837,37 +927,37 @@ namespace GodJungleTracker
                         else id += Seed2;
                     }
 
-                    IDOrder[order] = id;
+                    IdOrder[order] = id;
                 }
 
-            
+
                 for (int j = 5; j <= 7; j++)
                 {
-                    if (j == 4 || IDOrder[j] == 0) continue;
+                    if (j == 4 || IdOrder[j] == 0) continue;
 
-                    if (NetworkID[j] == 0)
+                    if (NetworkId[j] == 0)
                     {
-                        if (IDOrder[j] < IDOrder[4])
+                        if (IdOrder[j] < IdOrder[4])
                         {
-                            NetworkID[j] = NetworkID[4] - ((IDOrder[4] - IDOrder[j]));
+                            NetworkId[j] = NetworkId[4] - ((IdOrder[4] - IdOrder[j]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
-                        else if (IDOrder[j] > IDOrder[4])
+                        else if (IdOrder[j] > IdOrder[4])
                         {
-                            NetworkID[j] = NetworkID[4] + ((IDOrder[j] - IDOrder[4]));
+                            NetworkId[j] = NetworkId[4] + ((IdOrder[j] - IdOrder[4]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
                         //Console.WriteLine("NetworkID[" + j + "]:" + NetworkID[j] + " and Name: " + NameToCompare[j]);
                     }
                 }
-                GuessNetworkID1 = 0;
+                GuessNetworkId1 = 0;
             }
-            else if (GuessNetworkID1 == 1 && NetworkID[7] != 0 && NetworkID[6] != 0 && NetworkID[5] != 0 && NetworkID[7] < NetworkID[6])
+            else if (GuessNetworkId1 == 1 && NetworkId[7] != 0 && NetworkId[6] != 0 && NetworkId[5] != 0 && NetworkId[7] < NetworkId[6])
             {
-                Seed1 = (NetworkID[6] - NetworkID[7]);
-                Seed2 = (NetworkID[5] - NetworkID[6]);
+                Seed1 = (NetworkId[6] - NetworkId[7]);
+                Seed2 = (NetworkId[5] - NetworkId[6]);
 
                 //Console.WriteLine("Seed1:" + Seed1 + "  Seed2:" + Seed2);
 
@@ -888,37 +978,37 @@ namespace GodJungleTracker
                         else id += Seed2;
                     }
 
-                    IDOrder[order] = id;
+                    IdOrder[order] = id;
                 }
 
                 for (int j = 2; j <= 4; j++)
                 {
-                    if (j == 7 || IDOrder[j] == 0) continue;
+                    if (j == 7 || IdOrder[j] == 0) continue;
 
-                    if (NetworkID[j] == 0)
+                    if (NetworkId[j] == 0)
                     {
-                        if (IDOrder[j] < IDOrder[7])
+                        if (IdOrder[j] < IdOrder[7])
                         {
-                            NetworkID[j] = NetworkID[7] - ((IDOrder[7] - IDOrder[j]));
+                            NetworkId[j] = NetworkId[7] - ((IdOrder[7] - IdOrder[j]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
-                        else if (IDOrder[j] > IDOrder[7])
+                        else if (IdOrder[j] > IdOrder[7])
                         {
-                            NetworkID[j] = NetworkID[7] + ((IDOrder[j] - IDOrder[7]));
+                            NetworkId[j] = NetworkId[7] + ((IdOrder[j] - IdOrder[7]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
                         //Console.WriteLine("NetworkID[" + j + "]:" + NetworkID[j] + " and Name: " + NameToCompare[j]);
                     }
                 }
-                GuessNetworkID1 = 0;
+                GuessNetworkId1 = 0;
             }
 
-            else if (GuessNetworkID2 == 1 && NetworkID[10] != 0 && NetworkID[9] != 0 && NetworkID[8] != 0 &&  NetworkID[10] < NetworkID[9])
+            else if (GuessNetworkId2 == 1 && NetworkId[10] != 0 && NetworkId[9] != 0 && NetworkId[8] != 0 && NetworkId[10] < NetworkId[9])
             {
-                Seed1 = (NetworkID[9] - NetworkID[10]);
-                Seed2 = (NetworkID[8] - NetworkID[9]);
+                Seed1 = (NetworkId[9] - NetworkId[10]);
+                Seed2 = (NetworkId[8] - NetworkId[9]);
 
                 //Console.WriteLine("Seed1:" + Seed1 + "  Seed2:" + Seed2);
 
@@ -939,37 +1029,37 @@ namespace GodJungleTracker
                         else id += Seed2;
                     }
 
-                    IDOrder[order] = id;
+                    IdOrder[order] = id;
                 }
 
                 for (int j = 11; j <= 13; j++)
                 {
-                    if (j == 10 || IDOrder[j] == 0) continue;
+                    if (j == 10 || IdOrder[j] == 0) continue;
 
-                    if (NetworkID[j] == 0)
+                    if (NetworkId[j] == 0)
                     {
-                        if (IDOrder[j] < IDOrder[10])
+                        if (IdOrder[j] < IdOrder[10])
                         {
-                            NetworkID[j] = NetworkID[10] - ((IDOrder[10] - IDOrder[j]));
+                            NetworkId[j] = NetworkId[10] - ((IdOrder[10] - IdOrder[j]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
-                        else if (IDOrder[j] > IDOrder[10])
+                        else if (IdOrder[j] > IdOrder[10])
                         {
-                            NetworkID[j] = NetworkID[10] + ((IDOrder[j] - IDOrder[10]));
+                            NetworkId[j] = NetworkId[10] + ((IdOrder[j] - IdOrder[10]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
                         //Console.WriteLine("NetworkID[" + j + "]:" + NetworkID[j] + " and Name: " + NameToCompare[j]);
                     }
                 }
-                GuessNetworkID2 = 0;
+                GuessNetworkId2 = 0;
             }
 
-            else if (GuessNetworkID2 == 1 && NetworkID[13] != 0 && NetworkID[12] != 0 && NetworkID[11] != 0 && NetworkID[13] < NetworkID[12])
+            else if (GuessNetworkId2 == 1 && NetworkId[13] != 0 && NetworkId[12] != 0 && NetworkId[11] != 0 && NetworkId[13] < NetworkId[12])
             {
-                Seed1 = (NetworkID[12] - NetworkID[13]);
-                Seed2 = (NetworkID[11] - NetworkID[12]);
+                Seed1 = (NetworkId[12] - NetworkId[13]);
+                Seed2 = (NetworkId[11] - NetworkId[12]);
 
                 //Console.WriteLine("Seed1:" + Seed1 + "  Seed2:" + Seed2);
 
@@ -990,31 +1080,31 @@ namespace GodJungleTracker
                         else id += Seed2;
                     }
 
-                    IDOrder[order] = id;
+                    IdOrder[order] = id;
                 }
 
                 for (int j = 8; j <= 10; j++)
                 {
-                    if (j == 13 || IDOrder[j] == 0) continue;
+                    if (j == 13 || IdOrder[j] == 0) continue;
 
-                    if (NetworkID[j] == 0)
+                    if (NetworkId[j] == 0)
                     {
-                        if (IDOrder[j] < IDOrder[13])
+                        if (IdOrder[j] < IdOrder[13])
                         {
-                            NetworkID[j] = NetworkID[13] - ((IDOrder[13] - IDOrder[j]));
+                            NetworkId[j] = NetworkId[13] - ((IdOrder[13] - IdOrder[j]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
-                        else if (IDOrder[j] > IDOrder[13])
+                        else if (IdOrder[j] > IdOrder[13])
                         {
-                            NetworkID[j] = NetworkID[13] + ((IDOrder[j] - IDOrder[13]));
+                            NetworkId[j] = NetworkId[13] + ((IdOrder[j] - IdOrder[13]));
                             State[j] = 5;
                             LastChangeOnState[j] = Environment.TickCount;
                         }
                         //Console.WriteLine("NetworkID[" + j + "]:" + NetworkID[j] + " and Name: " + NameToCompare[j]);
                     }
                 }
-                GuessNetworkID2 = 0;
+                GuessNetworkId2 = 0;
             }
 
             #endregion
@@ -1026,8 +1116,8 @@ namespace GodJungleTracker
                 for (int i = 0; i <= 1; i++)
                 {
 
-                    if (!menu.Item("dragon").GetValue<bool>() && i == 0) continue;
-                    if (!menu.Item("baron").GetValue<bool>() && i == 1) continue;
+                    if (!_menu.Item("dragon").GetValue<bool>() && i == 0) continue;
+                    if (!_menu.Item("baron").GetValue<bool>() && i == 1) continue;
 
 
                     if (minion.Name.Contains(NameToCompare[i]))
@@ -1051,102 +1141,111 @@ namespace GodJungleTracker
 
             #endregion
 
-            #region Get Dragon/Baron buff 
+            #region Get Dragon/Baron buff
 
             var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget());
-            var ally = HeroManager.Allies.FirstOrDefault(x => x.IsValidTarget(50000f, false));
 
-            if (enemy != null)
+            if (L == 0)
             {
-                if (GetDragonStacks(enemy) > EnemyTeamStacks)
-                {
-                    EnemyTeamStacks = EnemyTeamStacks + 1;
+                var ally = HeroManager.Allies.FirstOrDefault(x => x.IsValidTarget(50000f, false));
 
-                    if (Environment.TickCount - EnemyFoWTime > 100 || (Environment.TickCount - EnemyFoWTime <= 100 && (State[0] != 4 && State[0] != 7)))
+                if (enemy != null)
+                {
+                    if (GetDragonStacks(enemy) > EnemyTeamStacks)
                     {
-                        State[0] = 4;
-                        LastChangeOnState[0] = Environment.TickCount;
-                        LastChangeOnCampState[0] = Environment.TickCount;
-                        CampRespawnTime[0] = (LastChangeOnCampState[0] + CampRespawnTimer[0] * 1000);
-                    }
-                    //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
-                }
-                else if (GetNashorBuff(enemy) && !EnemyTeamNashor)
-                {
-                    EnemyTeamNashor = true;
+                        EnemyTeamStacks = EnemyTeamStacks + 1;
 
-                    if (Environment.TickCount - EnemyFoWTime > 100 || (Environment.TickCount - EnemyFoWTime <= 100 && State[1] != 4 && State[1] != 7))
+                        if (Environment.TickCount - EnemyFoWTime > 100 ||
+                            (Environment.TickCount - EnemyFoWTime <= 100 && (State[0] != 4 && State[0] != 7)))
+                        {
+                            State[0] = 4;
+                            LastChangeOnState[0] = Environment.TickCount;
+                            LastChangeOnCampState[0] = Environment.TickCount;
+                            CampRespawnTime[0] = (LastChangeOnCampState[0] + CampRespawnTimer[0]*1000);
+                        }
+                        //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
+                    }
+                    else if (GetNashorBuff(enemy) && !EnemyTeamNashor)
                     {
-                        State[1] = 4;
-                        LastChangeOnState[1] = Environment.TickCount;
-                        LastChangeOnCampState[1] = Environment.TickCount;
-                        CampRespawnTime[1] = (LastChangeOnCampState[1] + CampRespawnTimer[1] * 1000);
+                        EnemyTeamNashor = true;
+
+                        if (Environment.TickCount - EnemyFoWTime > 100 ||
+                            (Environment.TickCount - EnemyFoWTime <= 100 && State[1] != 4 && State[1] != 7))
+                        {
+                            State[1] = 4;
+                            LastChangeOnState[1] = Environment.TickCount;
+                            LastChangeOnCampState[1] = Environment.TickCount;
+                            CampRespawnTime[1] = (LastChangeOnCampState[1] + CampRespawnTimer[1]*1000);
+                        }
+                        //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
                     }
-                    //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
-                }
-                else if (GetDragonStacks(enemy) < EnemyTeamStacks)
-                {
-                    EnemyTeamStacks--;
-                    //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
-                }
-                else if (!GetNashorBuff(enemy) && EnemyTeamNashor)
-                {
-                    EnemyTeamNashor = false;
-                    //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
-                }
-            }
-            else
-            {
-                EnemyFoWTime = Environment.TickCount;
-            }
-
-            if (ally != null)
-            {
-                if (GetDragonStacks(ally) > AllyTeamStacks)
-                {
-                    AllyTeamStacks = AllyTeamStacks + 1;
-
-                    if (Environment.TickCount - AllyFoWTime > 100 || (Environment.TickCount - AllyFoWTime <= 100 && (State[0] != 4 && State[0] != 7)))
+                    else if (GetDragonStacks(enemy) < EnemyTeamStacks)
                     {
-                        State[0] = 4;
-                        LastChangeOnState[0] = Environment.TickCount;
-                        LastChangeOnCampState[0] = Environment.TickCount;
-                        CampRespawnTime[0] = (LastChangeOnCampState[0] + CampRespawnTimer[0] * 1000);
+                        EnemyTeamStacks--;
+                        //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
                     }
-                    //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
-                }
-                else if (GetNashorBuff(ally) && !AllyTeamNashor)
-                {
-                    AllyTeamNashor = true;
-
-                    if (Environment.TickCount - AllyFoWTime > 100 || (Environment.TickCount - AllyFoWTime <= 100 && State[1] != 4 && State[1] != 7))
+                    else if (!GetNashorBuff(enemy) && EnemyTeamNashor)
                     {
-                        State[1] = 4;
-                        LastChangeOnState[1] = Environment.TickCount;
-                        LastChangeOnCampState[1] = Environment.TickCount;
-                        CampRespawnTime[1] = (LastChangeOnCampState[1] + CampRespawnTimer[1] * 1000);
+                        EnemyTeamNashor = false;
+                        //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
                     }
-                    //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
                 }
-                else if (GetDragonStacks(ally) < AllyTeamStacks)
+                else
                 {
-                    AllyTeamStacks--;
-                    //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
+                    EnemyFoWTime = Environment.TickCount;
                 }
-                else if (!GetNashorBuff(ally) && AllyTeamNashor)
-                {
-                    AllyTeamNashor = false;
-                    //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
-                }
-            }
-            else
-            {
-                AllyFoWTime = Environment.TickCount;
-            }
 
-            if (ally != null && enemy != null && AllyTeamNashor == false && EnemyTeamNashor == false && State[1] == 4)
-            {
-                State[1] = 1;
+                if (ally != null)
+                {
+                    if (GetDragonStacks(ally) > AllyTeamStacks)
+                    {
+                        AllyTeamStacks = AllyTeamStacks + 1;
+
+                        if (Environment.TickCount - AllyFoWTime > 100 ||
+                            (Environment.TickCount - AllyFoWTime <= 100 && (State[0] != 4 && State[0] != 7)))
+                        {
+                            State[0] = 4;
+                            LastChangeOnState[0] = Environment.TickCount;
+                            LastChangeOnCampState[0] = Environment.TickCount;
+                            CampRespawnTime[0] = (LastChangeOnCampState[0] + CampRespawnTimer[0]*1000);
+                        }
+                        //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
+                    }
+                    else if (GetNashorBuff(ally) && !AllyTeamNashor)
+                    {
+                        AllyTeamNashor = true;
+
+                        if (Environment.TickCount - AllyFoWTime > 100 ||
+                            (Environment.TickCount - AllyFoWTime <= 100 && State[1] != 4 && State[1] != 7))
+                        {
+                            State[1] = 4;
+                            LastChangeOnState[1] = Environment.TickCount;
+                            LastChangeOnCampState[1] = Environment.TickCount;
+                            CampRespawnTime[1] = (LastChangeOnCampState[1] + CampRespawnTimer[1]*1000);
+                        }
+                        //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
+                    }
+                    else if (GetDragonStacks(ally) < AllyTeamStacks)
+                    {
+                        AllyTeamStacks--;
+                        //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
+                    }
+                    else if (!GetNashorBuff(ally) && AllyTeamNashor)
+                    {
+                        AllyTeamNashor = false;
+                        //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
+                    }
+                }
+                else
+                {
+                    AllyFoWTime = Environment.TickCount;
+                }
+
+                if (ally != null && enemy != null && AllyTeamNashor == false && EnemyTeamNashor == false &&
+                    State[1] == 4)
+                {
+                    State[1] = 1;
+                }
             }
 
             #endregion  //Credits to Inferno
@@ -1155,76 +1254,131 @@ namespace GodJungleTracker
 
             int t = 3000;
 
-            if (l == 0)
+            if (L == 0)
             {
                 if (Game.ClockTime - ClockTimeAdjust < 420f) t = 60000;
                 else if (Game.ClockTime - ClockTimeAdjust < 820f) t = 40000;
-                else  t = 15000;
+                else t = 15000;
             }
 
-            if (l == 1 && State[l] == 8 && CampRespawnTime[l] <= Environment.TickCount)
+            if (L == 1 && State[L] == 8 && CampRespawnTime[L] <= Environment.TickCount)
             {
-                State[l] = 0;
+                State[L] = 0;
             }
 
-            if (State[l] == 2 && (Environment.TickCount - LastChangeOnState[l]) >= t && !(NameToCompare[l].Contains("Crab")))    //presumed dead
+            if (State[L] == 2 && (Environment.TickCount - LastChangeOnState[L]) >= t && !(NameToCompare[L].Contains("Crab")))    //presumed dead
             {
-                if (l <= 1)
+                if (L <= 1)
                 {
-                    if (OnFow[l] == 0 && enemy == null)
+                    if (OnFow[L] == 0 && enemy == null)
                     {
-                        State[l] = 4;
-                        LastChangeOnState[l] = Environment.TickCount - 2000;
+                        State[L] = 4;
+                        LastChangeOnState[L] = Environment.TickCount - 2000;
                     }
                 }
                 else
                 {
-                    State[l] = 4;
-                    LastChangeOnState[l] = Environment.TickCount - 2000;
+                    State[L] = 4;
+                    LastChangeOnState[L] = Environment.TickCount - 2000;
                 }
             }
-            else if (State[l] == 2 && (Environment.TickCount - LastChangeOnState[l]) >= 10000 && (NameToCompare[l].Contains("Crab")))
+            else if (State[L] == 2 && (Environment.TickCount - LastChangeOnState[L]) >= 10000 && (NameToCompare[L].Contains("Crab")))
             {
-                State[l] = 1;
-                LastChangeOnState[l] = Environment.TickCount;
+                State[L] = 1;
+                LastChangeOnState[L] = Environment.TickCount;
             }
 
-            else if (State[l] == 3 && (Environment.TickCount - LastChangeOnState[l]) >= 2000)    //after desingaged wait 2 sec's
+            else if (State[L] == 3 && (Environment.TickCount - LastChangeOnState[L]) >= 2000)    //after desingaged wait 2 sec's
             {
-                State[l] = 1;
-                LastChangeOnState[l] = Environment.TickCount;
+                State[L] = 1;
+                LastChangeOnState[L] = Environment.TickCount;
             }
 
-            else if (State[l] == 4 && (Environment.TickCount - LastChangeOnState[l]) >= 5000)
+            else if (State[L] == 4 && (Environment.TickCount - LastChangeOnState[L]) >= 5000)
             {
-                State[l] = 7;
-                JustDied[l] = 1;
+                State[L] = 7;
+                JustDied[L] = 1;
             }
 
-            else if (State[l] == 5 && (Environment.TickCount - LastChangeOnState[l]) >= 30000)  
+            else if (State[L] == 5 && (Environment.TickCount - LastChangeOnState[L]) >= 30000)
             {
-                State[l] = 0;
+                State[L] = 0;
             }
 
 
             #endregion
 
-            l++;
-            if (l > 35) l = 0;
+            #region Timers
+
+            if (L >= 0 && L <= 15)
+            {
+                if (CampRespawnTime[L] > Environment.TickCount && CampState[L] == 7)
+                {
+                    var timespan = TimeSpan.FromSeconds((CampRespawnTime[L] - Environment.TickCount)/1000f);
+
+                    bool format;
+
+                    if (CampPosition[L].IsOnScreen() && _menu.Item("timeronmap").GetValue<bool>())
+                    {
+                        format = !_menu.Item("timeronmapformat").GetValue<StringList>().SelectedIndex.Equals(0);
+
+                        TimerTextOnMap[L] = string.Format(format ? "{1}" : "{0}:{1:00}", (int) timespan.TotalMinutes,
+                            format ? (int) timespan.TotalSeconds : timespan.Seconds);
+                    }
+
+                    
+                    var pos2 = Drawing.WorldToMinimap(CampPosition[L]);
+
+                    if (_menu.Item("timeronminimap").GetValue<bool>())
+                    {
+                        format = !_menu.Item("timeronminimapformat").GetValue<StringList>().SelectedIndex.Equals(0);
+
+                        TimerTextOnMinimap[L] = string.Format(format ? "{1}" : "{0}:{1:00}",
+                            (int) timespan.TotalMinutes,
+                            format ? (int) timespan.TotalSeconds : timespan.Seconds);
+
+                        var textrect = MapText.MeasureText(null, TimerTextOnMinimap[L], FontDrawFlags.Center);
+
+                        TimerPosXOnMinimap[L] = (int) (pos2.X - textrect.Width/2f);
+
+                        TimerPosYOnMinimap[L] = (int) (pos2.Y - textrect.Height/2f);
+                    }
+                    
+                }
+            }
+
+            for (int i = 0; i <= 15; i++)
+            {
+                if (CampPosition[i].IsOnScreen() && _menu.Item("timeronmap").GetValue<bool>())
+                {
+                    var pos = Drawing.WorldToScreen(CampPosition[i]);
+
+                    var textrect = MapText.MeasureText(null, TimerTextOnMap[i], FontDrawFlags.Center);
+
+                    TimerPosXOnMap[i] = (int)(pos.X - textrect.Width / 2f);
+
+                    TimerPosYOnMap[i] = (int)(pos.Y - textrect.Height / 2f);
+                }
+            }
+
+            #endregion
+
+            L++;
+            if (L > 35) L = 0;
         }
 
         static int GetDragonStacks(Obj_AI_Hero hero)
         {
-            var Baff = hero.Buffs.Where(Buff => Buff.Name == "s5test_dragonslayerbuff").FirstOrDefault();
-            if (Baff == null)
+            var baff = hero.Buffs.FirstOrDefault(buff => buff.Name == "s5test_dragonslayerbuff");
+            if (baff == null)
                 return 0;
             else
-                return Baff.Count;
+                return baff.Count;
         }//Credits to Inferno
 
         static bool GetNashorBuff(Obj_AI_Hero hero)
         {
-            return hero.Buffs.Any(Buff => Buff.Name == "exaltedwithbaronnashor");
+            return hero.Buffs.Any(buff => buff.Name == "exaltedwithbaronnashor");
         } //Credits to Inferno
 
         private static void OnProcessPacket(GamePacketEventArgs args)
@@ -1235,9 +1389,9 @@ namespace GodJungleTracker
 
             for (int i = 0; i <= 25; i++)
             {
-                if (NetworkID[i] == 0) continue;
+                if (NetworkId[i] == 0) continue;
 
-                if (BitConverter.ToInt32(args.PacketData, 2) == NetworkID[i])
+                if (BitConverter.ToInt32(args.PacketData, 2) == NetworkId[i])
                 {
                     if (header == HeaderSkill)
                     {
@@ -1251,13 +1405,13 @@ namespace GodJungleTracker
                         {
                             if (NameToCompare[i].Contains("Dragon") && State[i] != 2)
                             {
-                                if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
+                                if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((_menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !_menu.Item("soundfow").GetValue<bool>()))
                                 {
-                                    if ((menu.Item("soundscreen").GetValue<bool>() && OnScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                                    if ((_menu.Item("soundscreen").GetValue<bool>() && OnScreen[0] == 0) || !_menu.Item("soundscreen").GetValue<bool>())
                                     {
-                                        if ((menu.Item("dragonsound").GetValue<bool>()))
+                                        if ((_menu.Item("dragonsound").GetValue<bool>()))
                                         {
-                                            BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
+                                            BufferDragonSound = _menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
                                             PlayingDragonSound = 1;
                                             CampState[0] = 2;
                                         }
@@ -1308,14 +1462,14 @@ namespace GodJungleTracker
             #region Guess Dragon/Baron NetworkID
 
             if (header == HeaderSkill &&
-                BitConverter.ToInt32(args.PacketData, 2) != NetworkID[0] &&
-                BitConverter.ToInt32(args.PacketData, 2) != NetworkID[1] &&
-                BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkID &&
+                BitConverter.ToInt32(args.PacketData, 2) != NetworkId[0] &&
+                BitConverter.ToInt32(args.PacketData, 2) != NetworkId[1] &&
+                BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkId &&
                 BitConverter.ToString(args.PacketData, 0).Length == 47 &&
-                GuessDragonID == 1
+                GuessDragonId == 1
                 )
             {
-                bool AI_Base = false;
+                bool aiBaseTest = false;
                 foreach (Obj_AI_Base obj in ObjectManager.Get<Obj_AI_Base>().Where(x => x.NetworkId == BitConverter.ToInt32(args.PacketData, 2)))
                 {
                     if (!obj.IsAlly)
@@ -1323,23 +1477,23 @@ namespace GodJungleTracker
                         if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron") )//&& !obj.Name.Contains("TestCube"))
                         {
                             Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
-                            GuessDragonID = 0;
+                            GuessDragonId = 0;
                         }
                     }
-                    AI_Base = true;
+                    aiBaseTest = true;
                 }
 
-                if (!AI_Base)
+                if (!aiBaseTest)
                 {
                     if (State[1] == 1 || (State[1] == 7 && CampRespawnTime[1] > Environment.TickCount + 1000) || State[1] == 8)
                     {
-                        if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !menu.Item("soundfow").GetValue<bool>()))
+                        if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((_menu.Item("soundfow").GetValue<bool>() && OnFow[0] == 0) || !_menu.Item("soundfow").GetValue<bool>()))
                         {
-                            if ((menu.Item("soundscreen").GetValue<bool>() && OnScreen[0] == 0) || !menu.Item("soundscreen").GetValue<bool>())
+                            if ((_menu.Item("soundscreen").GetValue<bool>() && OnScreen[0] == 0) || !_menu.Item("soundscreen").GetValue<bool>())
                             {
-                                if ((menu.Item("dragonsound").GetValue<bool>()))
+                                if ((_menu.Item("dragonsound").GetValue<bool>()))
                                 {
-                                    BufferDragonSound = menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
+                                    BufferDragonSound = _menu.Item("dragonsoundtimes").GetValue<Slider>().Value;
                                     PlayingDragonSound = 1;
                                     CampState[0] = 2;
                                 }
@@ -1348,13 +1502,13 @@ namespace GodJungleTracker
 
                         State[0] = 2;
                         LastChangeOnState[0] = Environment.TickCount;
-                        NetworkID[0] = BitConverter.ToInt32(args.PacketData, 2);
+                        NetworkId[0] = BitConverter.ToInt32(args.PacketData, 2);
                     }
                     else if (State[0] == 1 || (State[0] == 7 && CampRespawnTime[0] > Environment.TickCount + 1000))
                     {
                         State[1] = 2;
                         LastChangeOnState[1] = Environment.TickCount;
-                        NetworkID[1] = BitConverter.ToInt32(args.PacketData, 2);
+                        NetworkId[1] = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
             }
@@ -1367,22 +1521,22 @@ namespace GodJungleTracker
             {
                 if (BitConverter.ToString(args.PacketData, 0).Length == 284)
                 {
-                    NetworkID[14] = BitConverter.ToInt32(args.PacketData, 2);
+                    NetworkId[14] = BitConverter.ToInt32(args.PacketData, 2);
                     State[14] = 1;
                     LastChangeOnState[14] = Environment.TickCount;
 
-                    if (Game.ClockTime - 111f < 90 && ClockTimeAdjust == 0)
+                    if (Game.ClockTime - 111f < 90 && ClockTimeAdjust <= 0)
                     {
                         ClockTimeAdjust = Game.ClockTime - 111f;
                         State[0] = 0;
                         CampRespawnTime[0] = Environment.TickCount + 39000;
                         CampState[0] = 0;
-                        BiggestNetworkID = BitConverter.ToInt32(args.PacketData, 2);
+                        BiggestNetworkId = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
                 else if (BitConverter.ToString(args.PacketData, 0).Length == 293)
                 {
-                    NetworkID[15] = BitConverter.ToInt32(args.PacketData, 2);
+                    NetworkId[15] = BitConverter.ToInt32(args.PacketData, 2);
                     State[15] = 1;
                     LastChangeOnState[15] = Environment.TickCount;
                 }
@@ -1410,12 +1564,12 @@ namespace GodJungleTracker
             for (int i = 0; i <= 11; i++)
             {
 
-                if (!menu.Item("drawtracklist").GetValue<bool>()) break;
+                if (!_menu.Item("drawtracklist").GetValue<bool>()) break;
 
                 if (CampState[i] > 0 && CampState[i] != 7)
                 {
-                    int x = menu.Item("posX").GetValue<Slider>().Value;
-                    int y = menu.Item("posY").GetValue<Slider>().Value - c * 30;
+                    int x = _menu.Item("posX").GetValue<Slider>().Value;
+                    int y = _menu.Item("posY").GetValue<Slider>().Value - c * 30;
 
                     c += 1;
 
@@ -1449,23 +1603,23 @@ namespace GodJungleTracker
                     }
                     if (CampState[i] == 1)
                     {
-                        cor = menu.Item("colortracked").GetValue<Color>();
+                        cor = colortracked;
                     }
                     else if (CampState[i] == 2)
                     {
-                        cor = menu.Item("colorattacking").GetValue<Color>();
+                        cor = colorattacking;
                     }
                     else if (CampState[i] == 3)
                     {
-                        cor = menu.Item("colordisengaged").GetValue<Color>();
+                        cor = colordisengaged;
                     }
                     else if (CampState[i] == 4)
                     {
-                        cor = menu.Item("colordead").GetValue<Color>();
+                        cor = colordead;
                     }
                     else if (CampState[i] == 5 || CampState[i] == 6)
                     {
-                        cor = menu.Item("colorguessed").GetValue<Color>();
+                        cor = colorguessed;
                     }
 
 
@@ -1487,12 +1641,12 @@ namespace GodJungleTracker
                 }
             }
 
-            if (c == 0 && menu.Item("drawtracklist").GetValue<bool>() )
+            if (c == 0 && _menu.Item("drawtracklist").GetValue<bool>() )
             {
                 cor = Color.FromArgb(255, 255, 255, 255);
 
-                int x = menu.Item("posX").GetValue<Slider>().Value;
-                int y = menu.Item("posY").GetValue<Slider>().Value - c * 30;
+                int x = _menu.Item("posX").GetValue<Slider>().Value;
+                int y = _menu.Item("posY").GetValue<Slider>().Value - c * 30;
 
                 Drawing.DrawText(x, y, cor, "TrackList");
 
@@ -1517,7 +1671,6 @@ namespace GodJungleTracker
 
         public static void Drawing_OnEndScene(EventArgs args)
         {
-
             if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
             {
                 return;
@@ -1529,144 +1682,110 @@ namespace GodJungleTracker
 
                 if (CampRespawnTime[i] > Environment.TickCount && CampState[i] == 7)
                 {
-                    var t = TimeSpan.FromSeconds(((float)CampRespawnTime[i] - (float)Environment.TickCount) / 1000f);
-
-                    bool format = false;
-
-                    string text = string.Format(format ? "{1}" : "{0}:{1:00}", (int)t.TotalMinutes, format ? (int)t.TotalSeconds : t.Seconds);
-
-                    ColorBGRA white = new ColorBGRA(255, 255, 255, 255);
-
-                    var pos = Drawing.WorldToScreen(CampPosition[i]);
-
-                    var pos2 = Drawing.WorldToMinimap(CampPosition[i]);
-
-                    if (CampPosition[i].IsOnScreen() && menu.Item("timeronmap").GetValue<bool>())
+                    if (CampPosition[i].IsOnScreen() && timeronmap)
                     {
-                        if (menu.Item("timeronmapformat").GetValue<StringList>().SelectedIndex.Equals(0))
-                        {
-                            format = false;
-                        }
-                        else
-                        {
-                            format = true;
-                        }
-
-                        text = string.Format(format ? "{1}" : "{0}:{1:00}", (int)t.TotalMinutes, format ? (int)t.TotalSeconds : t.Seconds);
-
-                        MapText.DrawText(null, text, (int)(pos.X - MapText.MeasureText(null, text, FontDrawFlags.Center).Width / 2f),
-                                (int)(pos.Y - MapText.MeasureText(null, text, FontDrawFlags.Center).Height / 2f), white);
+                        MapText.DrawText(null, TimerTextOnMap[i], TimerPosXOnMap[i],TimerPosYOnMap[i], white);
                     }
 
-                    if (menu.Item("timeronminimap").GetValue<bool>())
+                    if (timeronminimap)
                     {
-                        if (menu.Item("timeronminimapformat").GetValue<StringList>().SelectedIndex.Equals(0))
-                        {
-                            format = false;
-                        }
-                        else
-                        {
-                            format = true;
-                        }
-
-                        text = string.Format(format ? "{1}" : "{0}:{1:00}", (int)t.TotalMinutes, format ? (int)t.TotalSeconds : t.Seconds);
-
-                        MinimapText.DrawText(null, text, (int)(pos2.X - MinimapText.MeasureText(null, text, FontDrawFlags.Center).Width / 2f),
-                                (int)(pos2.Y - MinimapText.MeasureText(null, text, FontDrawFlags.Center).Height / 2f), white);
+                        MinimapText.DrawText(null, TimerTextOnMinimap[i], TimerPosXOnMinimap[i], TimerPosYOnMinimap[i], white);
                     }
                 }
 
                 #endregion
 
+                #region Minimap Circles
+
                 if (i > 11) continue;
 
-
-                if (!menu.Item("TrackonMinimap").GetValue<bool>()) continue;
+                if (!trackonminimap) continue;
 
                 if ((i == 0 || i == 6 || i == 7) && CampState[i] == 2 && (Environment.TickCount - LastChangeOnCampState[i]) < 60000)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorattacking").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colorattacking, circlewidth + 1, 30, true);
                 }
                 else if (i != 0 && CampState[i] == 2 && (Environment.TickCount - LastChangeOnCampState[i]) < 10000)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorattacking").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colorattacking, circlewidth + 1, 30, true);
                 }
                 else if (CampState[i] == 1)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colortracked").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colortracked, circlewidth, 30, true);
                 }
                 else if (CampState[i] == 3)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colordisengaged").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value + 1, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colordisengaged, circlewidth + 1, 30, true);
                 }
                 else if (CampState[i] == 4)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colordead").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colordead, circlewidth, 30, true);
                 }
                 else if (CampState[i] == 5 || CampState[i] == 6)
                 {
-                    Utility.DrawCircle(CampPosition[i], menu.Item("circleradius").GetValue<Slider>().Value, menu.Item("colorguessed").GetValue<Color>(), menu.Item("circlewidth").GetValue<Slider>().Value, 30, true);
+                    Utility.DrawCircle(CampPosition[i], circleradius, colorguessed, circlewidth, 30, true);
                 }
+                #endregion
             }
         }
 
         static void LoadMenu()
         {
             //Start Menu
-            menu = new Menu("God Jungle Tracker", "God Jungle Tracker", true);
+            _menu = new Menu("God Jungle Tracker", "God Jungle Tracker", true);
 
             //Camp to Track Menu
-            menu.AddSubMenu(new Menu("Camp to Track", "Camp to Track"));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("baron", "Baron").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("dragon", "Dragon").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("blue", "Blue").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("red", "Red").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("crab", "Crab").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("raptor", "Raptor").SetValue(true));
-            menu.SubMenu("Camp to Track").AddItem(new MenuItem("gromp", "Gromp").SetValue(true));
+            _menu.AddSubMenu(new Menu("Camp to Track", "Camp to Track"));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("baron", "Baron").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("dragon", "Dragon").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("blue", "Blue").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("red", "Red").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("crab", "Crab").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("raptor", "Raptor").SetValue(true));
+            _menu.SubMenu("Camp to Track").AddItem(new MenuItem("gromp", "Gromp").SetValue(true));
 
             //Track List Menu
-            menu.AddSubMenu(new Menu("Track List", "Track List"));
-            menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
-            menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
-            menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
+            _menu.AddSubMenu(new Menu("Track List", "Track List"));
+            _menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
+            _menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
+            _menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
 
             //Play Danger Sound
-            menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On Dragon First Attack").SetValue(true));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsound", "On Baron Attack").SetValue(true));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("sounddelay", "Baron Sound Delay (s)").SetValue(new Slider(20, 1, 60)));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundfow", "Only On Fog of War").SetValue(false));
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundscreen", "Only If Camp Not On Screen").SetValue(true));
+            _menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On Dragon First Attack").SetValue(true));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsound", "On Baron Attack").SetValue(true));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("sounddelay", "Baron Sound Delay (s)").SetValue(new Slider(20, 1, 60)));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundfow", "Only On Fog of War").SetValue(false));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundscreen", "Only If Camp Not On Screen").SetValue(true));
             String [] volume = {"10%","25%","50%","75%","100%"};
-            menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundvolume", "Sound Volume").SetValue(new StringList(volume, 2)));
+            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundvolume", "Sound Volume").SetValue(new StringList(volume, 2)));
 
             //Timers
-            menu.AddSubMenu(new Menu("Timers", "Timers"));
+            _menu.AddSubMenu(new Menu("Timers", "Timers"));
             String[] format = { "mm:ss", "ss" };
-            var Timers = menu.SubMenu("Timers");
-            Timers.SubMenu("On Map").AddItem(new MenuItem("timeronmapformat", "Format ").SetValue(new StringList(format, 0)));
-            Timers.SubMenu("On Map").AddItem(new MenuItem("timerfontmap", "Font Size").SetValue(new Slider(20, 3, 30)));
-            Timers.SubMenu("On Map").AddItem(new MenuItem("timeronmap", "Enabled").SetValue(true));
-            Timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimapformat", "Format ").SetValue(new StringList(format, 0)));
-            Timers.SubMenu("On Minimap").AddItem(new MenuItem("timerfontminimap", "Font Height").SetValue(new Slider(13, 3, 30)));
-            Timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimap", "Enabled").SetValue(true));
+            var timers = _menu.SubMenu("Timers");
+            timers.SubMenu("On Map").AddItem(new MenuItem("timeronmapformat", "Format ").SetValue(new StringList(format)));
+            timers.SubMenu("On Map").AddItem(new MenuItem("timerfontmap", "Font Size").SetValue(new Slider(20, 3, 30)));
+            timers.SubMenu("On Map").AddItem(new MenuItem("timeronmap", "Enabled").SetValue(true));
+            timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimapformat", "Format ").SetValue(new StringList(format)));
+            timers.SubMenu("On Minimap").AddItem(new MenuItem("timerfontminimap", "Font Height").SetValue(new Slider(13, 3, 30)));
+            timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimap", "Enabled").SetValue(true));
             
             //Drawing
-            menu.AddSubMenu(new Menu("Drawing", "Drawing"));
-            var Draw = menu.SubMenu("Drawing");
-            Draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
-            Draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
-            Draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
-            Draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
-            Draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
-            menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
-            menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
-            menu.SubMenu("Drawing").AddItem(new MenuItem("TrackonMinimap", "Draw on Minimap").SetValue(true));
+            _menu.AddSubMenu(new Menu("Drawing", "Drawing"));
+            var draw = _menu.SubMenu("Drawing");
+            draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
+            draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
+            draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
+            draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
+            draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
+            _menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
+            _menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
+            _menu.SubMenu("Drawing").AddItem(new MenuItem("TrackonMinimap", "Draw on Minimap").SetValue(true));
 
-            menu.AddToMainMenu();
+            _menu.AddToMainMenu();
         }
     }
 }
