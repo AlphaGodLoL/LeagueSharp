@@ -421,7 +421,19 @@ namespace GodJungleTracker
             }
             else
             {
-                if (Game.Version.StartsWith("5.11"))
+                if (Game.Version.StartsWith("5.12"))
+                {
+                    HeaderRangedAttack = 186;
+
+                    HeaderMeleeAttack = 118;
+
+                    HeaderDisengaged = 52;
+
+                    HeaderSkill = 159;
+
+                    HeaderCreateGromp = 61;
+                }
+                else if (Game.Version.StartsWith("5.11"))
                 {
                     HeaderRangedAttack = 182;
 
