@@ -416,7 +416,9 @@ namespace GodJungleTracker
                     Notifications.AddNotification(
                         new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
                     Notifications.AddNotification(
-                        new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                        new Notification("for game version: " + Game.Version.Substring(0,4), 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("and region: " + Game.Region, 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
                 }
             }
             else
@@ -452,7 +454,9 @@ namespace GodJungleTracker
                     Notifications.AddNotification(
                         new Notification("is not updated", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
                     Notifications.AddNotification(
-                        new Notification("for this game version", 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                        new Notification("for game version: " + Game.Version.Substring(0, 4), 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("and region: " + Game.Region, 10000).SetTextColor(Color.FromArgb(255, 0, 0)));
                 }
             }
         }
