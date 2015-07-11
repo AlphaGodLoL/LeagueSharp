@@ -383,7 +383,7 @@ namespace GodJungleTracker
 
                     HeaderSkill = 57;
 
-                    HeaderCreateGromp = 999;
+                    HeaderCreateGromp = 23;
                 }
                 else if (Game.Version.StartsWith("5.12"))
                 {
@@ -1547,7 +1547,7 @@ namespace GodJungleTracker
 
             if (header == HeaderCreateGromp)  //Gromp Created
             {
-                if (BitConverter.ToString(args.PacketData, 0).Length == 284)
+                if (BitConverter.ToString(args.PacketData, 0).Length == 302)
                 {
                     NetworkId[14] = BitConverter.ToInt32(args.PacketData, 2);
                     State[14] = 1;
@@ -1562,7 +1562,7 @@ namespace GodJungleTracker
                         BiggestNetworkId = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
-                else if (BitConverter.ToString(args.PacketData, 0).Length == 293)
+                else if (BitConverter.ToString(args.PacketData, 0).Length == 311)
                 {
                     NetworkId[15] = BitConverter.ToInt32(args.PacketData, 2);
                     State[15] = 1;
