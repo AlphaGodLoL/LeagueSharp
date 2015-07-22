@@ -373,7 +373,19 @@ namespace GodJungleTracker
         {
             if (!Game.Region.Substring(0, 2).Equals("HN"))
             {
-                if (Game.Version.StartsWith("5.13"))
+                if (Game.Version.StartsWith("5.14"))
+                {
+                    HeaderRangedAttack = 112;
+
+                    HeaderMeleeAttack = 115;
+
+                    HeaderDisengaged = 274;
+
+                    HeaderSkill = 91;
+
+                    HeaderCreateGromp = 59;
+                }
+                else if (Game.Version.StartsWith("5.13"))
                 {
                     HeaderRangedAttack = 186;
 
@@ -397,30 +409,6 @@ namespace GodJungleTracker
 
                     HeaderCreateGromp = 61;
                 }
-                else if (Game.Version.StartsWith("5.11"))
-                {
-                    HeaderRangedAttack = 42;
-
-                    HeaderMeleeAttack = 230;
-
-                    HeaderDisengaged = 226;
-
-                    HeaderSkill = 132;
-
-                    HeaderCreateGromp = 168;
-                }
-                else if (Game.Version.StartsWith("5.10"))
-                {
-                    HeaderRangedAttack = 179;
-
-                    HeaderMeleeAttack = 305;
-
-                    HeaderDisengaged = 204;
-
-                    HeaderSkill = 30;
-
-                    HeaderCreateGromp = 282;
-                }
                 else
                 {
                     Notifications.AddNotification(
@@ -435,7 +423,19 @@ namespace GodJungleTracker
             }
             else
             {
-                if (Game.Version.StartsWith("5.12"))
+                if (Game.Version.StartsWith("5.13"))
+                {
+                    HeaderRangedAttack = 186;
+
+                    HeaderMeleeAttack = 265;
+
+                    HeaderDisengaged = 65;
+
+                    HeaderSkill = 57;
+
+                    HeaderCreateGromp = 23;
+                }
+                else if (Game.Version.StartsWith("5.12"))
                 {
                     HeaderRangedAttack = 186;
 
@@ -1547,7 +1547,7 @@ namespace GodJungleTracker
 
             if (header == HeaderCreateGromp)  //Gromp Created
             {
-                if (BitConverter.ToString(args.PacketData, 0).Length == 302)
+                if (BitConverter.ToString(args.PacketData, 0).Length == 302 || BitConverter.ToString(args.PacketData, 0).Length == 284)
                 {
                     NetworkId[14] = BitConverter.ToInt32(args.PacketData, 2);
                     State[14] = 1;
@@ -1562,7 +1562,7 @@ namespace GodJungleTracker
                         BiggestNetworkId = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
-                else if (BitConverter.ToString(args.PacketData, 0).Length == 311)
+                else if (BitConverter.ToString(args.PacketData, 0).Length == 311 || BitConverter.ToString(args.PacketData, 0).Length == 293)
                 {
                     NetworkId[15] = BitConverter.ToInt32(args.PacketData, 2);
                     State[15] = 1;
