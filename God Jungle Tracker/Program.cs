@@ -144,7 +144,7 @@ namespace GodJungleTracker
         private static readonly SoundPlayer Danger75 = new SoundPlayer(Properties.Resources.danger75);
         private static SoundPlayer _sound = Danger;
 
-        private static List<Obj_AI_Minion> TrackingList { get; set; }
+        public static List<Obj_AI_Minion> TrackingList { get; set; }
 
         public static int[] OnFow = { 0, 0 };
 
@@ -358,7 +358,7 @@ namespace GodJungleTracker
 
                 if (!hero.IsAlly)
                 {
-                    for (int i = 0; i <= 8; i++)
+                    for (int i = 0; i <= 9; i++)
                     {
                         if (hero.ChampionName.Contains(Heros[i]))
                         {
@@ -373,7 +373,19 @@ namespace GodJungleTracker
         {
             if (!Game.Region.Substring(0, 2).Equals("HN"))
             {
-                if (Game.Version.StartsWith("5.14"))
+                if (Game.Version.StartsWith("5.15"))
+                {
+                    HeaderRangedAttack = 244;
+
+                    HeaderMeleeAttack = 166;
+
+                    HeaderDisengaged = 59;
+
+                    HeaderSkill = 54;
+
+                    HeaderCreateGromp = 320;
+                }
+                else if (Game.Version.StartsWith("5.14"))
                 {
                     HeaderRangedAttack = 112;
 
@@ -396,18 +408,6 @@ namespace GodJungleTracker
                     HeaderSkill = 57;
 
                     HeaderCreateGromp = 23;
-                }
-                else if (Game.Version.StartsWith("5.12"))
-                {
-                    HeaderRangedAttack = 186;
-
-                    HeaderMeleeAttack = 118;
-
-                    HeaderDisengaged = 52;
-
-                    HeaderSkill = 159;
-
-                    HeaderCreateGromp = 61;
                 }
                 else
                 {
@@ -555,7 +555,15 @@ namespace GodJungleTracker
                     LastChangeOnState[i] = Environment.TickCount;
                     JustDied[i] = 1;
                     //Console.WriteLine("Removed " + minion.Name + " of the Tracking List");
-                    TrackingList.RemoveAll(x => x.Name == minion.Name);
+                    try
+                    {
+                        TrackingList.RemoveAll(x => x.Name == minion.Name);
+                    }
+                    catch (Exception)
+                    {
+                        //ignored
+                    }
+                    
 
                     return;
                 }
@@ -592,7 +600,16 @@ namespace GodJungleTracker
                         LastChangeOnState[i] = Environment.TickCount - 3000;
                         JustDied[i] = 1;
                         //Console.WriteLine("Removed " + minion.Name + " of the Tracking List");
-                        TrackingList.RemoveAll(x => x.Name == minion.Name);
+                        try
+                        {
+                            TrackingList.RemoveAll(x => x.Name == minion.Name);
+                        }
+                        catch (Exception)
+                        {
+                            
+                            //ignored
+                        }
+                        
                     }
                     
                     return;
@@ -1502,13 +1519,17 @@ namespace GodJungleTracker
                 {
                     if (!obj.IsAlly)
                     {
-                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron") )//&& !obj.Name.Contains("TestCube"))
+                        if (obj.Name.Contains("MonkeyKingClone"))
+                        {
+                            aiBaseTest = true;
+                        }
+                        else if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))//&& !obj.Name.Contains("TestCube"))
                         {
                             Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             GuessDragonId = 0;
+                            aiBaseTest = true;
                         }
                     }
-                    aiBaseTest = true;
                 }
 
                 if (!aiBaseTest)
