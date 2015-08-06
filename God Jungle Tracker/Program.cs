@@ -358,7 +358,7 @@ namespace GodJungleTracker
 
                 if (!hero.IsAlly)
                 {
-                    for (int i = 0; i <= 9; i++)
+                    for (int i = 0; i <= 8; i++)
                     {
                         if (hero.ChampionName.Contains(Heros[i]))
                         {
@@ -561,10 +561,9 @@ namespace GodJungleTracker
                     }
                     catch (Exception)
                     {
+
                         //ignored
                     }
-                    
-
                     return;
                 }
             }
@@ -1519,11 +1518,7 @@ namespace GodJungleTracker
                 {
                     if (!obj.IsAlly)
                     {
-                        if (obj.Name.Contains("MonkeyKingClone"))
-                        {
-                            aiBaseTest = true;
-                        }
-                        else if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))//&& !obj.Name.Contains("TestCube"))
+                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))//&& !obj.Name.Contains("TestCube"))
                         {
                             Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             GuessDragonId = 0;
