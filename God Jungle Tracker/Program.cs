@@ -172,9 +172,7 @@ namespace GodJungleTracker
 
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        public static string[] Heros = { "Caitlyn", "Fizz", "Jinx", "Nidalee", "Wukong", "Zed", "Zyra", "Kalista", "Yasuo" };
-
-        public static string[] HeroName = { "", "", "", "", "", "", "", "", "", "" };
+        public static string[] Heros = { "Caitlyn", "Fizz", "Jinx", "Nidalee", "MonkeyKing", "Zed", "Zyra", "Kalista", "Yasuo" };
 
         public static int[] State = { 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -348,8 +346,6 @@ namespace GodJungleTracker
             foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
             {
                 HeroNetworkId[c] = hero.NetworkId;
-                HeroName[c] = hero.BaseSkinName;
-                //Console.WriteLine(HeroName[c] + " ; " + HeroNetworkID[c]);
                 c++;
                 if (hero.NetworkId > BiggestNetworkId)
                 {
@@ -362,6 +358,7 @@ namespace GodJungleTracker
                     {
                         if (hero.ChampionName.Contains(Heros[i]))
                         {
+                            Console.WriteLine("God Jungle Tracker: " + hero.ChampionName + " in enemy team so GuessDragonId is disabled ");
                             GuessDragonId = 0;
                         }
                     }
@@ -1520,11 +1517,11 @@ namespace GodJungleTracker
                     {
                         if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))//&& !obj.Name.Contains("TestCube"))
                         {
-                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
+                            Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.CharData.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             GuessDragonId = 0;
-                            aiBaseTest = true;
                         }
                     }
+                    aiBaseTest = true;
                 }
 
                 if (!aiBaseTest)
