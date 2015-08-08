@@ -363,6 +363,17 @@ namespace GodJungleTracker
                         }
                     }
                 }
+                else
+                {
+                    for (int i = 0; i <= 8; i++)
+                    {
+                        if (hero.ChampionName.Contains("MonkeyKing"))
+                        {
+                            //Console.WriteLine("God Jungle Tracker: " + hero.ChampionName + " in enemy team so GuessDragonId is disabled ");
+                            GuessDragonId = 0;
+                        }
+                    }
+                }
             }
         }
 
