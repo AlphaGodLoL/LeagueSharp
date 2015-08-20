@@ -8,5 +8,6 @@ D:\LSharp\LocalAssemblies\PacketSharp\bin\Release\SharpDX.dll
 D:\LSharp\LocalAssemblies\PacketSharp\bin\Release\clipper_library.dll
 D:\LSharp\LocalAssemblies\PacketSharp\bin\Release\LeagueSharp.Sandbox.dll
 D:\LSharp\LocalAssemblies\PacketSharp\bin\Release\LeagueSharp.xml
+D:\LSharp\LocalAssemblies\PacketSharp\obj\Debug\PacketSharp.csprojResolveAssemblyReference.cache
 D:\LSharp\LocalAssemblies\PacketSharp\obj\Debug\PacketSharp.exe
 D:\LSharp\LocalAssemblies\PacketSharp\obj\Debug\PacketSharp.pdb

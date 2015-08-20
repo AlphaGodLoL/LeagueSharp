@@ -326,7 +326,7 @@ namespace PacketSharp
         static void LoadMenu()
         {
             //Start Menu
-            _menu = new Menu("Header Finder", "Header Finder", true);
+            _menu = new Menu("PacketSharp", "PacketSharp", true);
 
             String[] find = { "OnCreateGromp", "OnMissileHit", "OnAttack", "OnDisengaged", "OnMonsterSkill", "Custom" };
             _menu.AddItem(new MenuItem("finding", "Finding Header").SetValue(new StringList(find,5)));
