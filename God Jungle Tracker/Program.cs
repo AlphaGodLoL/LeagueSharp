@@ -149,136 +149,144 @@ namespace GodJungleTracker
 
         public static void OnGameLoad(EventArgs args)
         {
-            //if (Game.MapId.ToString() != "SummonersRift")
-            //{
-            //    return;
-            //}
+            try
+            {
+                //if (Game.MapId.ToString() != "SummonersRift")
+                //{
+                //    return;
+                //}
 
-            LoadMenu();
-
-            GameObject.OnCreate += GameObjectOnCreate;
-            GameObject.OnDelete += GameObjectOnDelete;
-            Game.OnProcessPacket += OnProcessPacket;
-            Game.OnUpdate += OnGameUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
-            Drawing.OnEndScene += Drawing_OnEndScene;
+                LoadMenu();
             
-            #region Set Headers
+                #region Set Headers
 
-            float gamever = float.Parse(Game.Version.Substring(0, 4));
+                float gamever = float.Parse(Game.Version.Substring(0, 4));
 
-            if (_menu.Item("headerFromPatch").GetValue<Slider>().Value != (int)gamever)
-            {
-                _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
-                OnAttack.Header = 0;
-                OnMissileHit.Header = 0;
-                OnDisengaged.Header = 0;
-                OnMonsterSkill.Header = 0;
-                OnCreateGromp.Header = 0;
-                OnCreateCampIcon.Header = 0;
-                _menu.Item("headerFromPatch").SetValue<Slider>(new Slider((int)gamever, 0, 1000));
-            }
-            else
-            {
-                OnAttack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
-                OnMissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
-                OnDisengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
-                OnMonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
-                OnCreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
-                OnCreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
-            }
+                if (_menu.Item("headerFromPatch").GetValue<Slider>().Value != (int)gamever)
+                {
+                    _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(0, 0, 400));
+                    _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(0, 0, 400));
+                    _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(0, 0, 400));
+                    _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
+                    _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
+                    _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
+                    OnAttack.Header = 0;
+                    OnMissileHit.Header = 0;
+                    OnDisengaged.Header = 0;
+                    OnMonsterSkill.Header = 0;
+                    OnCreateGromp.Header = 0;
+                    OnCreateCampIcon.Header = 0;
+                    _menu.Item("headerFromPatch").SetValue<Slider>(new Slider((int)gamever, 0, 1000));
+                }
+                else
+                {
+                    OnAttack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
+                    OnMissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
+                    OnDisengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
+                    OnMonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
+                    OnCreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
+                    OnCreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
+                }
             
-            #endregion
+                #endregion
 
-            #region Dragon/Baron Camp
-            foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
-            {
-                if (camp.Name == "Dragon")
+                #region Dragon/Baron Camp
+                foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
                 {
-                    DragonCamp = camp;
-                }
-                else if (camp.Name == "Baron")
-                {
-                    BaronCamp = camp;
-                }
-            }
-            #endregion
-
-            #region Load Minions
-
-            foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Contains("SRU_") || x.Name.Contains("Sru_")))
-            {
-                foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
-                {
-                    foreach (var mob in camp.Mobs)
+                    if (camp.Name == "Dragon")
                     {
-                        //Do Stuff for each mob in a camp
+                        DragonCamp = camp;
+                    }
+                    else if (camp.Name == "Baron")
+                    {
+                        BaronCamp = camp;
+                    }
+                }
+                #endregion
 
-                        if (mob.Name.Contains(minion.Name) && !minion.IsDead && mob.NetworkId != minion.NetworkId)
+                #region Load Minions
+
+                foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Contains("SRU_") || x.Name.Contains("Sru_")))
+                {
+                    foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
+                    {
+                        foreach (var mob in camp.Mobs)
                         {
-                            mob.NetworkId = minion.NetworkId;
-                            mob.State = 3;
-                            mob.LastChangeOnState = Environment.TickCount;
-                            mob.Unit = minion;
+                            //Do Stuff for each mob in a camp
+
+                            if (mob.Name.Contains(minion.Name) && !minion.IsDead && mob.NetworkId != minion.NetworkId)
+                            {
+                                mob.NetworkId = minion.NetworkId;
+                                mob.State = 3;
+                                mob.LastChangeOnState = Environment.TickCount;
+                                mob.Unit = minion;
+                            }
                         }
                     }
                 }
-            }
 
-            #endregion
+                #endregion
 
-            MinimapText = new Font(Drawing.Direct3DDevice,
-                     new FontDescription
-                     {
-                         FaceName = "Calibri",
-                         Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
-                         OutputPrecision = FontPrecision.Default,
-                         Quality = FontQuality.Default
-                     });
+                MinimapText = new Font(Drawing.Direct3DDevice,
+                         new FontDescription
+                         {
+                             FaceName = "Calibri",
+                             Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
+                             OutputPrecision = FontPrecision.Default,
+                             Quality = FontQuality.Default
+                         });
 
-            MapText = new Font(Drawing.Direct3DDevice,
-                    new FontDescription
-                    {
-                        FaceName = "Calibri",
-                        Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
+                MapText = new Font(Drawing.Direct3DDevice,
+                        new FontDescription
+                        {
+                            FaceName = "Calibri",
+                            Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
+                            OutputPrecision = FontPrecision.Default,
+                            Quality = FontQuality.Default
+                        });
             
 
-            if (Game.ClockTime > 450f)
-            {
-                GuessNetworkId1 = 0;
-
-                GuessNetworkId2 = 0;
-            }
-
-            int c = 0;
-            foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
-            {
-                HeroNetworkId[c] = hero.NetworkId;
-                c++;
-                if (hero.NetworkId > BiggestNetworkId)
+                if (Game.ClockTime > 450f)
                 {
-                    BiggestNetworkId = hero.NetworkId;
+                    GuessNetworkId1 = 0;
+
+                    GuessNetworkId2 = 0;
                 }
 
-                if (!hero.IsAlly)
+                int c = 0;
+                foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
                 {
-                    for (int i = 0; i <= 8; i++)
+                    HeroNetworkId[c] = hero.NetworkId;
+                    c++;
+                    if (hero.NetworkId > BiggestNetworkId)
                     {
-                        if (hero.ChampionName.Contains(BlockHeroes[i]))
+                        BiggestNetworkId = hero.NetworkId;
+                    }
+
+                    if (!hero.IsAlly)
+                    {
+                        for (int i = 0; i <= 8; i++)
                         {
-                            //Console.WriteLine("God Jungle Tracker: " + hero.ChampionName + " in enemy team so GuessDragonId is disabled ");
-                            GuessDragonId = 0;
+                            if (hero.ChampionName.Contains(BlockHeroes[i]))
+                            {
+                                //Console.WriteLine("God Jungle Tracker: " + hero.ChampionName + " in enemy team so GuessDragonId is disabled ");
+                                GuessDragonId = 0;
+                            }
                         }
                     }
                 }
+
+
+                GameObject.OnCreate += GameObjectOnCreate;
+                GameObject.OnDelete += GameObjectOnDelete;
+                Game.OnProcessPacket += OnProcessPacket;
+                Game.OnUpdate += OnGameUpdate;
+                Drawing.OnDraw += Drawing_OnDraw;
+                Drawing.OnEndScene += Drawing_OnEndScene;
+            }
+            catch (Exception)
+            {
+                //ignored
             }
         }
 
