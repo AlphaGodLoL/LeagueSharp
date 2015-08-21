@@ -44,7 +44,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift,
                         GameObjectTeam.Order,
-                        Color.Cyan, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Cyan, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Order: Wolves
                     new Camp("Wolves",
                         115, 100, new Vector3(3825f, 6491f, 52f),
@@ -57,7 +57,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift,
                         GameObjectTeam.Order,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Order: Raptor
                     new Camp("Raptor",
                         115, 100, new Vector3(6954f, 5458f, 53f),
@@ -71,7 +71,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Order,
-                        Color.Salmon, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Salmon, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Order: Red
                     new Camp("Red",
                         115, 300, new Vector3(7862f, 4111f, 54f),
@@ -84,7 +84,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Order,
-                        Color.Red, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Red, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                         
                     //Order: Krug
                     new Camp("Krug",
@@ -97,7 +97,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Order,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Order: Gromp
                     new Camp("Gromp",
                         115, 100, new Vector3(2091f, 8428f, 52f),
@@ -108,7 +108,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Order,
-                        Color.Green, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Green, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Chaos: Blue
                     new Camp("Blue",
                         115, 300, new Vector3(10930f, 6992f, 52f),
@@ -121,7 +121,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift,
                         GameObjectTeam.Chaos,
-                        Color.Cyan, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Cyan, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Chaos: Wolves
                     new Camp("Wolves",
                         115, 100, new Vector3(10957f, 8350f, 62f),
@@ -134,7 +134,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift,
                         GameObjectTeam.Chaos,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Chaos: Raptor
                     new Camp("Raptor",
                         115, 100, new Vector3(7857f, 9471f, 52f),
@@ -148,7 +148,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Chaos,
-                        Color.Salmon, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Salmon, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Chaos: Red
                     new Camp("Red",
                         115, 300, new Vector3(7017f, 10775f, 56f),
@@ -161,7 +161,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Chaos,
-                        Color.Red, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Red, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Chaos: Krug
                     new Camp("Krug",
                         115, 100, new Vector3(6449f, 12117f, 56f),
@@ -173,7 +173,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Chaos,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Chaos: Gromp
                     new Camp("Gromp",
                         115, 100, new Vector3(12703f, 6444f, 52f),
@@ -184,7 +184,7 @@ namespace GodJungleTracker.Classes
                             }),
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Chaos,
-                        Color.Green, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.Green, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Neutral: Dragon
                     new Camp("Dragon",
                         150, 360, new Vector3(9866f, 4414f, -71f),
@@ -195,7 +195,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
-                        Color.Orange, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.Orange, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Neutral: Baron
                     new Camp("Baron",
                         120, 420, new Vector3(5007f, 10471f, -71f),
@@ -206,7 +206,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
-                        Color.DarkOrchid, new Timers(new Vector2(0,0),new Vector2(0,0)), true,  8),
+                        Color.DarkOrchid, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true,  8),
                     //Dragon: Crab
                     new Camp("Crab",
                         150, 180, new Vector3(10508f, 5271f, -62f),
@@ -217,7 +217,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
-                        Color.PaleGreen, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.PaleGreen, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Baron: Crab
                     new Camp("Crab",
                         150, 180, new Vector3(4418f, 9664f, -69f),
@@ -228,7 +228,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
-                        Color.PaleGreen, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.PaleGreen, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Order: Wraiths
                     new Camp("Wraiths",
                         95, 75, new Vector3(4373f, 5843f, -107f),
@@ -241,7 +241,7 @@ namespace GodJungleTracker.Classes
                             }),  
                         Utility.Map.MapType.TwistedTreeline, 
                         GameObjectTeam.Order,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Order: Golems
                     new Camp("Golems",
                         95, 75, new Vector3(5107f, 7986f, -108f),
@@ -253,7 +253,7 @@ namespace GodJungleTracker.Classes
                             }), 
                         Utility.Map.MapType.TwistedTreeline, 
                         GameObjectTeam.Order,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Order: Wolves
                     new Camp("Wolves",
                         95, 75, new Vector3(6078f, 6094f, -99f),
@@ -266,7 +266,7 @@ namespace GodJungleTracker.Classes
                             }),
                          Utility.Map.MapType.TwistedTreeline, 
                          GameObjectTeam.Order,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Chaos: Wraiths
                     new Camp("Wraiths",
                         95, 75, new Vector3(11026f, 5806f, -107f),
@@ -279,7 +279,7 @@ namespace GodJungleTracker.Classes
                             }),  
                         Utility.Map.MapType.TwistedTreeline, 
                         GameObjectTeam.Chaos,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0)), true),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true),
                     //Chaos: Golems
                     new Camp("Golems",
                         95, 75, new Vector3(10277f, 8038f, -109f),
@@ -291,7 +291,7 @@ namespace GodJungleTracker.Classes
                             }),
                         Utility.Map.MapType.TwistedTreeline, 
                         GameObjectTeam.Chaos,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Chaos: Wolves
                     new Camp("Wolves",
                         95, 75, new Vector3(9294f, 6085f, -97f),
@@ -303,7 +303,7 @@ namespace GodJungleTracker.Classes
                                 new Mob("TT_NWolf26.1.3") }),
                          Utility.Map.MapType.TwistedTreeline, 
                          GameObjectTeam.Chaos,
-                        Color.White, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                        Color.White, new Timers(new Vector3(0,0,0),new Vector2(0,0))),
                     //Neutral: Spider
                     new Camp("Spider",
                         600, 360, new Vector3(7738f, 10080f, -62f),
@@ -314,7 +314,7 @@ namespace GodJungleTracker.Classes
                             }),
                         Utility.Map.MapType.TwistedTreeline, 
                         GameObjectTeam.Neutral,
-                        Color.DarkOrchid, new Timers(new Vector2(0,0),new Vector2(0,0)), true)
+                        Color.DarkOrchid, new Timers(new Vector3(0,0,0),new Vector2(0,0)), true)
                 };
             }
             catch (Exception)
@@ -343,6 +343,7 @@ namespace GodJungleTracker.Classes
                 SpawnTime = spawnTime;
                 RespawnTimer = respawnTimer;
                 Position = position;
+                MapPosition = Drawing.WorldToScreen(Position);
                 MinimapPosition = Drawing.WorldToMinimap(Position);
                 Mobs = mobs;
                 MapType = mapType;
@@ -360,6 +361,7 @@ namespace GodJungleTracker.Classes
             public int RespawnTimer { get; set; }
             public Vector3 Position { get; set; }
             public Vector2 MinimapPosition { get; set; }
+            public Vector2 MapPosition { get; set; }
             public List<Mob> Mobs { get; set; }
             public Utility.Map.MapType MapType { get; set; }
             public GameObjectTeam Team { get; set; }
@@ -395,7 +397,7 @@ namespace GodJungleTracker.Classes
 
         public class Timers
         {
-            public Timers(Vector2 position, Vector2 minimapPosition, string textOnMap = "", string textOnMinimap = "")
+            public Timers(Vector3 position, Vector2 minimapPosition, string textOnMap = "", string textOnMinimap = "")
             {
                 TextOnMap = textOnMap;
                 TextOnMinimap = textOnMinimap;
@@ -405,7 +407,7 @@ namespace GodJungleTracker.Classes
 
             public string TextOnMap { get; set; }
             public string TextOnMinimap { get; set; }
-            public Vector2 Position { get; set; }
+            public Vector3 Position { get; set; }
             public Vector2 MinimapPosition { get; set; }
         }
     }
