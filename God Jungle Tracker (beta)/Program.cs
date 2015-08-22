@@ -280,6 +280,8 @@ namespace GodJungleTracker
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnPreReset += DrawingOnPreReset;
+            Drawing.OnPostReset += DrawingOnPostReset;
             //Drawing.OnEndScene += Drawing_OnEndScene;
         }
 
@@ -1631,6 +1633,11 @@ namespace GodJungleTracker
         
         public static void Drawing_OnDraw(EventArgs args)
         {
+            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
+            {
+                return;
+            }
+
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
                 //Do Stuff for each camp
@@ -1771,7 +1778,19 @@ namespace GodJungleTracker
             //    }
             //}
         }
-        
+
+        private static void DrawingOnPostReset(EventArgs args)
+        {
+            MapText.OnResetDevice();
+            MinimapText.OnResetDevice();
+        }
+
+        private static void DrawingOnPreReset(EventArgs args)
+        {
+            MapText.OnLostDevice();
+            MinimapText.OnLostDevice();
+        }
+
         /*
         public static void Drawing_OnEndScene(EventArgs args)
         {
