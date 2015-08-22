@@ -279,7 +279,7 @@ namespace GodJungleTracker
             GameObject.OnDelete += GameObjectOnDelete;
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
+            //Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
         }
 
@@ -1628,7 +1628,7 @@ namespace GodJungleTracker
             }
             #endregion
         }
-
+        /*
         public static void Drawing_OnDraw(EventArgs args)
         {
             if (!_menu.Item("drawtracklist").GetValue<bool>()) return;
@@ -1700,14 +1700,9 @@ namespace GodJungleTracker
                 }
             }
         }
-
+        */
         public static void Drawing_OnEndScene(EventArgs args)
         {
-
-            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
-            {
-                return;
-            }
 
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
@@ -1788,10 +1783,10 @@ namespace GodJungleTracker
             _menu = new Menu("God Jungle Tracker", "God Jungle Tracker", true);
 
             //Track List Menu
-            _menu.AddSubMenu(new Menu("Track List", "Track List"));
-            _menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
-            _menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
-            _menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
+            //_menu.AddSubMenu(new Menu("Track List", "Track List"));
+            //_menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
+            //_menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
+            //_menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
 
             //Play Danger Sound
             _menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
