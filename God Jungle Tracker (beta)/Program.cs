@@ -279,8 +279,8 @@ namespace GodJungleTracker
             GameObject.OnDelete += GameObjectOnDelete;
             Game.OnProcessPacket += OnProcessPacket;
             Game.OnUpdate += OnGameUpdate;
-            //Drawing.OnDraw += Drawing_OnDraw;
-            Drawing.OnEndScene += Drawing_OnEndScene;
+            Drawing.OnDraw += Drawing_OnDraw;
+            //Drawing.OnEndScene += Drawing_OnEndScene;
         }
 
         private static void PlaySound(SoundPlayer sound = null)
@@ -1628,79 +1628,151 @@ namespace GodJungleTracker
             }
             #endregion
         }
-        /*
+        
         public static void Drawing_OnDraw(EventArgs args)
         {
-            if (!_menu.Item("drawtracklist").GetValue<bool>()) return;
-
-            Color cor = Color.FromArgb(255, 0, 255, 0);
-
-            int c = 0;
-
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
-                if (camp.State > 0 && camp.State < 7)
+                //Do Stuff for each camp
+
+                #region Timers
+
+                if (camp.RespawnTime > Environment.TickCount && camp.State == 7)
                 {
-                    int x = _menu.Item("posX").GetValue<Slider>().Value;
-                    int y = _menu.Item("posY").GetValue<Slider>().Value - c * 30;
-
-                    c += 1;
-                    try
+                    if (camp.Position.IsOnScreen() && timeronmap)
                     {
-                        Drawing.DrawText(x, y, camp.Colour, camp.Name + " - " + camp.Team.ToString().Substring(0, 1));
-                    }
-                    catch (Exception)
-                    {
-                        //ignored
-                    }
-                    
-
-                    switch (camp.State)
-                    {
-                        
-                        case 1:
-                            cor = colorattacking;
-                            break;
-                        case 2:
-                            cor = colordisengaged;
-                            break;
-                        case 3:
-                            cor = colortracked;
-                            break;
-                        case 4:
-                            cor = colordead;
-                            break;
-                        default:
-                            cor = colorguessed;
-                            break;
+                        try
+                        {
+                            var pos = Drawing.WorldToScreen(camp.Timer.Position);
+                            MapText.DrawText(null, camp.Timer.TextOnMap, (int)pos.X, (int)pos.Y, white);
+                        }
+                        catch (Exception)
+                        {
+                            //ingore
+                        }
                     }
 
-                    try
+                    if (timeronminimap)
                     {
-                        Drawing.DrawLine(
-                            new Vector2(x - 4.5f, y - 5),
-                            new Vector2(x + 70, y - 5), 3, cor);
-
-                        Drawing.DrawLine(
-                            new Vector2(x + 70, y - 4.5f),
-                            new Vector2(x + 70, y + 21), 3, cor);
-
-                        Drawing.DrawLine(
-                            new Vector2(x + 70, y + 21),
-                            new Vector2(x - 3, y + 21), 3, cor);
-
-                        Drawing.DrawLine(
-                            new Vector2(x - 5, y + 21),
-                            new Vector2(x - 5, y - 4.5f), 3, cor);
-                    }
-                    catch (Exception)
-                    {
-                        //ignored
+                        try
+                        {
+                            MinimapText.DrawText(null, camp.Timer.TextOnMinimap, (int)camp.Timer.MinimapPosition.X, (int)camp.Timer.MinimapPosition.Y, white);
+                        }
+                        catch (Exception)
+                        {
+                            //ingore
+                        }
                     }
                 }
+
+                #endregion
+
+                #region Minimap Circles
+
+                if (!trackonminimap) continue;
+
+                try
+                {
+                    if (camp.State == 1)
+                    {
+                        Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
+                    }
+                    else if (camp.State == 2)
+                    {
+                        Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
+                    }
+                    else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
+                    {
+                        Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
+                    }
+                    else if (camp.State == 4)
+                    {
+                        Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
+                    }
+                    else if (camp.State == 5)
+                    {
+                        Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
+                    }
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
+
+                #endregion
             }
+
+            //if (!_menu.Item("drawtracklist").GetValue<bool>()) return;
+
+            //Color cor = Color.FromArgb(255, 0, 255, 0);
+
+            //int c = 0;
+
+            //foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
+            //{
+            //    if (camp.State > 0 && camp.State < 7)
+            //    {
+            //        int x = _menu.Item("posX").GetValue<Slider>().Value;
+            //        int y = _menu.Item("posY").GetValue<Slider>().Value - c * 30;
+
+            //        c += 1;
+            //        try
+            //        {
+            //            Drawing.DrawText(x, y, camp.Colour, camp.Name + " - " + camp.Team.ToString().Substring(0, 1));
+            //        }
+            //        catch (Exception)
+            //        {
+            //            //ignored
+            //        }
+                    
+
+            //        switch (camp.State)
+            //        {
+                        
+            //            case 1:
+            //                cor = colorattacking;
+            //                break;
+            //            case 2:
+            //                cor = colordisengaged;
+            //                break;
+            //            case 3:
+            //                cor = colortracked;
+            //                break;
+            //            case 4:
+            //                cor = colordead;
+            //                break;
+            //            default:
+            //                cor = colorguessed;
+            //                break;
+            //        }
+
+            //        try
+            //        {
+            //            Drawing.DrawLine(
+            //                new Vector2(x - 4.5f, y - 5),
+            //                new Vector2(x + 70, y - 5), 3, cor);
+
+            //            Drawing.DrawLine(
+            //                new Vector2(x + 70, y - 4.5f),
+            //                new Vector2(x + 70, y + 21), 3, cor);
+
+            //            Drawing.DrawLine(
+            //                new Vector2(x + 70, y + 21),
+            //                new Vector2(x - 3, y + 21), 3, cor);
+
+            //            Drawing.DrawLine(
+            //                new Vector2(x - 5, y + 21),
+            //                new Vector2(x - 5, y - 4.5f), 3, cor);
+            //        }
+            //        catch (Exception)
+            //        {
+            //            //ignored
+            //        }
+            //    }
+            //}
         }
-        */
+        
+        /*
         public static void Drawing_OnEndScene(EventArgs args)
         {
 
@@ -1776,6 +1848,7 @@ namespace GodJungleTracker
             }
 
         }
+         */
 
         static void LoadMenu()
         {
