@@ -393,7 +393,7 @@ namespace GodJungleTracker
 
                     HeaderCreateGromp = 185;
                 }
-                if (Game.Version.StartsWith("5.15"))
+                else if (Game.Version.StartsWith("5.15"))
                 {
                     HeaderRangedAttack = 244;
 
