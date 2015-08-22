@@ -11,3 +11,4 @@ D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.P
 D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csproj.GenerateResource.Cache
 D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.exe
 D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.pdb
+D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csprojResolveAssemblyReference.cache

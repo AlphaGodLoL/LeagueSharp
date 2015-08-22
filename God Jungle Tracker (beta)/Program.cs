@@ -39,49 +39,35 @@ namespace GodJungleTracker
         camp.State == 7 dead on timer to respawn
         */
 
-        public static Font MinimapText = new Font(Drawing.Direct3DDevice,
-                        new FontDescription
-                        {
-                            FaceName = "Calibri",
-                            Height = 13,
-                            OutputPrecision = FontPrecision.Default,
-                            Quality = FontQuality.Default
-                        });
+        public static Font MinimapText;
 
-        public static Font MapText = new Font(Drawing.Direct3DDevice,
-                    new FontDescription
-                    {
-                        FaceName = "Calibri",
-                        Height = 13,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
+        public static Font MapText;
 
-        public static Packets.OnAttack OnAttack = new Packets.OnAttack();
-        public static Packets.OnMissileHit OnMissileHit = new Packets.OnMissileHit();
-        public static Packets.OnDisengaged OnDisengaged = new Packets.OnDisengaged();
-        public static Packets.OnMonsterSkill OnMonsterSkill = new Packets.OnMonsterSkill();
-        public static Packets.OnCreateGromp OnCreateGromp = new Packets.OnCreateGromp();
-        public static Packets.OnCreateCampIcon OnCreateCampIcon = new Packets.OnCreateCampIcon();
+        public static Packets.OnAttack OnAttack;
+        public static Packets.OnMissileHit OnMissileHit;
+        public static Packets.OnDisengaged OnDisengaged;
+        public static Packets.OnMonsterSkill OnMonsterSkill;
+        public static Packets.OnCreateGromp OnCreateGromp;
+        public static Packets.OnCreateCampIcon OnCreateCampIcon;
 
         public static Utility.Map.MapType MapType { get; set; }
 
-        private static readonly SoundPlayer Danger = new SoundPlayer(Properties.Resources.danger);
-        private static readonly SoundPlayer Danger10 = new SoundPlayer(Properties.Resources.danger10);
-        private static readonly SoundPlayer Danger25 = new SoundPlayer(Properties.Resources.danger25);
-        private static readonly SoundPlayer Danger50 = new SoundPlayer(Properties.Resources.danger50);
-        private static readonly SoundPlayer Danger75 = new SoundPlayer(Properties.Resources.danger75);
-        private static SoundPlayer _sound = Danger;
+        public static SoundPlayer Danger;
+        public static SoundPlayer Danger10;
+        public static SoundPlayer Danger25;
+        public static SoundPlayer Danger50;
+        public static SoundPlayer Danger75;
+        public static SoundPlayer _sound = Danger;
 
         public static Jungle.Camp DragonCamp;
         public static Jungle.Camp BaronCamp;
 
-        public static List<int> OnAttackList = new List<int>();
-        public static List<int> MissileHitList = new List<int>();
-        public static List<int[]> OnCreateGrompList = new List<int[]>();
-        public static List<int[]> OnCreateCampIconList = new List<int[]>();
-        public static List<int[]> PossibleBaronList = new List<int[]>();
-        public static List<int> PossibleDragonList = new List<int>();
+        public static List<int> OnAttackList;
+        public static List<int> MissileHitList;
+        public static List<int[]> OnCreateGrompList;
+        public static List<int[]> OnCreateCampIconList;
+        public static List<int[]> PossibleBaronList;
+        public static List<int> PossibleDragonList;
 
         public static int UpdateTick;
         public static int PossibleDragonTimer;
@@ -116,9 +102,8 @@ namespace GodJungleTracker
         public static Color colordead;
         public static Color colorguessed;
         public static int circlewidth;
-        public static bool trackonminimap;
 
-        public static ColorBGRA white = new ColorBGRA(255, 255, 255, 255);
+        public static ColorBGRA white;
 
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -134,17 +119,8 @@ namespace GodJungleTracker
 
         static void Main()
         {
-            Game.OnStart += OnGameStart;
+            LoadMenu();
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-        public static void OnGameStart(EventArgs args)
-        {
-            ClockTimeAdjust = Game.ClockTime;
-
-            //DragonCamp.RespawnTime = (int)((145f + Game.ClockTime) * 1000) + Environment.TickCount;
-
-            //BaronCamp.RespawnTime = (int)((1195f + Game.ClockTime) * 1000) + Environment.TickCount;
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -154,8 +130,33 @@ namespace GodJungleTracker
             //    return;
             //}
 
-            LoadMenu();
-            
+            #region Set Defin
+
+            OnAttack = new Packets.OnAttack();
+            OnMissileHit = new Packets.OnMissileHit();
+            OnDisengaged = new Packets.OnDisengaged();
+            OnMonsterSkill = new Packets.OnMonsterSkill();
+            OnCreateGromp = new Packets.OnCreateGromp();
+            OnCreateCampIcon = new Packets.OnCreateCampIcon();
+
+            Danger = new SoundPlayer(Properties.Resources.danger);
+            Danger10 = new SoundPlayer(Properties.Resources.danger10);
+            Danger25 = new SoundPlayer(Properties.Resources.danger25);
+            Danger50 = new SoundPlayer(Properties.Resources.danger50);
+            Danger75 = new SoundPlayer(Properties.Resources.danger75);
+            _sound = Danger;
+
+            OnAttackList = new List<int>();
+            MissileHitList = new List<int>();
+            OnCreateGrompList = new List<int[]>();
+            OnCreateCampIconList = new List<int[]>();
+            PossibleBaronList = new List<int[]>();
+            PossibleDragonList = new List<int>();
+
+            white = new ColorBGRA(255, 255, 255, 255);
+
+            #endregion
+
             #region Set Headers
 
             float gamever = float.Parse(Game.Version.Substring(0, 4));
@@ -187,6 +188,12 @@ namespace GodJungleTracker
             }
             
             #endregion
+
+            GameObject.OnCreate += GameObjectOnCreate;
+            GameObject.OnDelete += GameObjectOnDelete;
+            Game.OnProcessPacket += OnProcessPacket;
+            Game.OnUpdate += OnGameUpdate;
+            Drawing.OnEndScene += Drawing_OnEndScene;
 
             #region Dragon/Baron Camp
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
@@ -224,6 +231,8 @@ namespace GodJungleTracker
             }
 
             #endregion
+
+            #region Load Others
 
             MinimapText = new Font(Drawing.Direct3DDevice,
                         new FontDescription
@@ -274,15 +283,7 @@ namespace GodJungleTracker
                 }
             }
 
-
-            GameObject.OnCreate += GameObjectOnCreate;
-            GameObject.OnDelete += GameObjectOnDelete;
-            Game.OnProcessPacket += OnProcessPacket;
-            Game.OnUpdate += OnGameUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
-            Drawing.OnPreReset += DrawingOnPreReset;
-            Drawing.OnPostReset += DrawingOnPostReset;
-            //Drawing.OnEndScene += Drawing_OnEndScene;
+            #endregion
         }
 
         private static void PlaySound(SoundPlayer sound = null)
@@ -1108,8 +1109,6 @@ namespace GodJungleTracker
                 colordead = _menu.Item("colordead").GetValue<Color>();
                 colorguessed = _menu.Item("colorguessed").GetValue<Color>();
                 circlewidth = _menu.Item("circlewidth").GetValue<Slider>().Value;
-                trackonminimap = _menu.Item("TrackonMinimap").GetValue<bool>();
-
 
                 #endregion
 
@@ -1630,171 +1629,9 @@ namespace GodJungleTracker
             }
             #endregion
         }
-        
-        public static void Drawing_OnDraw(EventArgs args)
-        {
-            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
-            {
-                return;
-            }
 
-            foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
-            {
-                //Do Stuff for each camp
-
-                #region Timers
-
-                if (camp.RespawnTime > Environment.TickCount && camp.State == 7)
-                {
-                    if (camp.Position.IsOnScreen() && timeronmap)
-                    {
-                        try
-                        {
-                            var pos = Drawing.WorldToScreen(camp.Timer.Position);
-                            MapText.DrawText(null, camp.Timer.TextOnMap, (int)pos.X, (int)pos.Y, white);
-                        }
-                        catch (Exception)
-                        {
-                            //ingore
-                        }
-                    }
-
-                    if (timeronminimap)
-                    {
-                        try
-                        {
-                            MinimapText.DrawText(null, camp.Timer.TextOnMinimap, (int)camp.Timer.MinimapPosition.X, (int)camp.Timer.MinimapPosition.Y, white);
-                        }
-                        catch (Exception)
-                        {
-                            //ingore
-                        }
-                    }
-                }
-
-                #endregion
-
-                #region Minimap Circles
-
-                if (!trackonminimap) continue;
-
-                try
-                {
-                    if (camp.State == 1)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
-                    }
-                    else if (camp.State == 2)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
-                    }
-                    else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
-                    }
-                    else if (camp.State == 4)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
-                    }
-                    else if (camp.State == 5)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
-                    }
-                }
-                catch (Exception)
-                {
-                    //ignored
-                }
-
-                #endregion
-            }
-
-            //if (!_menu.Item("drawtracklist").GetValue<bool>()) return;
-
-            //Color cor = Color.FromArgb(255, 0, 255, 0);
-
-            //int c = 0;
-
-            //foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
-            //{
-            //    if (camp.State > 0 && camp.State < 7)
-            //    {
-            //        int x = _menu.Item("posX").GetValue<Slider>().Value;
-            //        int y = _menu.Item("posY").GetValue<Slider>().Value - c * 30;
-
-            //        c += 1;
-            //        try
-            //        {
-            //            Drawing.DrawText(x, y, camp.Colour, camp.Name + " - " + camp.Team.ToString().Substring(0, 1));
-            //        }
-            //        catch (Exception)
-            //        {
-            //            //ignored
-            //        }
-                    
-
-            //        switch (camp.State)
-            //        {
-                        
-            //            case 1:
-            //                cor = colorattacking;
-            //                break;
-            //            case 2:
-            //                cor = colordisengaged;
-            //                break;
-            //            case 3:
-            //                cor = colortracked;
-            //                break;
-            //            case 4:
-            //                cor = colordead;
-            //                break;
-            //            default:
-            //                cor = colorguessed;
-            //                break;
-            //        }
-
-            //        try
-            //        {
-            //            Drawing.DrawLine(
-            //                new Vector2(x - 4.5f, y - 5),
-            //                new Vector2(x + 70, y - 5), 3, cor);
-
-            //            Drawing.DrawLine(
-            //                new Vector2(x + 70, y - 4.5f),
-            //                new Vector2(x + 70, y + 21), 3, cor);
-
-            //            Drawing.DrawLine(
-            //                new Vector2(x + 70, y + 21),
-            //                new Vector2(x - 3, y + 21), 3, cor);
-
-            //            Drawing.DrawLine(
-            //                new Vector2(x - 5, y + 21),
-            //                new Vector2(x - 5, y - 4.5f), 3, cor);
-            //        }
-            //        catch (Exception)
-            //        {
-            //            //ignored
-            //        }
-            //    }
-            //}
-        }
-
-        private static void DrawingOnPostReset(EventArgs args)
-        {
-            MapText.OnResetDevice();
-            MinimapText.OnResetDevice();
-        }
-
-        private static void DrawingOnPreReset(EventArgs args)
-        {
-            MapText.OnLostDevice();
-            MinimapText.OnLostDevice();
-        }
-
-        /*
         public static void Drawing_OnEndScene(EventArgs args)
         {
-
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
                 //Do Stuff for each camp
@@ -1833,42 +1670,32 @@ namespace GodJungleTracker
 
                 #region Minimap Circles
 
-                if (!trackonminimap) continue;
-
-                try
+                if (camp.State == 1)
                 {
-                    if (camp.State == 1)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
-                    }
-                    else if (camp.State == 2)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
-                    }
-                    else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
-                    }
-                    else if (camp.State == 4)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
-                    }
-                    else if (camp.State == 5)
-                    {
-                        Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
-                    }
+                    Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
                 }
-                catch (Exception)
+                else if (camp.State == 2)
                 {
-                    //ignored
+                    Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
+                }
+                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
+                }
+                else if (camp.State == 4)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
+                }
+                else if (camp.State == 5)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
                 }
 
                 #endregion
             }
 
         }
-         */
-
+         
         static void LoadMenu()
         {
             //Start Menu
@@ -1914,7 +1741,6 @@ namespace GodJungleTracker
             draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
             _menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
             _menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
-            _menu.SubMenu("Drawing").AddItem(new MenuItem("TrackonMinimap", "Draw on Minimap").SetValue(true));
 
             //Advanced
             _menu.AddSubMenu(new Menu("Advanced", "Advanced"));
