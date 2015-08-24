@@ -43,13 +43,6 @@ namespace GodJungleTracker
 
         public static Font MapText;
 
-        public static Packets.OnAttack OnAttack;
-        public static Packets.OnMissileHit OnMissileHit;
-        public static Packets.OnDisengaged OnDisengaged;
-        public static Packets.OnMonsterSkill OnMonsterSkill;
-        public static Packets.OnCreateGromp OnCreateGromp;
-        public static Packets.OnCreateCampIcon OnCreateCampIcon;
-
         public static Utility.Map.MapType MapType { get; set; }
 
         public static SoundPlayer Danger;
@@ -119,7 +112,6 @@ namespace GodJungleTracker
 
         static void Main()
         {
-            LoadMenu();
             CustomEvents.Game.OnGameLoad += OnGameLoad;
         }
 
@@ -130,14 +122,9 @@ namespace GodJungleTracker
             //    return;
             //}
 
-            #region Set Defin
+            LoadMenu();
 
-            OnAttack = new Packets.OnAttack();
-            OnMissileHit = new Packets.OnMissileHit();
-            OnDisengaged = new Packets.OnDisengaged();
-            OnMonsterSkill = new Packets.OnMonsterSkill();
-            OnCreateGromp = new Packets.OnCreateGromp();
-            OnCreateCampIcon = new Packets.OnCreateCampIcon();
+            #region Set Defin
 
             Danger = new SoundPlayer(Properties.Resources.danger);
             Danger10 = new SoundPlayer(Properties.Resources.danger10);
@@ -169,22 +156,22 @@ namespace GodJungleTracker
                 _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
-                OnAttack.Header = 0;
-                OnMissileHit.Header = 0;
-                OnDisengaged.Header = 0;
-                OnMonsterSkill.Header = 0;
-                OnCreateGromp.Header = 0;
-                OnCreateCampIcon.Header = 0;
+                Packets.Attack.Header = 0;
+                Packets.MissileHit.Header = 0;
+                Packets.Disengaged.Header = 0;
+                Packets.MonsterSkill.Header = 0;
+                Packets.CreateGromp.Header = 0;
+                Packets.CreateCampIcon.Header = 0;
                 _menu.Item("headerFromPatch").SetValue<Slider>(new Slider((int)gamever, 0, 1000));
             }
             else
             {
-                OnAttack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
-                OnMissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
-                OnDisengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
-                OnMonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
-                OnCreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
-                OnCreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
+                Packets.Attack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
+                Packets.MissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
+                Packets.Disengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
+                Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
+                Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
+                Packets.CreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
             }
             
             #endregion
@@ -301,7 +288,7 @@ namespace GodJungleTracker
             }
         }
 
-        private static void GameObjectOnCreate(GameObject sender, EventArgs args)
+        public static void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
             if (!(sender is Obj_AI_Minion) || sender.Team != GameObjectTeam.Neutral)
             {
@@ -349,7 +336,7 @@ namespace GodJungleTracker
                         foreach (var item in OnCreateGrompList.Where(item => item[0] == mob.NetworkId))
                         {
                             _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(item[1], 0, 400));
-                            OnCreateGromp.Header = item[1];
+                            Packets.CreateGromp.Header = item[1];
                             break;
                         }
                     }
@@ -358,7 +345,7 @@ namespace GodJungleTracker
             }
         }
 
-        private static void GameObjectOnDelete(GameObject sender, EventArgs args)
+        public static void GameObjectOnDelete(GameObject sender, EventArgs args)
         {
             if (!(sender is Obj_AI_Minion) || sender.Team != GameObjectTeam.Neutral)
             {
@@ -871,15 +858,15 @@ namespace GodJungleTracker
 
                                 if (camp2.Mobs[i].NetworkId == 0)
                                 {
-                                    if (IdOrder[j] < IdOrder[4])
+                                    if (IdOrder[j] < IdOrder[7])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[4] - IdOrder[j]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[7] - IdOrder[j]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
-                                    else if (IdOrder[j] > IdOrder[4])
+                                    else if (IdOrder[j] > IdOrder[7])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[4]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[7]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
@@ -941,15 +928,15 @@ namespace GodJungleTracker
 
                                 if (camp2.Mobs[i].NetworkId == 0)
                                 {
-                                    if (IdOrder[j] < IdOrder[4])
+                                    if (IdOrder[j] < IdOrder[10])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[4] - IdOrder[j]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[10] - IdOrder[j]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
-                                    else if (IdOrder[j] > IdOrder[4])
+                                    else if (IdOrder[j] > IdOrder[10])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[4]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[10]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
@@ -1011,15 +998,15 @@ namespace GodJungleTracker
 
                                 if (camp2.Mobs[i].NetworkId == 0)
                                 {
-                                    if (IdOrder[j] < IdOrder[4])
+                                    if (IdOrder[j] < IdOrder[13])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[4] - IdOrder[j]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId - ((IdOrder[13] - IdOrder[j]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
-                                    else if (IdOrder[j] > IdOrder[4])
+                                    else if (IdOrder[j] > IdOrder[13])
                                     {
-                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[4]));
+                                        camp2.Mobs[i].NetworkId = camp.Mobs[0].NetworkId + ((IdOrder[j] - IdOrder[13]));
                                         camp2.Mobs[i].State = 5;
                                         camp2.Mobs[i].LastChangeOnState = Environment.TickCount;
                                     }
@@ -1223,7 +1210,7 @@ namespace GodJungleTracker
             }
         }
 
-        static int GetDragonStacks(Obj_AI_Hero hero)
+        public static int GetDragonStacks(Obj_AI_Hero hero)
         {
             var baff = hero.Buffs.FirstOrDefault(buff => buff.Name == "s5test_dragonslayerbuff");
             if (baff == null)
@@ -1232,16 +1219,16 @@ namespace GodJungleTracker
                 return baff.Count;
         }//Credits to Inferno
 
-        static bool GetNashorBuff(Obj_AI_Hero hero)
+        public static bool GetNashorBuff(Obj_AI_Hero hero)
         {
             return hero.Buffs.Any(buff => buff.Name == "exaltedwithbaronnashor");
         } //Credits to Inferno
 
-        private static void OnProcessPacket(GamePacketEventArgs args)
+        public static void OnProcessPacket(GamePacketEventArgs args)
         {
             short header = BitConverter.ToInt16(args.PacketData, 0);
 
-            int lenght = BitConverter.ToString(args.PacketData, 0).Length;
+            int length = BitConverter.ToString(args.PacketData, 0).Length;
 
             int networkID = BitConverter.ToInt32(args.PacketData, 2);
 
@@ -1260,16 +1247,16 @@ namespace GodJungleTracker
                 _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
-                OnAttack.Header = 0;
-                OnMissileHit.Header = 0;
-                OnDisengaged.Header = 0;
-                OnMonsterSkill.Header = 0;
-                OnCreateGromp.Header = 0;
-                OnCreateCampIcon.Header = 0;
+                Packets.Attack.Header = 0;
+                Packets.MissileHit.Header = 0;
+                Packets.Disengaged.Header = 0;
+                Packets.MonsterSkill.Header = 0;
+                Packets.CreateGromp.Header = 0;
+                Packets.CreateCampIcon.Header = 0;
                 _menu.Item("forcefindheaders").SetValue<bool>(false);
             }
 
-            if (_menu.Item("headerOnAttack").GetValue<Slider>().Value == 0 && lenght == OnAttack.Lenght && networkID > 0)
+            if (_menu.Item("headerOnAttack").GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.NetworkId == networkID))
                 {
@@ -1277,7 +1264,7 @@ namespace GodJungleTracker
                     if (OnAttackList.Count<int>(x => x == header) == 5)
                     {
                         _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(header, 0, 400));
-                        OnAttack.Header = header;
+                        Packets.Attack.Header = header;
                         try
                         {
                             OnAttackList.Clear();
@@ -1289,7 +1276,7 @@ namespace GodJungleTracker
                     }
                 }
             }
-            if (_menu.Item("headerOnMissileHit").GetValue<Slider>().Value == 0 && lenght == OnMissileHit.Lenght && networkID > 0)
+            if (_menu.Item("headerOnMissileHit").GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsRanged && obj.NetworkId == networkID))
                 {
@@ -1297,7 +1284,7 @@ namespace GodJungleTracker
                     if (MissileHitList.Count<int>(x => x == header) == 5)
                     {
                         _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(header, 0, 400));
-                        OnMissileHit.Header = header;
+                        Packets.MissileHit.Header = header;
                         try
                         {
                             MissileHitList.Clear();
@@ -1310,42 +1297,42 @@ namespace GodJungleTracker
                 }
             }
 
-            if (_menu.Item("headerOnDisengaged").GetValue<Slider>().Value == 0 && lenght == OnDisengaged.Lenght && networkID > 0)
+            if (_menu.Item("headerOnDisengaged").GetValue<Slider>().Value == 0 && length == Packets.Disengaged.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
                 {
                     _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(header, 0, 400));
-                    OnDisengaged.Header = header;
+                    Packets.Disengaged.Header = header;
                 }
             }
 
-            if (_menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value == 0 && lenght == OnMonsterSkill.Lenght && networkID > 0)
+            if (_menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Name.Contains("Dragon") && obj.NetworkId == networkID))
                 {
                     _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(header, 0, 400));
-                    OnMonsterSkill.Header = header;
+                    Packets.MonsterSkill.Header = header;
                 }
             }
 
-            if (_menu.Item("headerOnCreateGromp").GetValue<Slider>().Value == 0 && (lenght == OnCreateGromp.Lenght || lenght == OnCreateGromp.Lenght2) && networkID > 0)
+            if (_menu.Item("headerOnCreateGromp").GetValue<Slider>().Value == 0 && (length == Packets.CreateGromp.Length || length == Packets.CreateGromp.Length2) && networkID > 0)
             {
-                OnCreateGrompList.Add(new int[] { networkID, (int)header, lenght });
+                OnCreateGrompList.Add(new int[] { networkID, (int)header, length });
             }
 
             if (_menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value == 0 && networkID == 0 &&
-                (lenght == OnCreateCampIcon.Lenght || lenght == OnCreateCampIcon.Lenght2 || lenght == OnCreateCampIcon.Lenght3 || lenght == OnCreateCampIcon.Lenght4 || lenght == OnCreateCampIcon.Lenght5))
+                (length == Packets.CreateCampIcon.Length || length == Packets.CreateCampIcon.Length2 || length == Packets.CreateCampIcon.Length3 || length == Packets.CreateCampIcon.Length4 || length == Packets.CreateCampIcon.Length5))
             {
-                OnCreateCampIconList.Add(new int[] { (int)header, lenght });
+                OnCreateCampIconList.Add(new int[] { (int)header, length });
 
-                if ((OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == OnCreateCampIcon.Lenght) == 6) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == OnCreateCampIcon.Lenght2) == 3) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == OnCreateCampIcon.Lenght3) == 1) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == OnCreateCampIcon.Lenght4) == 1) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == OnCreateCampIcon.Lenght5) == 1))
+                if ((OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length) == 6) &&
+                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length2) == 3) &&
+                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length3) == 1) &&
+                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length4) == 1) &&
+                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length5) == 1))
                 {
                     _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(header, 0, 400));
-                    OnCreateCampIcon.Header = header;
+                    Packets.CreateCampIcon.Header = header;
                     try
                     {
                         OnCreateCampIconList.Clear();
@@ -1373,7 +1360,7 @@ namespace GodJungleTracker
 
                     isMob = true;
 
-                    if (header == OnMonsterSkill.Header)
+                    if (header == Packets.MonsterSkill.Header)
                     {
                         if (mob.Name.Contains("Crab"))
                         {
@@ -1401,7 +1388,7 @@ namespace GodJungleTracker
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
-                    else if (header == OnAttack.Header)
+                    else if (header == Packets.Attack.Header)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Attacking");
 
@@ -1409,7 +1396,7 @@ namespace GodJungleTracker
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
-                    else if (header == OnMissileHit.Header)
+                    else if (header == Packets.MissileHit.Header)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Attacking (ranged)");
 
@@ -1417,7 +1404,7 @@ namespace GodJungleTracker
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
-                    else if (header == OnDisengaged.Header)
+                    else if (header == Packets.Disengaged.Header)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Disengaged");
                         if (mob.Name.Contains("Crab"))
@@ -1450,12 +1437,12 @@ namespace GodJungleTracker
                     isLoaded = true;
                 }
 
-                if (!isLoaded && OnMissileHit.Header == header && OnMissileHit.Lenght == lenght)
+                if (!isLoaded && Packets.MissileHit.Header == header && Packets.MissileHit.Length == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, lenght });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
 
-                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMonsterSkill.Header && item[2] == OnMonsterSkill.Lenght) >= 1) &&
-                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMonsterSkill.Header && item[2] == OnMonsterSkill.Lenght2) >= 1))
+                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length) >= 1) &&
+                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length2) >= 1))
                     {
                         playBaronSound = true;
                         BaronCamp.Mobs[0].State = 1;
@@ -1464,12 +1451,12 @@ namespace GodJungleTracker
                     }
                     
                 }
-                else if (!isLoaded && OnMonsterSkill.Header == header && OnMonsterSkill.Lenght == lenght)
+                else if (!isLoaded && Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, lenght });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
 
-                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMissileHit.Header && item[2] == OnMissileHit.Lenght) >= 1) &&
-                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMonsterSkill.Header && item[2] == OnMonsterSkill.Lenght2) >= 1))
+                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MissileHit.Header && item[2] == Packets.MissileHit.Length) >= 1) &&
+                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length2) >= 1))
                     {
                         playBaronSound = true;
                         BaronCamp.Mobs[0].State = 1;
@@ -1477,12 +1464,12 @@ namespace GodJungleTracker
                         BaronCamp.Mobs[0].NetworkId = networkID;
                     }
                 }
-                else if (!isLoaded && OnMonsterSkill.Header == header && OnMonsterSkill.Lenght2 == lenght)
+                else if (!isLoaded && Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length2 == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, lenght });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
 
-                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMissileHit.Header && item[2] == OnMissileHit.Lenght) >= 1) &&
-                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == OnMonsterSkill.Header && item[2] == OnMonsterSkill.Lenght) >= 1))
+                    if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MissileHit.Header && item[2] == Packets.MissileHit.Length) >= 1) &&
+                    (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length) >= 1))
                     {
                         playBaronSound = true;
                         BaronCamp.Mobs[0].State = 1;
@@ -1529,14 +1516,14 @@ namespace GodJungleTracker
 		            //ignored
 	            }
             }
-            
 
-            if (header == OnMonsterSkill.Header &&
+
+            if (header == Packets.MonsterSkill.Header &&
                 Game.MapId.ToString() == "SummonersRift" &&
                 BitConverter.ToInt32(args.PacketData, 2) != DragonCamp.Mobs[0].NetworkId &&
                 BitConverter.ToInt32(args.PacketData, 2) != BaronCamp.Mobs[0].NetworkId &&
                 BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkId &&
-                BitConverter.ToString(args.PacketData, 0).Length == OnMonsterSkill.Lenght &&
+                BitConverter.ToString(args.PacketData, 0).Length == Packets.MonsterSkill.Length &&
                 GuessDragonId == 1
                 )
             {
@@ -1591,9 +1578,9 @@ namespace GodJungleTracker
             
             #region Gromp Created
 
-            if (header == OnCreateGromp.Header && Game.MapId.ToString() == "SummonersRift")  //Gromp Created
+            if (header == Packets.CreateGromp.Header && Game.MapId.ToString() == "SummonersRift")  //Gromp Created
             {
-                if (lenght == 302 || lenght == 284)
+                if (length == 302 || length == 284)
                 {
                     foreach (var camp in Jungle.Camps.Where(camp => camp.Name == "Gromp"))
                     {
@@ -1614,7 +1601,7 @@ namespace GodJungleTracker
                         BiggestNetworkId = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
-                else if (lenght == 311 || lenght == 293)
+                else if (length == 311 || length == 293)
                 {
                     foreach (var camp in Jungle.Camps.Where(camp => camp.Name == "Gromp"))
                     {
@@ -1630,7 +1617,7 @@ namespace GodJungleTracker
             #endregion
         }
 
-        public static void Drawing_OnEndScene(EventArgs args)
+        private static void Drawing_OnEndScene(EventArgs args)
         {
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
@@ -1696,68 +1683,76 @@ namespace GodJungleTracker
 
         }
          
-        static void LoadMenu()
+        public static void LoadMenu()
         {
-            //Start Menu
-            _menu = new Menu("God Jungle Tracker", "God Jungle Tracker", true);
+            try
+            {
+                //Start Menu
+                _menu = new Menu("God Jungle Tracker", "God Jungle Tracker", true);
 
-            //Track List Menu
-            //_menu.AddSubMenu(new Menu("Track List", "Track List"));
-            //_menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
-            //_menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
-            //_menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
+                //Track List Menu
+                //_menu.AddSubMenu(new Menu("Track List", "Track List"));
+                //_menu.SubMenu("Track List").AddItem(new MenuItem("drawtracklist", "Draw Track List").SetValue(false));
+                //_menu.SubMenu("Track List").AddItem(new MenuItem("posX", "Track List Pos X").SetValue(new Slider(Drawing.Width / 2, 0, Drawing.Width)));
+                //_menu.SubMenu("Track List").AddItem(new MenuItem("posY", "Track List Pos Y").SetValue(new Slider(Drawing.Height / 2, 0, Drawing.Height)));
 
-            //Play Danger Sound
-            _menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On Dragon First Attack").SetValue(true));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsounddelay", "Dragon Sound Delay (s)").SetValue(new Slider(10, 1, 30)));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsound", "On Baron Attack").SetValue(true));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsounddelay", "Baron Sound Delay (s)").SetValue(new Slider(10, 1, 30)));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundfow", "Only On Fog of War").SetValue(false));
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundscreen", "Only If Camp Not On Screen").SetValue(true));
-            String [] volume = {"10%","25%","50%","75%","100%"};
-            _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundvolume", "Sound Volume").SetValue(new StringList(volume, 2)));
+                //Play Danger Sound
+                _menu.AddSubMenu(new Menu("Play Danger Sound", "Play Danger Sound"));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsound", "On Dragon First Attack").SetValue(true));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("dragonsounddelay", "Dragon Sound Delay (s)").SetValue(new Slider(10, 1, 30)));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsound", "On Baron Attack").SetValue(true));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsoundtimes", "Play Sound X Times").SetValue(new Slider(2, 1, 4)));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("baronsounddelay", "Baron Sound Delay (s)").SetValue(new Slider(10, 1, 30)));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundfow", "Only On Fog of War").SetValue(false));
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundscreen", "Only If Camp Not On Screen").SetValue(true));
+                String [] volume = {"10%","25%","50%","75%","100%"};
+                _menu.SubMenu("Play Danger Sound").AddItem(new MenuItem("soundvolume", "Sound Volume").SetValue(new StringList(volume, 2)));
 
-            //Timers
-            _menu.AddSubMenu(new Menu("Timers", "Timers"));
-            String[] format = { "mm:ss", "ss" };
-            var timers = _menu.SubMenu("Timers");
-            timers.SubMenu("On Map").AddItem(new MenuItem("timeronmapformat", "Format ").SetValue(new StringList(format)));
-            timers.SubMenu("On Map").AddItem(new MenuItem("timerfontmap", "Font Size").SetValue(new Slider(20, 3, 30)));
-            timers.SubMenu("On Map").AddItem(new MenuItem("timeronmap", "Enabled").SetValue(true));
-            timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimapformat", "Format ").SetValue(new StringList(format)));
-            timers.SubMenu("On Minimap").AddItem(new MenuItem("timerfontminimap", "Font Height").SetValue(new Slider(13, 3, 30)));
-            timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimap", "Enabled").SetValue(true));
+                //Timers
+                _menu.AddSubMenu(new Menu("Timers", "Timers"));
+                String[] format = { "mm:ss", "ss" };
+                var timers = _menu.SubMenu("Timers");
+                timers.SubMenu("On Map").AddItem(new MenuItem("timeronmapformat", "Format ").SetValue(new StringList(format)));
+                timers.SubMenu("On Map").AddItem(new MenuItem("timerfontmap", "Font Size").SetValue(new Slider(20, 3, 30)));
+                timers.SubMenu("On Map").AddItem(new MenuItem("timeronmap", "Enabled").SetValue(true));
+                timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimapformat", "Format ").SetValue(new StringList(format)));
+                timers.SubMenu("On Minimap").AddItem(new MenuItem("timerfontminimap", "Font Height").SetValue(new Slider(13, 3, 30)));
+                timers.SubMenu("On Minimap").AddItem(new MenuItem("timeronminimap", "Enabled").SetValue(true));
             
-            //Drawing
-            _menu.AddSubMenu(new Menu("Drawing", "Drawing"));
-            var draw = _menu.SubMenu("Drawing");
-            draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
-            draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
-            draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
-            draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
-            draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
-            _menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
-            _menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
+                //Drawing
+                _menu.AddSubMenu(new Menu("Drawing", "Drawing"));
+                var draw = _menu.SubMenu("Drawing");
+                draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
+                draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
+                draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
+                draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
+                draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
+                _menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
+                _menu.SubMenu("Drawing").AddItem(new MenuItem("circlewidth", "Circle Width").SetValue(new Slider(1, 1, 4)));
 
-            //Advanced
-            _menu.AddSubMenu(new Menu("Advanced", "Advanced"));
-            var advanced = _menu.SubMenu("Advanced");
-            advanced.SubMenu("Headers").AddItem(new MenuItem("forcefindheaders", "Force Auto-Find Headers").SetValue(false));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack", "Header OnAttack").SetValue(new Slider(0, 0, 400)));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit", "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnDisengaged", "Header OnDisengaged").SetValue(new Slider(0, 0, 400)));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill", "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp", "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon", "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
+                //Advanced
+                _menu.AddSubMenu(new Menu("Advanced", "Advanced"));
+                var advanced = _menu.SubMenu("Advanced");
+                advanced.SubMenu("Headers").AddItem(new MenuItem("forcefindheaders", "Force Auto-Find Headers").SetValue(false));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack", "Header OnAttack").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit", "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnDisengaged", "Header OnDisengaged").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill", "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp", "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon", "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
 
-            advanced.SubMenu("Headers").AddItem(new MenuItem("headerFromPatch", "Headers From Patch: ").SetValue(new Slider(0, 0, 1000)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerFromPatch", "Headers From Patch: ").SetValue(new Slider(0, 0, 1000)));
             
-            _menu.SubMenu("Advanced").AddItem(new MenuItem("updatetick", "Update Tick").SetValue(new Slider(150,0,1000)));
+                _menu.SubMenu("Advanced").AddItem(new MenuItem("updatetick", "Update Tick").SetValue(new Slider(150,0,1000)));
             
-            _menu.AddToMainMenu();
+                _menu.AddToMainMenu();
+
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
         }
     }
 }
