@@ -142,6 +142,24 @@ namespace GodJungleTracker
 
             white = new ColorBGRA(255, 255, 255, 255);
 
+            MinimapText = new Font(Drawing.Direct3DDevice,
+                        new FontDescription
+                        {
+                            FaceName = "Calibri",
+                            Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
+                            OutputPrecision = FontPrecision.Default,
+                            Quality = FontQuality.Default
+                        });
+
+            MapText = new Font(Drawing.Direct3DDevice,
+                    new FontDescription
+                    {
+                        FaceName = "Calibri",
+                        Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default
+                    });
+
             #endregion
 
             #region Set Headers
@@ -176,13 +194,7 @@ namespace GodJungleTracker
             
             #endregion
 
-            GameObject.OnCreate += GameObjectOnCreate;
-            GameObject.OnDelete += GameObjectOnDelete;
-            Game.OnProcessPacket += OnProcessPacket;
-            Game.OnUpdate += OnGameUpdate;
-            Drawing.OnEndScene += Drawing_OnEndScene;
-
-            #region Dragon/Baron Camp
+            #region Set Dragon/Baron Camp
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
             {
                 if (camp.Name == "Dragon")
@@ -212,6 +224,12 @@ namespace GodJungleTracker
                             mob.State = 3;
                             mob.LastChangeOnState = Environment.TickCount;
                             mob.Unit = minion;
+
+                            if (camp.Mobs.Count == 1)
+                            {
+                                camp.State = mob.State;
+                                camp.LastChangeOnState = mob.LastChangeOnState;
+                            }
                         }
                     }
                 }
@@ -219,26 +237,42 @@ namespace GodJungleTracker
 
             #endregion
 
+            #region Load Static Menu
+
+            if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
+            {
+                _sound = Danger10;
+            }
+            else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(1))
+            {
+                _sound = Danger25;
+            }
+            else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(2))
+            {
+                _sound = Danger50;
+            }
+            else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(3))
+            {
+                _sound = Danger75;
+            }
+            else if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(4))
+            {
+                _sound = Danger;
+            }
+
+            timeronmap = _menu.Item("timeronmap").GetValue<bool>();
+            timeronminimap = _menu.Item("timeronminimap").GetValue<bool>();
+            circleradius = _menu.Item("circleradius").GetValue<Slider>().Value;
+            colorattacking = _menu.Item("colorattacking").GetValue<Color>();
+            colortracked = _menu.Item("colortracked").GetValue<Color>();
+            colordisengaged = _menu.Item("colordisengaged").GetValue<Color>();
+            colordead = _menu.Item("colordead").GetValue<Color>();
+            colorguessed = _menu.Item("colorguessed").GetValue<Color>();
+            circlewidth = _menu.Item("circlewidth").GetValue<Slider>().Value;
+
+            #endregion
+
             #region Load Others
-
-            MinimapText = new Font(Drawing.Direct3DDevice,
-                        new FontDescription
-                        {
-                            FaceName = "Calibri",
-                            Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
-                            OutputPrecision = FontPrecision.Default,
-                            Quality = FontQuality.Default
-                        });
-
-            MapText = new Font(Drawing.Direct3DDevice,
-                    new FontDescription
-                    {
-                        FaceName = "Calibri",
-                        Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
-            
 
             if (Game.ClockTime > 450f)
             {
@@ -271,6 +305,33 @@ namespace GodJungleTracker
             }
 
             #endregion
+
+            if (_menu.Item("onendscene").GetValue<bool>())
+            {
+                Drawing.OnEndScene += Drawing_OnEndScene;
+                Console.WriteLine("OnEndScene Loaded");
+            }
+            if (_menu.Item("oncreate").GetValue<bool>())
+            {
+                GameObject.OnCreate += GameObjectOnCreate;
+                Console.WriteLine("OnCreate Loaded");
+            }
+            if (_menu.Item("ondelete").GetValue<bool>())
+            {
+                GameObject.OnDelete += GameObjectOnDelete;
+                Console.WriteLine("OnDelete Loaded");
+            }
+            if (_menu.Item("onupdate").GetValue<bool>())
+            {
+                Game.OnUpdate += OnGameUpdate;
+                Console.WriteLine("OnUpdate Loaded");
+            }
+            if (_menu.Item("onprocesspacket").GetValue<bool>())
+            {
+                Game.OnProcessPacket += OnProcessPacket;
+                Console.WriteLine("OnProcessPacket Loaded");
+            }
+            
         }
 
         private static void PlaySound(SoundPlayer sound = null)
@@ -319,6 +380,12 @@ namespace GodJungleTracker
                         mob.JustDied = true;
                     }
 
+                    if (camp.Mobs.Count == 1)
+                    {
+                        camp.State = mob.State;
+                        camp.LastChangeOnState = mob.LastChangeOnState;
+                    }
+
                     if (mob.Name.Contains("Baron") && PossibleBaronList.Count >= 1)
                     {
                         try
@@ -354,11 +421,11 @@ namespace GodJungleTracker
 
             var minion = (Obj_AI_Minion)sender;
 
-            foreach (var camps in Jungle.Camps.Where(camps => camps.MapType.ToString() == Game.MapId.ToString()))
+            foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
                 //Do Stuff for each camp
 
-                foreach (var mob in camps.Mobs.Where(mob => mob.Name == minion.Name))
+                foreach (var mob in camp.Mobs.Where(mob => mob.Name == minion.Name))
                 {
                     //Do Stuff for each mob in a camp
 
@@ -368,6 +435,12 @@ namespace GodJungleTracker
                     {
                         mob.State = 7;
                         mob.JustDied = true;
+                    }
+
+                    if (camp.Mobs.Count == 1)
+                    {
+                        camp.State = mob.State;
+                        camp.LastChangeOnState = mob.LastChangeOnState;
                     }
                 }
             }
@@ -1239,103 +1312,35 @@ namespace GodJungleTracker
 
             #region AutoFind Headers
 
-            if (_menu.Item("forcefindheaders").GetValue<bool>())
-            {
-                _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
-                Packets.Attack.Header = 0;
-                Packets.MissileHit.Header = 0;
-                Packets.Disengaged.Header = 0;
-                Packets.MonsterSkill.Header = 0;
-                Packets.CreateGromp.Header = 0;
-                Packets.CreateCampIcon.Header = 0;
-                _menu.Item("forcefindheaders").SetValue<bool>(false);
-            }
+        if (_menu.Item("forcefindheaders").GetValue<bool>())
+        {
+            _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(0, 0, 400));
+            _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(0, 0, 400));
+            _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(0, 0, 400));
+            _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
+            _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
+            _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
+            Packets.Attack.Header = 0;
+            Packets.MissileHit.Header = 0;
+            Packets.Disengaged.Header = 0;
+            Packets.MonsterSkill.Header = 0;
+            Packets.CreateGromp.Header = 0;
+            Packets.CreateCampIcon.Header = 0;
+            _menu.Item("forcefindheaders").SetValue<bool>(false);
+        }
 
-            if (_menu.Item("headerOnAttack").GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
+        if (_menu.Item("headerOnAttack").GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
+        {
+            foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.NetworkId == networkID))
             {
-                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.NetworkId == networkID))
+                OnAttackList.Add(header);
+                if (OnAttackList.Count<int>(x => x == header) == 5)
                 {
-                    OnAttackList.Add(header);
-                    if (OnAttackList.Count<int>(x => x == header) == 5)
-                    {
-                        _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(header, 0, 400));
-                        Packets.Attack.Header = header;
-                        try
-                        {
-                            OnAttackList.Clear();
-                        }
-                        catch (Exception)
-                        {
-                            //ignored
-                        }
-                    }
-                }
-            }
-            if (_menu.Item("headerOnMissileHit").GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
-            {
-                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsRanged && obj.NetworkId == networkID))
-                {
-                    MissileHitList.Add(header);
-                    if (MissileHitList.Count<int>(x => x == header) == 5)
-                    {
-                        _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(header, 0, 400));
-                        Packets.MissileHit.Header = header;
-                        try
-                        {
-                            MissileHitList.Clear();
-                        }
-                        catch (Exception)
-                        {
-                            //ignored
-                        }
-                    }
-                }
-            }
-
-            if (_menu.Item("headerOnDisengaged").GetValue<Slider>().Value == 0 && length == Packets.Disengaged.Length && networkID > 0)
-            {
-                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
-                {
-                    _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(header, 0, 400));
-                    Packets.Disengaged.Header = header;
-                }
-            }
-
-            if (_menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
-            {
-                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Name.Contains("Dragon") && obj.NetworkId == networkID))
-                {
-                    _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(header, 0, 400));
-                    Packets.MonsterSkill.Header = header;
-                }
-            }
-
-            if (_menu.Item("headerOnCreateGromp").GetValue<Slider>().Value == 0 && (length == Packets.CreateGromp.Length || length == Packets.CreateGromp.Length2) && networkID > 0)
-            {
-                OnCreateGrompList.Add(new int[] { networkID, (int)header, length });
-            }
-
-            if (_menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value == 0 && networkID == 0 &&
-                (length == Packets.CreateCampIcon.Length || length == Packets.CreateCampIcon.Length2 || length == Packets.CreateCampIcon.Length3 || length == Packets.CreateCampIcon.Length4 || length == Packets.CreateCampIcon.Length5))
-            {
-                OnCreateCampIconList.Add(new int[] { (int)header, length });
-
-                if ((OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length) == 6) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length2) == 3) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length3) == 1) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length4) == 1) &&
-                    (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length5) == 1))
-                {
-                    _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(header, 0, 400));
-                    Packets.CreateCampIcon.Header = header;
+                    _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(header, 0, 400));
+                    Packets.Attack.Header = header;
                     try
                     {
-                        OnCreateCampIconList.Clear();
+                        OnAttackList.Clear();
                     }
                     catch (Exception)
                     {
@@ -1343,8 +1348,76 @@ namespace GodJungleTracker
                     }
                 }
             }
+        }
+        if (_menu.Item("headerOnMissileHit").GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
+        {
+            foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsRanged && obj.NetworkId == networkID))
+            {
+                MissileHitList.Add(header);
+                if (MissileHitList.Count<int>(x => x == header) == 5)
+                {
+                    _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(header, 0, 400));
+                    Packets.MissileHit.Header = header;
+                    try
+                    {
+                        MissileHitList.Clear();
+                    }
+                    catch (Exception)
+                    {
+                        //ignored
+                    }
+                }
+            }
+        }
 
-            #endregion
+        if (_menu.Item("headerOnDisengaged").GetValue<Slider>().Value == 0 && length == Packets.Disengaged.Length && networkID > 0)
+        {
+            foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
+            {
+                _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(header, 0, 400));
+                Packets.Disengaged.Header = header;
+            }
+        }
+
+        if (_menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
+        {
+            foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Name.Contains("Dragon") && obj.NetworkId == networkID))
+            {
+                _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(header, 0, 400));
+                Packets.MonsterSkill.Header = header;
+            }
+        }
+
+        if (_menu.Item("headerOnCreateGromp").GetValue<Slider>().Value == 0 && (length == Packets.CreateGromp.Length || length == Packets.CreateGromp.Length2) && networkID > 0)
+        {
+            OnCreateGrompList.Add(new int[] { networkID, (int)header, length });
+        }
+
+        if (_menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value == 0 && networkID == 0 &&
+            (length == Packets.CreateCampIcon.Length || length == Packets.CreateCampIcon.Length2 || length == Packets.CreateCampIcon.Length3 || length == Packets.CreateCampIcon.Length4 || length == Packets.CreateCampIcon.Length5))
+        {
+            OnCreateCampIconList.Add(new int[] { (int)header, length });
+
+            if ((OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length) == 6) &&
+                (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length2) == 3) &&
+                (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length3) == 1) &&
+                (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length4) == 1) &&
+                (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length5) == 1))
+            {
+                _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(header, 0, 400));
+                Packets.CreateCampIcon.Header = header;
+                try
+                {
+                    OnCreateCampIconList.Clear();
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
+            }
+        }
+
+        #endregion
 
             #region Update States
 
@@ -1412,12 +1485,18 @@ namespace GodJungleTracker
                             if (mob.State == 0) mob.State = 5;    //check this again
                             else mob.State = 1;
                         }
-                        if  (!mob.Name.Contains("Crab") && !mob.Name.Contains("Spider"))
+                        if (!mob.Name.Contains("Crab") && !mob.Name.Contains("Spider"))
                         {
                             if (mob.State == 0) mob.State = 5;
                             else mob.State = 2;
                         }
                         mob.LastChangeOnState = Environment.TickCount;
+                    }
+
+                    if (mob.LastChangeOnState == Environment.TickCount && camp.Mobs.Count == 1)
+                    {
+                        camp.State = mob.State;
+                        camp.LastChangeOnState = mob.LastChangeOnState;
                     }
                 }
             }
@@ -1428,6 +1507,23 @@ namespace GodJungleTracker
 
             bool playBaronSound = false;
             //baron
+
+            if (BaronCamp == null)
+            {
+                Console.WriteLine("BaronCamp");
+            }
+            if (DragonCamp == null)
+            {
+                Console.WriteLine("DragonCamp");
+            }
+            if (Packets.MonsterSkill.Header == null)
+            {
+                Console.WriteLine("Packets.MonsterSkill.Header");
+            }
+            if (PossibleDragonList == null)
+            {
+                Console.WriteLine("PossibleDragonList");
+            }
 
             if (!isMob && (BaronCamp.Mobs[0].State < 1 || BaronCamp.Mobs[0].State > 3))
             {
@@ -1449,7 +1545,7 @@ namespace GodJungleTracker
                         BaronCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
                         BaronCamp.Mobs[0].NetworkId = networkID;
                     }
-                    
+
                 }
                 else if (!isLoaded && Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length == length)
                 {
@@ -1480,17 +1576,17 @@ namespace GodJungleTracker
             }
 
             if (Environment.TickCount <= PossibleDragonTimer + 5000)
-	        {
-		        foreach (var id in PossibleDragonList.Where(id => id == networkID))
-	            {
-		            PossibleDragonList.RemoveAll(x => x == networkID);
-	            }
-	        }
+            {
+                foreach (var id in PossibleDragonList.Where(id => id == networkID))
+                {
+                    PossibleDragonList.RemoveAll(x => x == networkID);
+                }
+            }
             else
             {
                 if (PossibleDragonList.Count() == 1)
-	            {
-		            if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((_menu.Item("soundfow").GetValue<bool>() && (DragonCamp.Mobs[0].Unit == null || !DragonCamp.Mobs[0].Unit.IsVisible)) || !_menu.Item("soundfow").GetValue<bool>()))
+                {
+                    if (BufferDragonSound == 0 && PlayingDragonSound == 0 && ((_menu.Item("soundfow").GetValue<bool>() && (DragonCamp.Mobs[0].Unit == null || !DragonCamp.Mobs[0].Unit.IsVisible)) || !_menu.Item("soundfow").GetValue<bool>()))
                     {
                         if ((_menu.Item("soundscreen").GetValue<bool>() && !DragonCamp.Position.IsOnScreen()) || !_menu.Item("soundscreen").GetValue<bool>())
                         {
@@ -1506,15 +1602,15 @@ namespace GodJungleTracker
                     DragonCamp.Mobs[0].State = 1;
                     DragonCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
                     DragonCamp.Mobs[0].NetworkId = PossibleDragonList[0];
-	            }
-                try 
-	            {	        
-		            PossibleDragonList.Clear();
-	            }
-	            catch (Exception)
-	            {
-		            //ignored
-	            }
+                }
+                try
+                {
+                    PossibleDragonList.Clear();
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
             }
 
 
@@ -1575,12 +1671,12 @@ namespace GodJungleTracker
             }
 
             #endregion  
-            
+
             #region Gromp Created
 
             if (header == Packets.CreateGromp.Header && Game.MapId.ToString() == "SummonersRift")  //Gromp Created
             {
-                if (length == 302 || length == 284)
+                if (length == Packets.CreateGromp.Length)
                 {
                     foreach (var camp in Jungle.Camps.Where(camp => camp.Name == "Gromp"))
                     {
@@ -1589,6 +1685,8 @@ namespace GodJungleTracker
                             mob.NetworkId = BitConverter.ToInt32(args.PacketData, 2);
                             mob.State = 3;
                             mob.LastChangeOnState = Environment.TickCount;
+                            camp.State = mob.State;
+                            camp.LastChangeOnState = mob.LastChangeOnState;
                         }
                     }
 
@@ -1601,7 +1699,7 @@ namespace GodJungleTracker
                         BiggestNetworkId = BitConverter.ToInt32(args.PacketData, 2);
                     }
                 }
-                else if (length == 311 || length == 293)
+                else if (length == Packets.CreateGromp.Length2)
                 {
                     foreach (var camp in Jungle.Camps.Where(camp => camp.Name == "Gromp"))
                     {
@@ -1610,6 +1708,8 @@ namespace GodJungleTracker
                             mob.NetworkId = BitConverter.ToInt32(args.PacketData, 2);
                             mob.State = 3;
                             mob.LastChangeOnState = Environment.TickCount;
+                            camp.State = mob.State;
+                            camp.LastChangeOnState = mob.LastChangeOnState;
                         }
                     }
                 }
@@ -1622,6 +1722,31 @@ namespace GodJungleTracker
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
                 //Do Stuff for each camp
+
+                #region Minimap Circles
+
+                if (camp.State == 1)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
+                }
+                else if (camp.State == 2)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
+                }
+                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
+                }
+                else if (camp.State == 4)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
+                }
+                else if (camp.State == 5)
+                {
+                    Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
+                }
+
+                #endregion
 
                 #region Timers
 
@@ -1654,33 +1779,7 @@ namespace GodJungleTracker
                 }
 
                 #endregion
-
-                #region Minimap Circles
-
-                if (camp.State == 1)
-                {
-                    Utility.DrawCircle(camp.Position, circleradius, colorattacking, circlewidth + 1, 30, true);
-                }
-                else if (camp.State == 2)
-                {
-                    Utility.DrawCircle(camp.Position, circleradius, colordisengaged, circlewidth + 1, 30, true);
-                }
-                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
-                {
-                    Utility.DrawCircle(camp.Position, circleradius, colortracked, circlewidth, 30, true);
-                }
-                else if (camp.State == 4)
-                {
-                    Utility.DrawCircle(camp.Position, circleradius, colordead, circlewidth, 30, true);
-                }
-                else if (camp.State == 5)
-                {
-                    Utility.DrawCircle(camp.Position, circleradius, colorguessed, circlewidth, 30, true);
-                }
-
-                #endregion
             }
-
         }
          
         public static void LoadMenu()
@@ -1741,17 +1840,22 @@ namespace GodJungleTracker
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill", "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp", "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon", "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
-
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerFromPatch", "Headers From Patch: ").SetValue(new Slider(0, 0, 1000)));
-            
                 _menu.SubMenu("Advanced").AddItem(new MenuItem("updatetick", "Update Tick").SetValue(new Slider(150,0,1000)));
+
+                _menu.AddSubMenu(new Menu("Debug", "Debug"));
+                _menu.SubMenu("Debug").AddItem(new MenuItem("onupdate", "OnUpdate").SetValue(true));
+                _menu.SubMenu("Debug").AddItem(new MenuItem("onprocesspacket", "OnProcessPacket").SetValue(true));
+                _menu.SubMenu("Debug").AddItem(new MenuItem("oncreate", "OnCreate").SetValue(true));
+                _menu.SubMenu("Debug").AddItem(new MenuItem("ondelete", "OnDelete").SetValue(true));
+                _menu.SubMenu("Debug").AddItem(new MenuItem("onendscene", "OnEndScene").SetValue(true));
             
                 _menu.AddToMainMenu();
 
             }
             catch (Exception)
             {
-                //ignored
+                Console.WriteLine("Menu Init Failed");
             }
         }
     }
