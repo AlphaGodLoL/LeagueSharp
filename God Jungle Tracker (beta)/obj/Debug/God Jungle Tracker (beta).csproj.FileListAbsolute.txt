@@ -14,8 +14,6 @@ D:\LSharp\LocalAssemblies\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.p
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\GodJungleTracker.exe.config
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.exe
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.pdb
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.Properties.Resources.resources
-C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csproj.GenerateResource.Cache
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\GodJungleTracker.exe
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\GodJungleTracker.pdb
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\LeagueSharp.Common.dll
@@ -25,3 +23,5 @@ C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Rel
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\clipper_library.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\LeagueSharp.Sandbox.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csprojResolveAssemblyReference.cache
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\GodJungleTracker.Properties.Resources.resources
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csproj.GenerateResource.Cache

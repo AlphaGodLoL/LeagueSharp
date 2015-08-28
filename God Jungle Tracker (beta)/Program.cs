@@ -20,7 +20,6 @@ using Font = SharpDX.Direct3D9.Font;
 using FontDrawFlags = SharpDX.Direct3D9.FontDrawFlags;
 using Vector2 = SharpDX.Vector2;
 using GodJungleTracker.Classes;
-using System.Globalization;
 
 namespace GodJungleTracker
 {
@@ -170,71 +169,58 @@ namespace GodJungleTracker
             Console.WriteLine("Started Set Headers");
             #region Set Headers
 
-            Console.WriteLine("GameVer: " + Game.Version);
 
-            Console.WriteLine("GameVer substring: " + Game.Version.Substring(0, 4));
+            Console.WriteLine("gamever trimed: " + Game.Version.Substring(0, 4).Trim(new Char[] { '.', ' ', ',' }));
 
-            float gamever = float.Parse(Game.Version.Substring(0, 4),
-                      System.Globalization.NumberStyles.AllowThousands,
-                      CultureInfo.InvariantCulture);
-
-            Console.WriteLine("GameVer parsed: " + gamever);
-
-            try
+            int gamever = 0;
+            if (int.TryParse(Game.Version.Substring(0, 4).Trim(new Char[] { '.', ' ', ',' }), out gamever))
             {
-                if (_menu.Item("headerFromPatch").GetValue<Slider>().Value != (int)gamever)
+                Console.WriteLine("gamever parsed: " + gamever);
+
+                if (_menu.Item("headerFromPatch").GetValue<Slider>().Value != gamever)
                 {
                     Console.WriteLine("gamever = false");
-                    Console.WriteLine("Header1");
+                    Console.WriteLine("Set Header Menu");
                     _menu.Item("headerOnAttack").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("Header2");
                     _menu.Item("headerOnMissileHit").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("Header3");
                     _menu.Item("headerOnDisengaged").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("Header4");
                     _menu.Item("headerOnMonsterSkill").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("Header5");
                     _menu.Item("headerOnCreateGromp").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("Header6");
                     _menu.Item("headerOnCreateCampIcon").SetValue<Slider>(new Slider(0, 0, 400));
-                    Console.WriteLine("SetHeader1");
+                    Console.WriteLine("Set Header");
                     Packets.Attack.Header = 0;
-                    Console.WriteLine("SetHeader2");
                     Packets.MissileHit.Header = 0;
-                    Console.WriteLine("SetHeader3");
                     Packets.Disengaged.Header = 0;
-                    Console.WriteLine("SetHeader4");
                     Packets.MonsterSkill.Header = 0;
-                    Console.WriteLine("SetHeader5");
                     Packets.CreateGromp.Header = 0;
-                    Console.WriteLine("SetHeader6");
                     Packets.CreateCampIcon.Header = 0;
                     Console.WriteLine("Set Patch");
-                    _menu.Item("headerFromPatch").SetValue<Slider>(new Slider((int)gamever, 0, 1000));
+                    _menu.Item("headerFromPatch").SetValue<Slider>(new Slider(gamever, 0, 1000));
                 }
                 else
                 {
                     Console.WriteLine("gamever = true");
-                    Console.WriteLine("Header1");
+                    Console.WriteLine("Set Header");
                     Packets.Attack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
-                    Console.WriteLine("Header2");
                     Packets.MissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
-                    Console.WriteLine("Header3");
                     Packets.Disengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
-                    Console.WriteLine("Header4");
                     Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
-                    Console.WriteLine("Header5");
                     Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
-                    Console.WriteLine("Header6");
                     Packets.CreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
                 }
-
             }
-            catch (Exception)
+            else
             {
-                Console.WriteLine("Set Headers Error");
+                Console.WriteLine("gamever: " + gamever);
+                Console.WriteLine("Set Header");
+                Packets.Attack.Header = _menu.Item("headerOnAttack").GetValue<Slider>().Value;
+                Packets.MissileHit.Header = _menu.Item("headerOnMissileHit").GetValue<Slider>().Value;
+                Packets.Disengaged.Header = _menu.Item("headerOnDisengaged").GetValue<Slider>().Value;
+                Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill").GetValue<Slider>().Value;
+                Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp").GetValue<Slider>().Value;
+                Packets.CreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon").GetValue<Slider>().Value;
             }
-            
+
             #endregion
 
             Console.WriteLine("Started Set Dragon/Baron");
