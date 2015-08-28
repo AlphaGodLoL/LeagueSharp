@@ -112,7 +112,9 @@ namespace GodJungleTracker
 
         static void Main()
         {
+            Console.WriteLine("Started Loading OnGameLoad");
             CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Console.WriteLine("OnGameLoad loaded");
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -122,8 +124,10 @@ namespace GodJungleTracker
             //    return;
             //}
 
+            Console.WriteLine("Started Loading Menu");
             LoadMenu();
 
+            Console.WriteLine("Started Set Defin");
             #region Set Defin
 
             Danger = new SoundPlayer(Properties.Resources.danger);
@@ -162,6 +166,7 @@ namespace GodJungleTracker
 
             #endregion
 
+            Console.WriteLine("Started Set Headers");
             #region Set Headers
 
             float gamever = float.Parse(Game.Version.Substring(0, 4));
@@ -194,6 +199,7 @@ namespace GodJungleTracker
             
             #endregion
 
+            Console.WriteLine("Started Set Dragon/Baron");
             #region Set Dragon/Baron Camp
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
             {
@@ -208,6 +214,7 @@ namespace GodJungleTracker
             }
             #endregion
 
+            Console.WriteLine("Started Loading Minions");
             #region Load Minions
 
             foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Contains("SRU_") || x.Name.Contains("Sru_")))
@@ -237,6 +244,7 @@ namespace GodJungleTracker
 
             #endregion
 
+            Console.WriteLine("Started Loading Static Menu");
             #region Load Static Menu
 
             if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
@@ -272,6 +280,7 @@ namespace GodJungleTracker
 
             #endregion
 
+            Console.WriteLine("Started Loading Others");
             #region Load Others
 
             if (Game.ClockTime > 450f)
@@ -331,7 +340,6 @@ namespace GodJungleTracker
                 Game.OnProcessPacket += OnProcessPacket;
                 Console.WriteLine("OnProcessPacket Loaded");
             }
-            
         }
 
         private static void PlaySound(SoundPlayer sound = null)
