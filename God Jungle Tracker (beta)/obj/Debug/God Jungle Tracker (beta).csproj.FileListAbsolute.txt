@@ -24,3 +24,4 @@ C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Rel
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\SharpDX.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\clipper_library.dll
 C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\bin\Release\LeagueSharp.Sandbox.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\God Jungle Tracker (beta)\obj\Debug\God Jungle Tracker (beta).csprojResolveAssemblyReference.cache

@@ -20,6 +20,7 @@ using Font = SharpDX.Direct3D9.Font;
 using FontDrawFlags = SharpDX.Direct3D9.FontDrawFlags;
 using Vector2 = SharpDX.Vector2;
 using GodJungleTracker.Classes;
+using System.Globalization;
 
 namespace GodJungleTracker
 {
@@ -173,18 +174,14 @@ namespace GodJungleTracker
 
             Console.WriteLine("GameVer substring: " + Game.Version.Substring(0, 4));
 
-            Console.WriteLine("GameVer parsed: " + float.Parse(Game.Version.Substring(0, 4)));
+            float gamever = float.Parse(Game.Version.Substring(0, 4),
+                      System.Globalization.NumberStyles.AllowThousands,
+                      CultureInfo.InvariantCulture);
 
-            float gamever = float.Parse(Game.Version.Substring(0, 4));
-
-            Console.WriteLine("GameVer: " + gamever);
+            Console.WriteLine("GameVer parsed: " + gamever);
 
             try
             {
-                gamever = float.Parse(Game.Version.Substring(0, 4));
-            
-                Console.WriteLine("GameVer: " + gamever);
-
                 if (_menu.Item("headerFromPatch").GetValue<Slider>().Value != (int)gamever)
                 {
                     Console.WriteLine("gamever = false");
