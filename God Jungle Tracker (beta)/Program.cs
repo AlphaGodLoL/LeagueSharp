@@ -98,7 +98,7 @@ namespace GodJungleTracker
 
         public static ColorBGRA white;
 
-        public static string GameVersion;
+        public static string GameVersion = Game.Version.Substring(0, 4);
 
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -171,12 +171,12 @@ namespace GodJungleTracker
             Console.WriteLine("Started Set Headers");
             #region Set Headers
 
-            Packets.Attack.Header = _menu.Item("headerOnAttack" + GameVersion.ToString()).GetValue<Slider>().Value;
-            Packets.MissileHit.Header = _menu.Item("headerOnMissileHit" + GameVersion.ToString()).GetValue<Slider>().Value;
-            Packets.Disengaged.Header = _menu.Item("headerOnDisengaged" + GameVersion.ToString()).GetValue<Slider>().Value;
-            Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill" + GameVersion.ToString()).GetValue<Slider>().Value;
-            Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp" + GameVersion.ToString()).GetValue<Slider>().Value;
-            Packets.CreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon" + GameVersion.ToString()).GetValue<Slider>().Value;
+            Packets.Attack.Header = _menu.Item("headerOnAttack" + GameVersion).GetValue<Slider>().Value;
+            Packets.MissileHit.Header = _menu.Item("headerOnMissileHit" + GameVersion).GetValue<Slider>().Value;
+            Packets.Disengaged.Header = _menu.Item("headerOnDisengaged" + GameVersion).GetValue<Slider>().Value;
+            Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill" + GameVersion).GetValue<Slider>().Value;
+            Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp" + GameVersion).GetValue<Slider>().Value;
+            Packets.CreateCampIcon.Header = _menu.Item("headerOnCreateCampIcon" + GameVersion).GetValue<Slider>().Value;
 
             #endregion
 
@@ -387,11 +387,11 @@ namespace GodJungleTracker
                         }
                     }
 
-                    if (camp.Name == "Gromp" && _menu.Item("headerOnCreateGromp" + GameVersion.ToString()).GetValue<Slider>().Value == 0)
+                    if (camp.Name == "Gromp" && _menu.Item("headerOnCreateGromp" + GameVersion).GetValue<Slider>().Value == 0)
                     {
                         foreach (var item in OnCreateGrompList.Where(item => item[0] == mob.NetworkId))
                         {
-                            _menu.Item("headerOnCreateGromp" + GameVersion.ToString()).SetValue<Slider>(new Slider(item[1], 0, 400));
+                            _menu.Item("headerOnCreateGromp" + GameVersion).SetValue<Slider>(new Slider(item[1], 0, 400));
                             Packets.CreateGromp.Header = item[1];
                             break;
                         }
@@ -1304,12 +1304,12 @@ namespace GodJungleTracker
 
             if (_menu.Item("forcefindheaders").GetValue<bool>())
             {
-                _menu.Item("headerOnAttack" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMissileHit" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnDisengaged" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMonsterSkill" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateGromp" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnCreateCampIcon" + GameVersion.ToString()).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnAttack" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnMissileHit" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnDisengaged" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnMonsterSkill" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnCreateGromp" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnCreateCampIcon" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 Packets.Attack.Header = 0;
                 Packets.MissileHit.Header = 0;
                 Packets.Disengaged.Header = 0;
@@ -1321,14 +1321,14 @@ namespace GodJungleTracker
 
             
 
-            if (_menu.Item("headerOnAttack" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
+            if (_menu.Item("headerOnAttack" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.NetworkId == networkID))
                 {
                     OnAttackList.Add(header);
                     if (OnAttackList.Count<int>(x => x == header) == 5)
                     {
-                        _menu.Item("headerOnAttack" + GameVersion.ToString()).SetValue<Slider>(new Slider(header, 0, 400));
+                        _menu.Item("headerOnAttack" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                         Packets.Attack.Header = header;
                         try
                         {
@@ -1342,14 +1342,14 @@ namespace GodJungleTracker
                 }
             }
 
-            if (_menu.Item("headerOnMissileHit" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
+            if (_menu.Item("headerOnMissileHit" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsRanged && obj.NetworkId == networkID))
                 {
                     MissileHitList.Add(header);
                     if (MissileHitList.Count<int>(x => x == header) == 5)
                     {
-                        _menu.Item("headerOnMissileHit" + GameVersion.ToString()).SetValue<Slider>(new Slider(header, 0, 400));
+                        _menu.Item("headerOnMissileHit" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                         Packets.MissileHit.Header = header;
                         try
                         {
@@ -1363,30 +1363,30 @@ namespace GodJungleTracker
                 }
             }
 
-            if (_menu.Item("headerOnDisengaged" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && length == Packets.Disengaged.Length && networkID > 0)
+            if (_menu.Item("headerOnDisengaged" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Disengaged.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
                 {
-                    _menu.Item("headerOnDisengaged" + GameVersion.ToString()).SetValue<Slider>(new Slider(header, 0, 400));
+                    _menu.Item("headerOnDisengaged" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                     Packets.Disengaged.Header = header;
                 }
             }
 
-            if (_menu.Item("headerOnMonsterSkill" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
+            if (_menu.Item("headerOnMonsterSkill" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Name.Contains("Dragon") && obj.NetworkId == networkID))
                 {
-                    _menu.Item("headerOnMonsterSkill" + GameVersion.ToString()).SetValue<Slider>(new Slider(header, 0, 400));
+                    _menu.Item("headerOnMonsterSkill" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                     Packets.MonsterSkill.Header = header;
                 }
             }
 
-            if (_menu.Item("headerOnCreateGromp" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && (length == Packets.CreateGromp.Length || length == Packets.CreateGromp.Length2) && networkID > 0)
+            if (_menu.Item("headerOnCreateGromp" + GameVersion).GetValue<Slider>().Value == 0 && (length == Packets.CreateGromp.Length || length == Packets.CreateGromp.Length2) && networkID > 0)
             {
                 OnCreateGrompList.Add(new int[] { networkID, (int)header, length });
             }
 
-            if (_menu.Item("headerOnCreateCampIcon" + GameVersion.ToString()).GetValue<Slider>().Value == 0 && networkID == 0 &&
+            if (_menu.Item("headerOnCreateCampIcon" + GameVersion).GetValue<Slider>().Value == 0 && networkID == 0 &&
                 (length == Packets.CreateCampIcon.Length || length == Packets.CreateCampIcon.Length2 || length == Packets.CreateCampIcon.Length3 || length == Packets.CreateCampIcon.Length4 || length == Packets.CreateCampIcon.Length5))
             {
                 OnCreateCampIconList.Add(new int[] { (int)header, length });
@@ -1397,7 +1397,7 @@ namespace GodJungleTracker
                     (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length4) == 1) &&
                     (OnCreateCampIconList.Count(item => item[0] == (int)header && item[1] == Packets.CreateCampIcon.Length5) == 1))
                 {
-                    _menu.Item("headerOnCreateCampIcon" + GameVersion.ToString()).SetValue<Slider>(new Slider(header, 0, 400));
+                    _menu.Item("headerOnCreateCampIcon" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                     Packets.CreateCampIcon.Header = header;
                     try
                     {
@@ -1411,7 +1411,6 @@ namespace GodJungleTracker
             }
 
             #endregion
-
             
             #region Update States
 
@@ -1810,16 +1809,16 @@ namespace GodJungleTracker
                 _menu.AddSubMenu(new Menu("Advanced", "Advanced"));
                 var advanced = _menu.SubMenu("Advanced");
                 advanced.SubMenu("Headers").AddItem(new MenuItem("forcefindheaders", "Force Auto-Find Headers").SetValue(false));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack" + GameVersion.ToString(), "Header OnAttack").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit" + GameVersion.ToString(), "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnDisengaged" + GameVersion.ToString(), "Header OnDisengaged").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill" + GameVersion.ToString(), "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp" + GameVersion.ToString(), "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon" + GameVersion.ToString(), "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("patch", "Headers From Patch: " + GameVersion.ToString()));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack" + GameVersion, "Header OnAttack").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit" + GameVersion, "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnDisengaged" + GameVersion, "Header OnDisengaged").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill" + GameVersion, "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp" + GameVersion, "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon" + GameVersion, "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("patch", "Headers From Patch: " + GameVersion));
 
                 //String[] gameversion = { "" };
-                //advanced.SubMenu("Headers").AddItem(new MenuItem("headerFromPatch" + Game.Version.Substring(0, 4), "Headers From Patch: " + Game.Version.Substring(0, 4)).SetValue(new StringList(GameVersion.ToString())));
+                //advanced.SubMenu("Headers").AddItem(new MenuItem("headerFromPatch" + Game.Version.Substring(0, 4), "Headers From Patch: " + Game.Version.Substring(0, 4)).SetValue(new StringList(GameVersion)));
 
                 _menu.SubMenu("Advanced").AddItem(new MenuItem("updatetick", "Update Tick").SetValue(new Slider(150,0,1000)));
 
