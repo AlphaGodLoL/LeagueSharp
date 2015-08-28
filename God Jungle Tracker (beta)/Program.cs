@@ -169,6 +169,12 @@ namespace GodJungleTracker
             Console.WriteLine("Started Set Headers");
             #region Set Headers
 
+            Console.WriteLine("GameVer: " + Game.Version);
+
+            Console.WriteLine("GameVer substring: " + Game.Version.Substring(0, 4));
+
+            Console.WriteLine("GameVer parsed: " + float.Parse(Game.Version.Substring(0, 4)));
+
             float gamever = float.Parse(Game.Version.Substring(0, 4));
 
             Console.WriteLine("GameVer: " + gamever);
