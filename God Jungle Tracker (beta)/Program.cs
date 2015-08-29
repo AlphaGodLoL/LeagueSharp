@@ -114,11 +114,13 @@ namespace GodJungleTracker
 
         static void Main()
         {
+            Console.WriteLine("[GJT] - Start");
             CustomEvents.Game.OnGameLoad += OnGameLoad;
         }
 
         public static void OnGameLoad(EventArgs args)
         {
+            Console.WriteLine("[GJT] - Started OnGameLoad");
             //if (Game.MapId.ToString() != "SummonersRift")
             //{
             //    return;
@@ -126,10 +128,10 @@ namespace GodJungleTracker
 
             GameVersion = Game.Version.Substring(0, 4);
 
-            Console.WriteLine("Started Loading Menu");
+            Console.WriteLine("[GJT] - Started Loading Menu");
             LoadMenu();
 
-            Console.WriteLine("Started Set Defin");
+            Console.WriteLine("[GJT] - Started Set Defin");
             #region Set Defin
 
             Danger = new SoundPlayer(Properties.Resources.danger);
@@ -168,7 +170,7 @@ namespace GodJungleTracker
 
             #endregion
 
-            Console.WriteLine("Started Set Headers");
+            Console.WriteLine("[GJT] - Started Set Headers");
             #region Set Headers
 
             Packets.Attack.Header = _menu.Item("headerOnAttack" + GameVersion).GetValue<Slider>().Value;
@@ -180,7 +182,7 @@ namespace GodJungleTracker
 
             #endregion
 
-            Console.WriteLine("Started Set Dragon/Baron");
+            Console.WriteLine("[GJT] - Started Set Dragon/Baron");
             #region Set Dragon/Baron Camp
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == "SummonersRift"))
             {
@@ -195,7 +197,7 @@ namespace GodJungleTracker
             }
             #endregion
 
-            Console.WriteLine("Started Loading Minions");
+            Console.WriteLine("[GJT] - Started Loading Minions");
             #region Load Minions
 
             foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Contains("SRU_") || x.Name.Contains("Sru_")))
@@ -225,7 +227,7 @@ namespace GodJungleTracker
 
             #endregion
 
-            Console.WriteLine("Started Loading Static Menu");
+            Console.WriteLine("[GJT] - Started Loading Static Menu");
             #region Load Static Menu
 
             if (_menu.Item("soundvolume").GetValue<StringList>().SelectedIndex.Equals(0))
@@ -261,7 +263,7 @@ namespace GodJungleTracker
 
             #endregion
 
-            Console.WriteLine("Started Loading Others");
+            Console.WriteLine("[GJT] - Started Loading Others");
             #region Load Others
 
             if (Game.ClockTime > 450f)
@@ -299,27 +301,47 @@ namespace GodJungleTracker
             if (_menu.Item("onendscene").GetValue<bool>())
             {
                 Drawing.OnEndScene += Drawing_OnEndScene;
-                Console.WriteLine("OnEndScene Loaded");
+                Console.WriteLine("[GJT] - OnEndScene Loaded");
+            }
+            else
+            {
+                Console.WriteLine("[GJT] - OnEndScene Not Loaded");
             }
             if (_menu.Item("oncreate").GetValue<bool>())
             {
                 GameObject.OnCreate += GameObjectOnCreate;
-                Console.WriteLine("OnCreate Loaded");
+                Console.WriteLine("[GJT] - OnCreate Loaded");
+            }
+            else
+            {
+                Console.WriteLine("[GJT] - OnCreate Not Loaded");
             }
             if (_menu.Item("ondelete").GetValue<bool>())
             {
                 GameObject.OnDelete += GameObjectOnDelete;
-                Console.WriteLine("OnDelete Loaded");
+                Console.WriteLine("[GJT] - OnDelete Loaded");
+            }
+            else
+            {
+                Console.WriteLine("[GJT] - OnDelete Not Loaded");
             }
             if (_menu.Item("onupdate").GetValue<bool>())
             {
                 Game.OnUpdate += OnGameUpdate;
-                Console.WriteLine("OnUpdate Loaded");
+                Console.WriteLine("[GJT] - OnUpdate Loaded");
+            }
+            else
+            {
+                Console.WriteLine("[GJT] - OnUpdate Not Loaded");
             }
             if (_menu.Item("onprocesspacket").GetValue<bool>())
             {
                 Game.OnProcessPacket += OnProcessPacket;
-                Console.WriteLine("OnProcessPacket Loaded");
+                Console.WriteLine("[GJT] - OnProcessPacket Loaded");
+            }
+            else
+            {
+                Console.WriteLine("[GJT] - OnProcessPacket Not Loaded");
             }
         }
 
