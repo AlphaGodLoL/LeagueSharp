@@ -1455,7 +1455,7 @@ namespace GodJungleTracker
                 {
                     if (!obj.IsAlly)
                     {
-                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron"))
+                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron") && !obj.CharData.BaseSkinName.Contains("jinxmine"))
                         {
                             Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.CharData.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
                             GuessDragonId = 0;
