@@ -146,8 +146,8 @@ namespace GodJungleTracker
 
             #region Set Headers
 
-            Packets.Attack.Header = _menu.Item("headerOnAttack" + GameVersion).GetValue<Slider>().Value;
-            Packets.MissileHit.Header = _menu.Item("headerOnMissileHit" + GameVersion).GetValue<Slider>().Value;
+            Packets.Attack.Header = _menu.Item("headerOnAttack2" + GameVersion).GetValue<Slider>().Value;
+            Packets.MissileHit.Header = _menu.Item("headerOnMissileHit2" + GameVersion).GetValue<Slider>().Value;
             Packets.Disengaged.Header = _menu.Item("headerOnDisengaged" + GameVersion).GetValue<Slider>().Value;
             Packets.MonsterSkill.Header = _menu.Item("headerOnMonsterSkill" + GameVersion).GetValue<Slider>().Value;
             Packets.CreateGromp.Header = _menu.Item("headerOnCreateGromp" + GameVersion).GetValue<Slider>().Value;
@@ -1189,8 +1189,8 @@ namespace GodJungleTracker
 
             if (_menu.Item("forcefindheaders").GetValue<bool>())
             {
-                _menu.Item("headerOnAttack" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
-                _menu.Item("headerOnMissileHit" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnAttack2" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+                _menu.Item("headerOnMissileHit2" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnDisengaged" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnMonsterSkill" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateGromp" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
@@ -1206,14 +1206,14 @@ namespace GodJungleTracker
 
             
 
-            if (_menu.Item("headerOnAttack" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
+            if (_menu.Item("headerOnAttack2" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.NetworkId == networkID))
                 {
                     OnAttackList.Add(header);
-                    if (OnAttackList.Count<int>(x => x == header) == 5)
+                    if (OnAttackList.Count<int>(x => x == header) == 10)
                     {
-                        _menu.Item("headerOnAttack" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
+                        _menu.Item("headerOnAttack2" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                         Packets.Attack.Header = header;
                         try
                         {
@@ -1227,14 +1227,14 @@ namespace GodJungleTracker
                 }
             }
 
-            if (_menu.Item("headerOnMissileHit" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
+            if (_menu.Item("headerOnMissileHit2" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.MissileHit.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsRanged && obj.NetworkId == networkID))
                 {
                     MissileHitList.Add(header);
-                    if (MissileHitList.Count<int>(x => x == header) == 5)
+                    if (MissileHitList.Count<int>(x => x == header) == 10)
                     {
-                        _menu.Item("headerOnMissileHit" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
+                        _menu.Item("headerOnMissileHit2" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
                         Packets.MissileHit.Header = header;
                         try
                         {
@@ -1638,8 +1638,8 @@ namespace GodJungleTracker
                 _menu.AddSubMenu(new Menu("Advanced", "Advanced"));
                 var advanced = _menu.SubMenu("Advanced");
                 advanced.SubMenu("Headers").AddItem(new MenuItem("forcefindheaders", "Force Auto-Find Headers").SetValue(false));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack" + GameVersion, "Header OnAttack").SetValue(new Slider(0, 0, 400)));
-                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit" + GameVersion, "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnAttack2" + GameVersion, "Header OnAttack").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMissileHit2" + GameVersion, "Header OnMissileHit").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnDisengaged" + GameVersion, "Header OnDisengaged").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill" + GameVersion, "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp" + GameVersion, "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
