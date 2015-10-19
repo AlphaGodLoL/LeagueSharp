@@ -13,10 +13,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
-using Font = SharpDX.Direct3D9.Font;
-using FontDrawFlags = SharpDX.Direct3D9.FontDrawFlags;
 using Vector2 = SharpDX.Vector2;
 using GodJungleTracker.Classes;
 
@@ -24,7 +21,7 @@ namespace GodJungleTracker
 {
     class Program
     {
-        static Menu _menu;
+        public static Menu _menu;
 
         #region Definitions
 
@@ -39,10 +36,6 @@ namespace GodJungleTracker
         camp.State == 7 dead on timer to respawn
         */
 
-        public static Font MinimapText;
-
-        public static Font MapText;
-
         public static Utility.Map.MapType MapType { get; set; }
 
         public static Jungle.Camp DragonCamp;
@@ -54,18 +47,13 @@ namespace GodJungleTracker
         public static List<int[]> OnCreateCampIconList;
         public static List<int[]> PossibleBaronList;
         public static List<int> PossibleDragonList;
+        public static List<int> ObjectsList;
 
         public static int UpdateTick;
         public static int PossibleDragonTimer;
-        public static int EnemyTeamStacks;
-        public static int AllyTeamStacks;
-        public static bool EnemyTeamNashor;
-        public static bool AllyTeamNashor;
         public static int GuessNetworkId1 = 1;
         public static int GuessNetworkId2 = 1;
         public static int GuessDragonId = 1;
-        public static int EnemyFoWTime;
-        public static int AllyFoWTime;
         public static int Seed1 = 3;
         public static int Seed2 = 2;
         public static float ClockTimeAdjust;
@@ -84,15 +72,10 @@ namespace GodJungleTracker
         public static ColorBGRA White;
 
         public static string GameVersion = Game.Version.Substring(0, 4);
-
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-        public static string[] BlockHeroes = { "Caitlyn", "Fizz", "Nidalee", "MonkeyKing", "Zed", "Zyra", "Kalista", "Yasuo" }; //"Jinx",
-
+        public static string[] BlockHeroes = { "Caitlyn", "Nidalee" };
         public static int[] SeedOrder = { 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0 };
-
         public static int[] CreateOrder = { 14, 15, 10, 9, 8, 13, 12, 11, 4, 3, 2, 7, 6, 5, 23, 22, 21, 20, 29, 28, 27, 26, 19, 18, 17, 16, 35, 34, 33, 32, 31, 30 };
-
         public static int[] IdOrder = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         #endregion
@@ -121,26 +104,9 @@ namespace GodJungleTracker
             OnCreateCampIconList = new List<int[]>();
             PossibleBaronList = new List<int[]>();
             PossibleDragonList = new List<int>();
+            ObjectsList = new List<int>();
 
             White = new ColorBGRA(255, 255, 255, 255);
-
-            MinimapText = new Font(Drawing.Direct3DDevice,
-                        new FontDescription
-                        {
-                            FaceName = "Calibri",
-                            Height = _menu.Item("timerfontminimap").GetValue<Slider>().Value,
-                            OutputPrecision = FontPrecision.Default,
-                            Quality = FontQuality.Default
-                        });
-
-            MapText = new Font(Drawing.Direct3DDevice,
-                    new FontDescription
-                    {
-                        FaceName = "Calibri",
-                        Height = _menu.Item("timerfontmap").GetValue<Slider>().Value,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
 
             #endregion
 
@@ -242,7 +208,7 @@ namespace GodJungleTracker
 
                 if (!hero.IsAlly)
                 {
-                    for (int i = 0; i <= 7; i++)
+                    for (int i = 0; i <= 1; i++)
                     {
                         if (hero.ChampionName.Contains(BlockHeroes[i]))
                         {
@@ -699,18 +665,11 @@ namespace GodJungleTracker
                                 (int)timespan.TotalMinutes,
                                 format ? (int)timespan.TotalSeconds : timespan.Seconds);
 
-                            var textrect = MapText.MeasureText(null, camp.Timer.TextOnMinimap, FontDrawFlags.Center);
-
-                            camp.Timer.MinimapPosition = new Vector2((int)(camp.MinimapPosition.X - textrect.Width / 2f), (int)(camp.MinimapPosition.Y - textrect.Height / 2f));
+                            camp.Timer.MinimapPosition = new Vector2((int)(camp.MinimapPosition.X), (int)(camp.MinimapPosition.Y));
                         }
                     }
 
-                    if (camp.Position.IsOnScreen() && _menu.Item("timeronmap").GetValue<bool>())
-                    {
-                        var textrect = MapText.MeasureText(null, camp.Timer.TextOnMap, FontDrawFlags.Center);
-
-                        camp.Timer.Position = new Vector3((int)(camp.Position.X - textrect.Width / 2f), (int)(camp.Position.Y - textrect.Height / 2f), 0);
-                    }
+                    
 
                     #endregion
 
@@ -1049,130 +1008,29 @@ namespace GodJungleTracker
 
                 #endregion
 
-                #region Get Dragon/Baron buff
-
-                if (Game.MapId.ToString() == "SummonersRift")
+                foreach (var obj in PossibleBaronList.ToList().Where(item => Environment.TickCount >= item[3] + 20000))
                 {
-                    var ally = HeroManager.Allies.FirstOrDefault(x => x.IsValidTarget(50000f, false));
-
-                    if (enemy != null)
+                    try
                     {
-                        if (GetDragonStacks(enemy) > EnemyTeamStacks)
-                        {
-                            EnemyTeamStacks = EnemyTeamStacks + 1;
-
-                            if (Environment.TickCount - EnemyFoWTime > 100 ||
-                                (Environment.TickCount - EnemyFoWTime <= 100 && (DragonCamp.Mobs[0].State != 4 && DragonCamp.Mobs[0].State != 7)))
-                            {
-                                DragonCamp.Mobs[0].State = 4;
-                                DragonCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
-                                DragonCamp.LastChangeOnState = Environment.TickCount;
-                                DragonCamp.RespawnTime = (DragonCamp.LastChangeOnState + DragonCamp.RespawnTimer * 1000);
-                            }
-                            //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
-                        }
-                        else if (GetNashorBuff(enemy) && !EnemyTeamNashor)
-                        {
-                            EnemyTeamNashor = true;
-
-                            if (Environment.TickCount - EnemyFoWTime > 100 ||
-                                (Environment.TickCount - EnemyFoWTime <= 100 && BaronCamp.Mobs[0].State != 4 && BaronCamp.Mobs[0].State != 7))
-                            {
-                                BaronCamp.Mobs[0].State = 4;
-                                BaronCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
-                                BaronCamp.LastChangeOnState = Environment.TickCount;
-                                BaronCamp.RespawnTime = (BaronCamp.LastChangeOnState + BaronCamp.RespawnTimer * 1000);
-                            }
-                            //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
-                        }
-                        else if (GetDragonStacks(enemy) < EnemyTeamStacks)
-                        {
-                            EnemyTeamStacks--;
-                            //Console.WriteLine("Enemy Dragon Stacks: " + EnemyTeamStacks);
-                        }
-                        else if (!GetNashorBuff(enemy) && EnemyTeamNashor)
-                        {
-                            EnemyTeamNashor = false;
-                            //Console.WriteLine("Enemy Baron: " + EnemyTeamNashor);
-                        }
+                        PossibleBaronList.Remove(obj);
                     }
-                    else
+                    catch (Exception)
                     {
-                        EnemyFoWTime = Environment.TickCount;
-                    }
-
-                    if (ally != null)
-                    {
-                        if (GetDragonStacks(ally) > AllyTeamStacks)
-                        {
-                            AllyTeamStacks = AllyTeamStacks + 1;
-
-                            if (Environment.TickCount - AllyFoWTime > 100 ||
-                                (Environment.TickCount - AllyFoWTime <= 100 && (DragonCamp.Mobs[0].State != 4 && DragonCamp.Mobs[0].State != 7)))
-                            {
-                                DragonCamp.Mobs[0].State = 4;
-                                DragonCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
-                                DragonCamp.LastChangeOnState = Environment.TickCount;
-                                DragonCamp.RespawnTime = (DragonCamp.LastChangeOnState + DragonCamp.RespawnTimer * 1000);
-                            }
-                            //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
-                        }
-                        else if (GetNashorBuff(ally) && !AllyTeamNashor)
-                        {
-                            AllyTeamNashor = true;
-
-                            if (Environment.TickCount - AllyFoWTime > 100 ||
-                                (Environment.TickCount - AllyFoWTime <= 100 && BaronCamp.Mobs[0].State != 4 && BaronCamp.Mobs[0].State != 7))
-                            {
-                                BaronCamp.Mobs[0].State = 4;
-                                BaronCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
-                                BaronCamp.LastChangeOnState = Environment.TickCount;
-                                BaronCamp.RespawnTime = (BaronCamp.LastChangeOnState + BaronCamp.RespawnTimer * 1000);
-                            }
-                            //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
-                        }
-                        else if (GetDragonStacks(ally) < AllyTeamStacks)
-                        {
-                            AllyTeamStacks--;
-                            //Console.WriteLine("Ally Dragon Stacks: " + AllyTeamStacks);
-                        }
-                        else if (!GetNashorBuff(ally) && AllyTeamNashor)
-                        {
-                            AllyTeamNashor = false;
-                            //Console.WriteLine("Ally Baron: " + AllyTeamNashor);
-                        }
-                    }
-                    else
-                    {
-                        AllyFoWTime = Environment.TickCount;
-                    }
-
-                    if (ally != null && enemy != null && AllyTeamNashor == false && EnemyTeamNashor == false &&
-                        BaronCamp.Mobs[0].State == 4)
-                    {
-                        BaronCamp.Mobs[0].State = 1;
+                        //ignored
                     }
                 }
 
-                #endregion  //Credits to Inferno
-
                 UpdateTick = Environment.TickCount;
             }
+
+            foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
+            {
+                if (camp.Position.IsOnScreen() && _menu.Item("timeronmap").GetValue<bool>())
+                {
+                    camp.Timer.Position = Drawing.WorldToScreen(camp.Position);
+                }
+            }
         }
-
-        public static int GetDragonStacks(Obj_AI_Hero hero)
-        {
-            var baff = hero.Buffs.FirstOrDefault(buff => buff.Name == "s5test_dragonslayerbuff");
-            if (baff == null)
-                return 0;
-            else
-                return baff.Count;
-        }//Credits to Inferno
-
-        public static bool GetNashorBuff(Obj_AI_Hero hero)
-        {
-            return hero.Buffs.Any(buff => buff.Name == "exaltedwithbaronnashor");
-        } //Credits to Inferno
 
         public static void OnProcessPacket(GamePacketEventArgs args)
         {
@@ -1184,6 +1042,12 @@ namespace GodJungleTracker
             {
                 return;
             }
+
+            //debug
+            //foreach (var item in PossibleDragonList.ToList().Where(id => id == networkID))
+            //{
+            //    Console.WriteLine("Header: " + header + " lenght: " + length + " id: " + networkID);
+            //}
 
             #region AutoFind Headers
 
@@ -1368,17 +1232,24 @@ namespace GodJungleTracker
 
             #region Guess Dragon/Baron NetworkID
 
-            if (!isMob && (BaronCamp.Mobs[0].State < 1 || BaronCamp.Mobs[0].State > 3))
-            {
-                bool isLoaded = false;
-                foreach (Obj_AI_Base obj in ObjectManager.Get<Obj_AI_Base>().Where(obj => obj.NetworkId == networkID))
-                {
-                    isLoaded = true;
-                }
+            bool foundObj = false;
 
-                if (!isLoaded && Packets.MissileHit.Header == header && Packets.MissileHit.Length == length)
+            foreach (var obj in ObjectManager.Get<GameObject>().ToList().Where(x => x.NetworkId == networkID))
+            {
+                foundObj = true;
+            }
+
+            //Find Baron NetworkID
+            if (Game.MapId.ToString() == "SummonersRift" && 
+                !isMob && !foundObj &&
+                networkID != DragonCamp.Mobs[0].NetworkId &&
+                networkID != BaronCamp.Mobs[0].NetworkId &&
+                networkID > BiggestNetworkId
+                )
+            {
+                if (Packets.MissileHit.Header == header && Packets.MissileHit.Length == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length, Environment.TickCount });
 
                     if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length) >= 1) &&
                     (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length2) >= 1))
@@ -1389,9 +1260,9 @@ namespace GodJungleTracker
                     }
 
                 }
-                else if (!isLoaded && Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length == length)
+                else if (Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length, Environment.TickCount });
 
                     if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MissileHit.Header && item[2] == Packets.MissileHit.Length) >= 1) &&
                     (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length2) >= 1))
@@ -1401,9 +1272,9 @@ namespace GodJungleTracker
                         BaronCamp.Mobs[0].NetworkId = networkID;
                     }
                 }
-                else if (!isLoaded && Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length2 == length)
+                else if (Packets.MonsterSkill.Header == header && Packets.MonsterSkill.Length2 == length)
                 {
-                    PossibleBaronList.Add(new int[] { networkID, (int)header, length });
+                    PossibleBaronList.Add(new int[] { networkID, (int)header, length, Environment.TickCount });
 
                     if ((PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MissileHit.Header && item[2] == Packets.MissileHit.Length) >= 1) &&
                     (PossibleBaronList.Count(item => item[0] == networkID && item[1] == Packets.MonsterSkill.Header && item[2] == Packets.MonsterSkill.Length) >= 1))
@@ -1415,11 +1286,19 @@ namespace GodJungleTracker
                 }
             }
 
+            //Find Dragon NetworkID
             if (Environment.TickCount <= PossibleDragonTimer + 5000)
             {
-                foreach (var id in PossibleDragonList.Where(id => id == networkID))
+                foreach (var id in PossibleDragonList.ToList().Where(id => id == networkID))
                 {
-                    PossibleDragonList.RemoveAll(x => x == networkID);
+                    try
+                    {
+                        PossibleDragonList.RemoveAll(x => x == networkID);
+                    }
+                    catch (Exception)
+                    {
+                        //ignored
+                    }
                 }
             }
             else
@@ -1441,48 +1320,26 @@ namespace GodJungleTracker
             }
 
 
+
             if (header == Packets.MonsterSkill.Header &&
                 Game.MapId.ToString() == "SummonersRift" &&
-                BitConverter.ToInt32(args.PacketData, 2) != DragonCamp.Mobs[0].NetworkId &&
-                BitConverter.ToInt32(args.PacketData, 2) != BaronCamp.Mobs[0].NetworkId &&
-                BitConverter.ToInt32(args.PacketData, 2) > BiggestNetworkId &&
-                BitConverter.ToString(args.PacketData, 0).Length == Packets.MonsterSkill.Length &&
-                GuessDragonId == 1
-                )
+                !isMob && !foundObj &&
+                networkID != DragonCamp.Mobs[0].NetworkId &&
+                networkID != BaronCamp.Mobs[0].NetworkId &&
+                networkID > BiggestNetworkId &&
+                length == Packets.MonsterSkill.Length &&
+                GuessDragonId == 1)
             {
-                bool aiBaseTest = false;
-                foreach (Obj_AI_Base obj in ObjectManager.Get<Obj_AI_Base>().Where(x => x.NetworkId == networkID))
+                /*foreach (var obj in ObjectManager.Get<GameObject>().Where(x => x.NetworkId == networkID))
                 {
-                    if (!obj.IsAlly)
-                    {
-                        if (!obj.Name.Contains("SRU_Dragon") && !obj.Name.Contains("SRU_Baron") && !obj.CharData.BaseSkinName.Contains("jinxmine"))
-                        {
-                            //Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.CharData.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
-                            GuessDragonId = 0;
-                        }
-                    }
-                    aiBaseTest = true;
-                }
-
-                if (!aiBaseTest)
+                    Game.PrintChat("<font color=\"#FF0000\"> God Jungle Tracker (debug): Tell AlphaGod he forgot to consider: " + obj.Name + " - " + obj.SkinName + " - " + obj.CharData.BaseSkinName + " - Guess Dragon NetWorkID disabled</font>");
+                }*/
+                if (!ObjectsList.Contains(networkID))
                 {
-                    if (BaronCamp.Mobs[0].State <= 3)
-                    {
-                        PossibleDragonList.Add(networkID);
-                        PossibleDragonTimer = Environment.TickCount;
-                    }
-                    else if (DragonCamp.Mobs[0].State == 3)
-                    {
-                        BaronCamp.Mobs[0].State = 1;
-                        BaronCamp.Mobs[0].LastChangeOnState = Environment.TickCount;
-                        BaronCamp.Mobs[0].NetworkId = networkID;
-                    }
+                    PossibleDragonList.Add(networkID);
+                    PossibleDragonTimer = Environment.TickCount;
                 }
             }
-
-
-                
-            
 
             #endregion  
 
@@ -1529,6 +1386,17 @@ namespace GodJungleTracker
                 }
             }
             #endregion
+
+
+            #region ObjectsList
+
+            if (!ObjectsList.Contains(networkID) && (header != Packets.MonsterSkill.Header || length != Packets.MonsterSkill.Length))
+            {
+                ObjectsList.Add(networkID);
+            }
+            
+
+            #endregion
         }
 
         private static void Drawing_OnEndScene(EventArgs args)
@@ -1558,38 +1426,6 @@ namespace GodJungleTracker
                 else if (camp.State == 5)
                 {
                     Utility.DrawCircle(camp.Position, Circleradius, Colorguessed, Circlewidth, 30, true);
-                }
-
-                #endregion
-
-                #region Timers
-
-                if (camp.RespawnTime > Environment.TickCount && camp.State == 7)
-                {
-                    if (camp.Position.IsOnScreen() && Timeronmap)
-                    {
-                        try
-                        {
-                            var pos = Drawing.WorldToScreen(camp.Timer.Position);
-                            MapText.DrawText(null, camp.Timer.TextOnMap, (int)pos.X, (int)pos.Y, White);
-                        }
-                        catch (Exception)
-                        {
-                            //ingore
-                        }
-                    }
-
-                    if (Timeronminimap)
-                    {
-                        try
-                        {
-                            MinimapText.DrawText(null, camp.Timer.TextOnMinimap, (int)camp.Timer.MinimapPosition.X, (int)camp.Timer.MinimapPosition.Y, White);
-                        }
-                        catch (Exception)
-                        {
-                            //ingore
-                        }
-                    }
                 }
 
                 #endregion
