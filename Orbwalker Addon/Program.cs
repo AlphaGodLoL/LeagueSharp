@@ -205,6 +205,21 @@ namespace OrbwalkerAddon
                 }
             }
 
+            if (BufferAttack && (BufferTarget == null || BufferTarget.IsDead))
+            {
+                BufferAttack = false;
+            }
+            if (LastTarget == null || !LastTarget.IsValid || LastTarget.IsDead)
+            {
+                if (AttackOrder || JustAttacked)
+                {
+                    AttackOrder = false;
+                    JustAttacked = false;
+                    IssueOrder = false;
+                    AttackOnRange = false;
+                }
+            }
+
             if (Orbwalking.CanAttack())
             {
                 if (Orbwalking.Attack && BufferAttack && BufferTarget != null && BufferTarget.IsValid && BufferTarget.IsTargetable && Orbwalking.InAutoAttackRange((AttackableUnit)BufferTarget))
@@ -226,6 +241,10 @@ namespace OrbwalkerAddon
                 return false;
             }
             if (Player.IsRanged && Menu.Item("missilecheck").GetValue<bool>() && MissileLaunched)
+            {
+                return true;
+            }
+            if (LastTarget == null || !LastTarget.IsValid || LastTarget.IsDead)
             {
                 return true;
             }
