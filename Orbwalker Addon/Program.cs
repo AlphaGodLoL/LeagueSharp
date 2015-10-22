@@ -207,7 +207,7 @@ namespace OrbwalkerAddon
 
             if (Orbwalking.CanAttack())
             {
-                if (BufferAttack && BufferTarget != null && BufferTarget.IsValid && BufferTarget.IsTargetable)
+                if (Orbwalking.Attack && BufferAttack && BufferTarget != null && BufferTarget.IsValid && BufferTarget.IsTargetable && Orbwalking.InAutoAttackRange((AttackableUnit)BufferTarget))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, BufferTarget, true);
                 }
