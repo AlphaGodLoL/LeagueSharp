@@ -183,11 +183,15 @@ namespace OrbwalkerAddon
                     AttackOrder = false;
 
                 }
-                if (BufferMovement)
+                if (!Player.Spellbook.IsCastingSpell && !Player.Spellbook.IsChanneling)
                 {
-                    Player.IssueOrder(GameObjectOrder.MoveTo, BufferPosition, true);
+                    if (BufferMovement)
+                    {
+                        Player.IssueOrder(GameObjectOrder.MoveTo, BufferPosition, true);
+                    }
+                    BufferMovement = false;
                 }
-                BufferMovement = false;
+                
                 if (MissileLaunched)
                 {
                     MissileLaunched = false;
@@ -227,8 +231,11 @@ namespace OrbwalkerAddon
                     Player.IssueOrder(GameObjectOrder.AttackUnit, BufferTarget, true);
                 }
                 BufferAttack = false;
-            }
+            } 
+
+            Console.WriteLine();
         }
+
 
         private static bool CanMove()
         {
@@ -467,7 +474,8 @@ namespace OrbwalkerAddon
 
 
 
-            if (args.Order == GameObjectOrder.MoveTo && ((AttackOrder && Environment.TickCount - LastAttackOrder > 0) || JustAttacked) &&
+            if (args.Order == GameObjectOrder.MoveTo && (((AttackOrder && Environment.TickCount - LastAttackOrder > 0) || JustAttacked) || 
+                (Player.Spellbook.IsCastingSpell && !Player.Spellbook.IsChanneling)) &&
                 !Player.CharData.BaseSkinName.Contains("Kalista") && ShouldBlock)
             {
                 args.Process = false;
