@@ -1,0 +1,11 @@
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\Orbwalker Addon.exe.config
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\Orbwalker Addon.exe
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\Orbwalker Addon.pdb
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\LeagueSharp.Common.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\LeagueSharp.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\SharpDX.Direct3D9.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\SharpDX.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\clipper_library.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\bin\Debug\LeagueSharp.Sandbox.dll
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\obj\Debug\Orbwalker Addon.exe
+D:\LSharp\LocalAssemblies\Orbwalker Addon retry\obj\Debug\Orbwalker Addon.pdb
