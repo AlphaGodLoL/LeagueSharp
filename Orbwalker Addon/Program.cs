@@ -474,8 +474,7 @@ namespace OrbwalkerAddon
 
 
 
-            if (args.Order == GameObjectOrder.MoveTo && (((AttackOrder && Environment.TickCount - LastAttackOrder > 0) || JustAttacked) || 
-                (Player.Spellbook.IsCastingSpell && !Player.Spellbook.IsChanneling)) &&
+            if (args.Order == GameObjectOrder.MoveTo && ((AttackOrder && Environment.TickCount - LastAttackOrder > 0) || JustAttacked) &&
                 !Player.CharData.BaseSkinName.Contains("Kalista") && ShouldBlock)
             {
                 args.Process = false;
