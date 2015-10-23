@@ -160,9 +160,28 @@ namespace OrbwalkerAddon
                 AttackOrder = false;
             }
 
-            if (BufferAttack && Environment.TickCount - BufferAttackTimer >= 1000)
+            if (BufferAttack && (Environment.TickCount - BufferAttackTimer >= 1000 || (BufferTarget == null || BufferTarget.IsDead)))
             {
                 BufferAttack = false;
+            }
+
+            if (Player.Spellbook.IsCastingSpell && (AttackOrder || JustAttacked))
+            {
+                AttackOrder = false;
+                JustAttacked = false;
+                IssueOrder = false;
+                AttackOnRange = false;
+            }
+
+            if (LastTarget == null || !LastTarget.IsValid || LastTarget.IsDead)
+            {
+                if (AttackOrder || JustAttacked)
+                {
+                    AttackOrder = false;
+                    JustAttacked = false;
+                    IssueOrder = false;
+                    AttackOnRange = false;
+                }
             }
 
             if (CanMove())
@@ -209,20 +228,7 @@ namespace OrbwalkerAddon
                 }
             }
 
-            if (BufferAttack && (BufferTarget == null || BufferTarget.IsDead))
-            {
-                BufferAttack = false;
-            }
-            if (LastTarget == null || !LastTarget.IsValid || LastTarget.IsDead)
-            {
-                if (AttackOrder || JustAttacked)
-                {
-                    AttackOrder = false;
-                    JustAttacked = false;
-                    IssueOrder = false;
-                    AttackOnRange = false;
-                }
-            }
+            
 
             if (Orbwalking.CanAttack())
             {
@@ -231,9 +237,7 @@ namespace OrbwalkerAddon
                     Player.IssueOrder(GameObjectOrder.AttackUnit, BufferTarget, true);
                 }
                 BufferAttack = false;
-            } 
-
-            Console.WriteLine();
+            }
         }
 
 
@@ -405,7 +409,7 @@ namespace OrbwalkerAddon
             if (args.Order == GameObjectOrder.AttackTo || args.Order == GameObjectOrder.AttackUnit ||
                 args.Order == GameObjectOrder.AutoAttack || args.IsAttackMove)
             {
-                if (Menu.Item("BufferAttack").GetValue<bool>() && !Orbwalking.CanAttack() && CanMove())
+                if (Menu.Item("BufferAttack").GetValue<bool>() && !Orbwalking.CanAttack() && CanMove() && Orbwalking.Attack)
                 {
                     if (args.Target != null && args.Target.IsValid && args.Target is Obj_AI_Base)
                     {
