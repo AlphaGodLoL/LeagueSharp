@@ -372,7 +372,7 @@ namespace GodJungleTracker.Classes
                         return v2;
                     },
                     TextUpdate = () => Timer.TextOnMinimap,
-                    OutLined = true,
+                    OutLined = false,
                     Centered = true
                 };
                 TextMinimap.Add();
@@ -392,8 +392,6 @@ namespace GodJungleTracker.Classes
                     Centered = true
                 };
                 TextMap.Add();
-                
-
 
                 #endregion
 
