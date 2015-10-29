@@ -221,11 +221,37 @@ namespace GodJungleTracker
 
             #endregion
 
+
             Drawing.OnEndScene += Drawing_OnEndScene;
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnDelete += GameObjectOnDelete;
             Game.OnUpdate += OnGameUpdate;
             Game.OnProcessPacket += OnProcessPacket;
+            Obj_AI_Base.OnBuffAdd += Obj_AI_Base_OnBuffAdd;
+        }
+
+        public static void Obj_AI_Base_OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
+        {
+            if (!(sender is Obj_AI_Hero))
+            {
+                return;
+            }
+
+            if (args.Buff.Name.Contains("exaltedwithbaronnashor") && Utils.GameTimeTickCount - args.Buff.StartTime * 1000 <= BaronCamp.RespawnTimer * 1000)
+            {
+                BaronCamp.Mobs[0].State = 7;
+                BaronCamp.Mobs[0].JustDied = false;
+                BaronCamp.State = 7;
+                BaronCamp.RespawnTime = Environment.TickCount + BaronCamp.RespawnTimer * 1000 - (Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) - 1000);
+            }
+
+            if (args.Buff.Name.Contains("tooltip_dragonslayerbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
+            {
+                DragonCamp.Mobs[0].State = 7;
+                DragonCamp.Mobs[0].JustDied = false;
+                DragonCamp.State = 7;
+                DragonCamp.RespawnTime = Environment.TickCount + DragonCamp.RespawnTimer * 1000 - (Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) - 1000);
+            }
         }
 
         public static void GameObjectOnCreate(GameObject sender, EventArgs args)
@@ -298,13 +324,18 @@ namespace GodJungleTracker
                 return;
             }
 
-            var minion = (Obj_AI_Minion)sender;
+            if (sender.NetworkId == 0)
+            {
+                return;
+            }
+
+            //var minion = (Obj_AI_Minion)sender;
 
             foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
             {
                 //Do Stuff for each camp
 
-                foreach (var mob in camp.Mobs.Where(mob => mob.Name == minion.Name))
+                foreach (var mob in camp.Mobs.Where(mob => mob.NetworkId == sender.NetworkId))
                 {
                     //Do Stuff for each mob in a camp
 
@@ -374,13 +405,6 @@ namespace GodJungleTracker
 
                         int guessedTimetoDead = 3000;
 
-                        if (camp.Name == "Dragon")
-                        {
-                            if (Game.ClockTime - ClockTimeAdjust < 420f) guessedTimetoDead = 60000;
-                            else if (Game.ClockTime - ClockTimeAdjust < 820f) guessedTimetoDead = 40000;
-                            else guessedTimetoDead = 15000;
-                        }
-
                         if (camp.Name == "Baron")
                         {
                             guessedTimetoDead = 5000;
@@ -394,18 +418,7 @@ namespace GodJungleTracker
                                 {
                                     if (camp.Name == "Dragon")
                                     {
-                                        try
-                                        {
-                                            if (mob.Unit != null && !mob.Unit.IsVisible && enemy == null)
-                                            {
-                                                mob.State = 4;
-                                                mob.LastChangeOnState = Environment.TickCount - 2000;
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                            //ignored
-                                        }
+                                        //do nothing
                                     }
                                     else if (camp.Name == "Baron")
                                     {
