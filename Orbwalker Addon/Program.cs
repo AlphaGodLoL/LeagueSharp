@@ -51,7 +51,7 @@ namespace OrbwalkerAddon
         public static float MediumTime = 0;
         public static bool MissileLaunched;
         public static Vector3 BufferPosition = new Vector3(0, 0, 0); 
-        public static Obj_AI_Base BufferTarget;
+        public static GameObject BufferTarget;
         public static int BufferAttackTimer;
        
 
@@ -228,7 +228,7 @@ namespace OrbwalkerAddon
 
             if (Orbwalking.CanAttack())
             {
-                if (Orbwalking.Attack && BufferAttack && BufferTarget != null && BufferTarget.IsValid && BufferTarget.IsTargetable && Orbwalking.InAutoAttackRange((AttackableUnit)BufferTarget))
+                if (Orbwalking.Attack && BufferAttack && BufferTarget != null && BufferTarget.IsValid && Orbwalking.InAutoAttackRange((AttackableUnit)BufferTarget))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, BufferTarget, true);
                 }
@@ -408,10 +408,10 @@ namespace OrbwalkerAddon
             {
                 if (Menu.Item("BufferAttack").GetValue<bool>() && !Orbwalking.CanAttack() && CanMove() && Orbwalking.Attack)
                 {
-                    if (args.Target != null && args.Target.IsValid && args.Target is Obj_AI_Base)
+                    if (args.Target != null && args.Target.IsValid && args.Target is GameObject)
                     {
                         BufferAttack = true;
-                        BufferTarget = (Obj_AI_Base)args.Target;
+                        BufferTarget = args.Target;
                         BufferAttackTimer = Environment.TickCount;
                     }
 
@@ -421,7 +421,7 @@ namespace OrbwalkerAddon
                         {
                             BufferMovement = true;
                             BufferPosition = args.TargetPosition;
-                        } 
+                        }
                     }
                     args.Process = false;
                     return;
@@ -438,7 +438,7 @@ namespace OrbwalkerAddon
 
                 if (Orbwalking.Move)
                 {
-                    if (args.Target != null && args.Target.IsValid && args.Target is Obj_AI_Base && Orbwalking.InAutoAttackRange((AttackableUnit)args.Target))
+                    if (args.Target != null && args.Target.IsValid && args.Target is GameObject && Orbwalking.InAutoAttackRange((AttackableUnit)args.Target))
                     {
                         LastAttackOrder = Environment.TickCount;
                         AttackOrder = true;
@@ -454,7 +454,7 @@ namespace OrbwalkerAddon
                 }
                 else
                 {
-                    if (args.Target != null && args.Target.IsValid && args.Target is Obj_AI_Base)
+                    if (args.Target != null && args.Target.IsValid && args.Target is GameObject)
                     {
                         if (Orbwalking.InAutoAttackRange((AttackableUnit)args.Target))
                         {

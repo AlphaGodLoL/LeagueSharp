@@ -1,0 +1,11 @@
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\Orbwalker Addon.exe.config
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\Orbwalker Addon.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\Orbwalker Addon.pdb
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\LeagueSharp.Common.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\LeagueSharp.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\SharpDX.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\clipper_library.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\bin\Debug\LeagueSharp.Sandbox.dll
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\obj\Debug\Orbwalker Addon.exe
+C:\Users\MAURICIO\Documents\GitHub\LeagueSharp\Orbwalker Addon\obj\Debug\Orbwalker Addon.pdb
