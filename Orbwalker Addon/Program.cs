@@ -83,7 +83,7 @@ namespace OrbwalkerAddon
 
 
             //Follow Mouse (Orbwalk)
-            var movement = Menu.AddSubMenu(new Menu("Follow Mouse", "Follow Mouse"));
+            var movement = Menu.AddSubMenu(new Menu("Enable Movement", "Enable Movement"));
             movement.AddItem(new MenuItem("LastHitMovement", "On Last hit").SetValue(true).SetTooltip("Enable/Disable auto Orbwalk"));
             movement.AddItem(new MenuItem("LaneClearMovement", "On LaneClear").SetValue(true).SetTooltip("Enable/Disable auto Orbwalk"));
             movement.AddItem(new MenuItem("MixedMovement", "On Mixed").SetValue(true).SetTooltip("Enable/Disable auto Orbwalk"));
@@ -155,7 +155,7 @@ namespace OrbwalkerAddon
                 }
             }
 
-            if (AttackOrder && Environment.TickCount - LastAttackOrder >= 100 + Game.Ping)
+            if (AttackOrder && Environment.TickCount - LastAttackOrder >= 100 + Game.Ping * 1.5)
             {
                 AttackOrder = false;
             }
@@ -165,11 +165,10 @@ namespace OrbwalkerAddon
                 BufferAttack = false;
             }
 
-            if (Player.Spellbook.IsCastingSpell && (AttackOrder || JustAttacked))
+            if (Player.Spellbook.IsCastingSpell && !Player.Spellbook.IsAutoAttacking && (!AttackOrder || JustAttacked))
             {
                 AttackOrder = false;
                 JustAttacked = false;
-                IssueOrder = false;
                 AttackOnRange = false;
             }
 
@@ -179,7 +178,6 @@ namespace OrbwalkerAddon
                 {
                     AttackOrder = false;
                     JustAttacked = false;
-                    IssueOrder = false;
                     AttackOnRange = false;
                 }
             }
@@ -202,7 +200,7 @@ namespace OrbwalkerAddon
                     AttackOrder = false;
 
                 }
-                if (!Player.Spellbook.IsCastingSpell && !Player.Spellbook.IsChanneling)
+                if (!Player.Spellbook.IsChanneling)
                 {
                     if (BufferMovement)
                     {
@@ -227,8 +225,6 @@ namespace OrbwalkerAddon
                     ShouldBlock = false;
                 }
             }
-
-            
 
             if (Orbwalking.CanAttack())
             {
@@ -360,6 +356,7 @@ namespace OrbwalkerAddon
                     LastServerResponseDelay = Environment.TickCount - LastAttackOrder;
                     LastAttack = Environment.TickCount;
                     JustAttacked = true;
+                    Console.WriteLine("JustAttack Is True");
                     IssueOrder = false;
                     AttackOrder = false;
                 }
