@@ -19,7 +19,7 @@ namespace GodJungleTracker.Classes
 {
     public class Packets
     {
-        public static OnAggro Aggro;
+        public static OnPatienceChange Patience;
         public static OnAttack Attack;
         public static OnMissileHit MissileHit;
         public static OnDisengaged Disengaged;
@@ -31,7 +31,7 @@ namespace GodJungleTracker.Classes
         {
             try
             {
-                Aggro = new OnAggro();
+                Patience = new OnPatienceChange();
                 Attack = new OnAttack();
                 MissileHit = new OnMissileHit();
                 Disengaged = new OnDisengaged();
@@ -45,9 +45,9 @@ namespace GodJungleTracker.Classes
             }
         }
 
-        public class OnAggro
+        public class OnPatienceChange
         {
-            public OnAggro(int header = 0, int length = 35)
+            public OnPatienceChange(int header = 0, int length = 35)
             {
                 Length = length;
                 Header = header;
