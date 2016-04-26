@@ -1462,7 +1462,7 @@ namespace GodJungleTracker
                 {
                     Utility.DrawCircle(camp.Position, Circleradius, Colordisengaged, Circlewidth + 1, 30, true);
                 }
-                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
+                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Wolves" | camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
                 {
                     Utility.DrawCircle(camp.Position, Circleradius, Colortracked, Circlewidth, 30, true);
                 }
