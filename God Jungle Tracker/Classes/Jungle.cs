@@ -191,7 +191,11 @@ namespace GodJungleTracker.Classes
                         new List<Mob>(
                             new[] 
                             { 
-                                new Mob("SRU_Dragon6.1.1") 
+                                new Mob("SRU_Dragon_Air6.1.1"),
+                                new Mob("SRU_Dragon_Fire6.2.1"),
+                                new Mob("SRU_Dragon_Water6.3.1"),
+                                new Mob("SRU_Dragon_Earth6.4.1"),
+                                new Mob("SRU_Dragon_Elderh6.5.1")
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
@@ -201,8 +205,8 @@ namespace GodJungleTracker.Classes
                         120, 420, new Vector3(5007f, 10471f, -71f),
                         new List<Mob>(
                             new[] 
-                            { 
-                                new Mob("SRU_Baron12.1.1", true, null, 0) 
+                            {
+                                new Mob("SRU_Baron12.1.1", true, null, 0)                               
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,

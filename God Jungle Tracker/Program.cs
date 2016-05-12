@@ -72,7 +72,7 @@ namespace GodJungleTracker
 
         public static ColorBGRA White;
 
-        public static string GameVersion = Game.Version.Substring(0, 4);
+        public static string GameVersion;
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static string[] BlockHeroes = { "Caitlyn", "Nidalee" };
         public static int[] SeedOrder = { 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0 };
@@ -93,7 +93,7 @@ namespace GodJungleTracker
             //    return;
             //}
 
-            GameVersion = Game.Version.Substring(0, 4);
+            GameVersion = Game.Version.Split(' ')[1];
 
             LoadMenu();
 
@@ -1238,7 +1238,6 @@ namespace GodJungleTracker
                     else if (header == Packets.Patience.Header && mob.State != 2)
                     {
                         //Console.WriteLine(NameToCompare[i] + " is loosing Patience");
-
                         mob.State = 1;
                         mob.LastChangeOnState = Environment.TickCount;
                     }
