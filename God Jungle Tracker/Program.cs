@@ -1090,7 +1090,7 @@ namespace GodJungleTracker
 
             if (_menu.Item("headerOnPatienceChange" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Patience.Length && networkID > 0)
             {
-                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID && obj.Target == null))
+                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
                 {
                     OnPatienceChangeList.Add(header);
                     if (OnPatienceChangeList.Count<int>(x => x == header) == 10)
