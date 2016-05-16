@@ -195,7 +195,7 @@ namespace GodJungleTracker.Classes
                                 new Mob("SRU_Dragon_Fire6.2.1"),
                                 new Mob("SRU_Dragon_Water6.3.1"),
                                 new Mob("SRU_Dragon_Earth6.4.1"),
-                                new Mob("SRU_Dragon_Elderh6.5.1")
+                                new Mob("SRU_Dragon_Elder6.5.1")
                             }), 
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,

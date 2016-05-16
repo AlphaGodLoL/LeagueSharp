@@ -248,7 +248,7 @@ namespace GodJungleTracker
                 BaronCamp.RespawnTime = Environment.TickCount + BaronCamp.RespawnTimer * 1000 - (Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) - 1000);
             }
 
-            if (args.Buff.Name.Contains("tooltip_dragonslayerbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
+            if (args.Buff.Name.Contains("dragonbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
             {
                 DragonCamp.Mobs[0].State = 7;
                 DragonCamp.Mobs[0].JustDied = false;
