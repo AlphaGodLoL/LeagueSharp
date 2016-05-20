@@ -41,6 +41,7 @@ namespace GodJungleTracker
         public static Jungle.Camp DragonCamp;
         public static Jungle.Camp BaronCamp;
 
+        public static List<int> OnPatienceChangeList;
         public static List<int> OnAttackList;
         public static List<int> MissileHitList;
         public static List<int[]> OnCreateGrompList;
@@ -71,7 +72,7 @@ namespace GodJungleTracker
 
         public static ColorBGRA White;
 
-        public static string GameVersion = Game.Version.Substring(0, 4);
+        public static string GameVersion;
         public static int[] HeroNetworkId = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static string[] BlockHeroes = { "Caitlyn", "Nidalee" };
         public static int[] SeedOrder = { 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0 };
@@ -92,12 +93,13 @@ namespace GodJungleTracker
             //    return;
             //}
 
-            GameVersion = Game.Version.Substring(0, 4);
+            GameVersion = Game.Version.Split(' ')[1];
 
             LoadMenu();
 
             #region Set Defin
 
+            OnPatienceChangeList = new List<int>();
             OnAttackList = new List<int>();
             MissileHitList = new List<int>();
             OnCreateGrompList = new List<int[]>();
@@ -112,6 +114,7 @@ namespace GodJungleTracker
 
             #region Set Headers
 
+            Packets.Patience.Header = _menu.Item("headerOnPatienceChange" + GameVersion).GetValue<Slider>().Value;
             Packets.Attack.Header = _menu.Item("headerOnAttack2" + GameVersion).GetValue<Slider>().Value;
             Packets.MissileHit.Header = _menu.Item("headerOnMissileHit2" + GameVersion).GetValue<Slider>().Value;
             Packets.Disengaged.Header = _menu.Item("headerOnDisengaged" + GameVersion).GetValue<Slider>().Value;
@@ -245,7 +248,7 @@ namespace GodJungleTracker
                 BaronCamp.RespawnTime = Environment.TickCount + BaronCamp.RespawnTimer * 1000 - (Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) - 1000);
             }
 
-            if (args.Buff.Name.Contains("tooltip_dragonslayerbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
+            if (args.Buff.Name.Contains("dragonbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
             {
                 DragonCamp.Mobs[0].State = 7;
                 DragonCamp.Mobs[0].JustDied = false;
@@ -1066,22 +1069,45 @@ namespace GodJungleTracker
 
             if (_menu.Item("forcefindheaders").GetValue<bool>())
             {
+                _menu.Item("headerOnPatienceChange" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnAttack2" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnMissileHit2" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnDisengaged" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnMonsterSkill" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateGromp" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
                 _menu.Item("headerOnCreateCampIcon" + GameVersion).SetValue<Slider>(new Slider(0, 0, 400));
+
+                Packets.Patience.Header = 0;
                 Packets.Attack.Header = 0;
                 Packets.MissileHit.Header = 0;
                 Packets.Disengaged.Header = 0;
                 Packets.MonsterSkill.Header = 0;
                 Packets.CreateGromp.Header = 0;
                 Packets.CreateCampIcon.Header = 0;
-                _menu.Item("forcefindheaders").SetValue<bool>(false);
-            }
 
-            
+                _menu.Item("forcefindheaders").SetValue<bool>(false);
+            }   
+
+            if (_menu.Item("headerOnPatienceChange" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Patience.Length && networkID > 0)
+            {
+                foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Team.ToString().Contains("Neutral") && obj.NetworkId == networkID))
+                {
+                    OnPatienceChangeList.Add(header);
+                    if (OnPatienceChangeList.Count<int>(x => x == header) == 10)
+                    {
+                        _menu.Item("headerOnPatienceChange" + GameVersion).SetValue<Slider>(new Slider(header, 0, 400));
+                        Packets.Patience.Header = header;
+                        try
+                        {
+                            OnPatienceChangeList.Clear();
+                        }
+                        catch (Exception)
+                        {
+                            //ignored
+                        }
+                    }
+                }
+            }
 
             if (_menu.Item("headerOnAttack2" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.Attack.Length && networkID > 0)
             {
@@ -1205,6 +1231,13 @@ namespace GodJungleTracker
                     {
                         //Console.WriteLine(NameToCompare[i] + " is Attacking");
 
+                        mob.State = 1;
+                        mob.LastChangeOnState = Environment.TickCount;
+                    }
+
+                    else if (header == Packets.Patience.Header && mob.State != 2)
+                    {
+                        //Console.WriteLine(NameToCompare[i] + " is loosing Patience");
                         mob.State = 1;
                         mob.LastChangeOnState = Environment.TickCount;
                     }
@@ -1428,7 +1461,7 @@ namespace GodJungleTracker
                 {
                     Utility.DrawCircle(camp.Position, Circleradius, Colordisengaged, Circlewidth + 1, 30, true);
                 }
-                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
+                else if (camp.State == 3 && (camp.IsRanged || (camp.Name == "Wolves" | camp.Name == "Dragon" || camp.Name == "Crab" || camp.Name == "Spider")))
                 {
                     Utility.DrawCircle(camp.Position, Circleradius, Colortracked, Circlewidth, 30, true);
                 }
@@ -1477,7 +1510,7 @@ namespace GodJungleTracker
                 var draw = _menu.SubMenu("Drawing");
                 draw.SubMenu("Color").AddItem(new MenuItem("colortracked", "Camp is Idle - Tracked").SetValue(Color.FromArgb(255, 0, 255, 0)));
                 draw.SubMenu("Color").AddItem(new MenuItem("colorguessed", "Camp is Idle - Guessed").SetValue(Color.FromArgb(255, 0, 255, 255)));
-                draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Attacking").SetValue(Color.FromArgb(255, 255, 0, 0)));
+                draw.SubMenu("Color").AddItem(new MenuItem("colorattacking", "Camp is Aggro").SetValue(Color.FromArgb(255, 255, 0, 0)));
                 draw.SubMenu("Color").AddItem(new MenuItem("colordisengaged", "Camp is Disengaged").SetValue(Color.FromArgb(255, 255, 210, 0)));
                 draw.SubMenu("Color").AddItem(new MenuItem("colordead", "Camp is Dead").SetValue(Color.FromArgb(255, 200, 200, 200)));
                 _menu.SubMenu("Drawing").AddItem(new MenuItem("circleradius", "Circle Radius").SetValue(new Slider(300, 1, 500)));
@@ -1493,6 +1526,7 @@ namespace GodJungleTracker
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnMonsterSkill" + GameVersion, "Header OnMonsterSkill").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateGromp" + GameVersion, "Header OnCreateGromp").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnCreateCampIcon" + GameVersion, "Header OnCreateCampIcon").SetValue(new Slider(0, 0, 400)));
+                advanced.SubMenu("Headers").AddItem(new MenuItem("headerOnPatienceChange" + GameVersion, "Header OnPatienceChange").SetValue(new Slider(0, 0, 400)));
                 advanced.SubMenu("Headers").AddItem(new MenuItem("patch", "Headers From Patch: " + GameVersion));
                 _menu.SubMenu("Advanced").AddItem(new MenuItem("updatetick", "Update Tick").SetValue(new Slider(150,0,1000)));
 
