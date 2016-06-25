@@ -200,6 +200,17 @@ namespace GodJungleTracker.Classes
                         Utility.Map.MapType.SummonersRift, 
                         GameObjectTeam.Neutral,
                         Color.Orange, new Timers(new Vector2(0,0),new Vector2(0,0))),
+                    //Neutral: RiftHerald
+                    new Camp("RiftHerald",
+                        120, 300, new Vector3(5007f, 10471f, -71f),
+                        new List<Mob>(
+                            new[]
+                            {
+                                new Mob("SRU_RiftHerald17.1.1")
+                            }),
+                        Utility.Map.MapType.SummonersRift,
+                        GameObjectTeam.Neutral,
+                        Color.DarkOrchid, new Timers(new Vector2(0,0),new Vector2(0,0)), true,  8),
                     //Neutral: Baron
                     new Camp("Baron",
                         120, 420, new Vector3(5007f, 10471f, -71f),

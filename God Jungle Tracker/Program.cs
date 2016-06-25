@@ -88,11 +88,6 @@ namespace GodJungleTracker
 
         public static void OnGameLoad(EventArgs args)
         {
-            //if (Game.MapId.ToString() != "SummonersRift")
-            //{
-            //    return;
-            //}
-
             GameVersion = Game.Version.Split(' ')[1];
 
             LoadMenu();
@@ -248,7 +243,7 @@ namespace GodJungleTracker
                 BaronCamp.RespawnTime = Environment.TickCount + BaronCamp.RespawnTimer * 1000 - (Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) - 1000);
             }
 
-            if (args.Buff.Name.Contains("dragonbuff") && Utils.GameTimeTickCount - (int)(args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
+            if (args.Buff.Name.Contains("dragonbuff") && Utils.GameTimeTickCount - (int) (args.Buff.StartTime * 1000) <= DragonCamp.RespawnTimer * 1000)
             {
                 DragonCamp.Mobs[0].State = 7;
                 DragonCamp.Mobs[0].JustDied = false;
@@ -339,7 +334,7 @@ namespace GodJungleTracker
                 //Do Stuff for each camp
 
                 foreach (var mob in camp.Mobs.Where(mob => mob.NetworkId == sender.NetworkId))
-                {
+                {  
                     //Do Stuff for each mob in a camp
 
                     mob.LastChangeOnState = Environment.TickCount - 3000;
@@ -364,7 +359,7 @@ namespace GodJungleTracker
             if (Environment.TickCount > UpdateTick + _menu.Item("updatetick").GetValue<Slider>().Value)
             {
                 var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget());
-        
+
                 foreach (var camp in Jungle.Camps.Where(camp => camp.MapType.ToString() == Game.MapId.ToString()))
                 {
                     #region Update States
@@ -378,6 +373,18 @@ namespace GodJungleTracker
                     foreach (var mob in camp.Mobs)
                     {
                         //Do Stuff for each mob in a camp
+
+                        if (Game.ClockTime > 1230)
+                        {
+                            if (camp.Name == "RiftHerald" && camp.State != 0)
+                            {
+                                mob.State = 0;
+                                mob.LastChangeOnState = Environment.TickCount;
+
+                                camp.State = mob.State;
+                                camp.LastChangeOnState = mob.LastChangeOnState;
+                            }
+                        }
 
                         try
                         {
