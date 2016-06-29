@@ -1236,30 +1236,27 @@ namespace GodJungleTracker
 
                     else if (header == Packets.Attack.Header)
                     {
-                        //Console.WriteLine(NameToCompare[i] + " is Attacking");
-
                         mob.State = 1;
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
                     else if (header == Packets.Patience.Header && mob.State != 2)
                     {
-                        //Console.WriteLine(NameToCompare[i] + " is loosing Patience");
-                        mob.State = 1;
-                        mob.LastChangeOnState = Environment.TickCount;
+                        if (camp.Name != "Dragon")
+                        {
+                            mob.State = 1;
+                            mob.LastChangeOnState = Environment.TickCount;
+                        }
                     }
 
                     else if (header == Packets.MissileHit.Header)
                     {
-                        //Console.WriteLine(NameToCompare[i] + " is Attacking (ranged)");
-
                         mob.State = 1;
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
                     else if (header == Packets.Disengaged.Header)
                     {
-                        //Console.WriteLine(NameToCompare[i] + " is Disengaged");
                         if (mob.Name.Contains("Crab"))
                         {
                             if (mob.State == 0) mob.State = 5;    //check this again
