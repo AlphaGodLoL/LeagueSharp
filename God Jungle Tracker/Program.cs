@@ -419,7 +419,6 @@ namespace GodJungleTracker
                         {
                             guessedTimetoDead = 5000;
                         }
-                        
 
                         switch (mob.State)
                         {
@@ -432,8 +431,8 @@ namespace GodJungleTracker
                                     }
                                     else if (camp.Name == "Baron")
                                     {
-                                            mob.State = 5;
-                                            mob.LastChangeOnState = Environment.TickCount - 2000;
+                                        mob.State = 5;
+                                        mob.LastChangeOnState = Environment.TickCount - 2000;
                                     }
                                     else
                                     {
@@ -1167,6 +1166,7 @@ namespace GodJungleTracker
                 }
             }
 
+
             if (_menu.Item("headerOnMonsterSkill" + GameVersion).GetValue<Slider>().Value == 0 && length == Packets.MonsterSkill.Length && networkID > 0)
             {
                 foreach (Obj_AI_Minion obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.Name.Contains("Dragon") && obj.NetworkId == networkID))
@@ -1242,9 +1242,9 @@ namespace GodJungleTracker
 
                     else if (header == Packets.Patience.Header && mob.State != 2)
                     {
-                        if (camp.Name != "Dragon")
+                        if (!mob.Name.Contains("Dragon") && !mob.Name.Contains("Baron"))
                         {
-                            mob.State = 1;
+                            mob.State = 1; // mob is aggro
                             mob.LastChangeOnState = Environment.TickCount;
                         }
                     }
@@ -1259,14 +1259,16 @@ namespace GodJungleTracker
                     {
                         if (mob.Name.Contains("Crab"))
                         {
-                            if (mob.State == 0) mob.State = 5;    //check this again
+                            if (mob.State == 0) mob.State = 5;
                             else mob.State = 1;
                         }
+
                         if (!mob.Name.Contains("Crab") && !mob.Name.Contains("Spider"))
                         {
                             if (mob.State == 0) mob.State = 5;
                             else mob.State = 2;
                         }
+
                         mob.LastChangeOnState = Environment.TickCount;
                     }
 
